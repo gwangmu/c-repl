@@ -4,6 +4,7 @@ import logging
 import re
 import subprocess
 
+VERSION = "v0.1"
 INDENT = "  "
 CC = "clang"
 FIND_HEADER = "./find-header"
@@ -151,5 +152,9 @@ class REPLoop():
                 cur_st.err = [l.strip() for l in err_str.split('\n')]
                 assert(self.tu.print())
 
-print("C REPL (version xxx)")
+print("C REPL (version {})".format(VERSION))
 REPLoop().loop()
+
+# TODO: Ctrl+C to quit.
+# TODO: '%print' to print the current code.
+# TODO: function, block support.
