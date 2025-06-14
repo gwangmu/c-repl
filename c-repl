@@ -1,10 +1,12 @@
 #!/usr/bin/python
 
 import logging
+import re
 import subprocess
 
 INDENT = "  "
 CC = "clang"
+FIND_HEADER = "./find-header"
 
 class StdIncludePath():
     def __init__(self, path, depth):
@@ -34,12 +36,12 @@ class Block():
 
     def get(self):
         out = []
-        out += ["{} {{\n".format(self.head)]
+        out += ["{} {{".format(self.head)]
         for child in self.children:
             child_lines = child.get()
             for child_line in child_lines:
-                out += ["{}{}\n".format(INDENT, child_line)]
-        out += ["}\n"]
+                out += ["{}{}".format(INDENT, child_line)]
+        out += ["}"]
         return out
 
 class TranslationUnit():
@@ -64,7 +66,7 @@ class TranslationUnit():
     def print(self):
         try:
             with open(self.out_path, 'w') as f:
-                f.writelines(self.get())
+                f.writelines([l + '\n' for l in self.get()])
         except:
             logging.error("output failed.")
             return False
@@ -81,11 +83,56 @@ class REPLoop():
         while True:
             print("> ", end='')
             line = input()
-            self.cur_blk.add(Statement(line))
-            assert(self.tu.print())
-            cc_out = subprocess.check_output([CC, self.src_path, "-o", self.exe_path], text=True)
-            print(cc_out)
-            exe_out = subprocess.check_output([self.exe_path], text=True)
-            print(exe_out)
+            cur_st = Statement(line.strip())
+            self.cur_blk.add(cur_st)
 
+            # First compile attempt.
+            assert(self.tu.print())
+            cc_out = subprocess.run([CC, self.src_path, "-o", self.exe_path], check=False, capture_output=True)
+
+            # Obvious library function not included?
+            re_impl_lib_func = re.search("implicitly declaring library function '([a-zA-Z_0-9]+)'", cc_out.stderr.decode())
+            if (re_impl_lib_func):
+                impl_func_name = re_impl_lib_func.group(1)
+                logging.warning("function '{}' not included.".format(impl_func_name))
+                re_incl_suggest = re.search("include the header <([a-zA-Z_0-9/\.]+)>", cc_out.stderr.decode())
+                if (re_incl_suggest):
+                    suggested_header_path = re_incl_suggest.group(1)
+                    logging.warning("automatically including suggested header '{}'...".format(suggested_header_path))
+                    self.tu.incls += [StdIncludePath(suggested_header_path, 0)]
+                else:
+                    assert(False)
+
+            # Less obvious function not included?
+            re_impl_func = re.search("implicit declaration of function '([a-zA-Z_0-9]+)'", cc_out.stderr.decode())
+            if (re_impl_func):
+                impl_func_name = re_impl_func.group(1)
+                logging.warning("function '{}' not included.".format(impl_func_name))
+                find_header_out = subprocess.check_output([FIND_HEADER, "find", impl_func_name, "-f"], text=True)
+                cand_headers = [StdIncludePath(e.split('\t')[0], int(e.split('\t')[1])) for e in find_header_out.strip().split('\n')]
+                for i, cand_header in enumerate(cand_headers):
+                    logging.warning("[{}] {} (at '{}')".format(i, str(cand_header), cand_header.path))
+                logging.warning("which to include? ")
+                header_num = input()
+                try:
+                    self.tu.incls += [cand_headers[int(header_num)]]
+                except:
+                    logging.error("header inclusion failed.")
+
+            # Second compile attempt.
+            assert(self.tu.print())
+            cc_out = subprocess.run([CC, self.src_path, "-o", self.exe_path], check=False, capture_output=True)
+
+            # Execute.
+            if (cc_out.returncode == 0):
+                subprocess.run([self.exe_path], stderr=subprocess.STDOUT, check=False)
+            else:
+                print(cc_out.stderr.decode())
+                err_str = cc_out.stderr.decode().strip()
+                err_str = re.sub("^.* error:", "error:", err_str)
+                err_str = re.sub(".*error.*generated.*", "", err_str)
+                cur_st.err = [l.strip() for l in err_str.split('\n')]
+                assert(self.tu.print())
+
+print("C REPL (version xxx)")
 REPLoop().loop()
