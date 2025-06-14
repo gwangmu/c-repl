@@ -1,0 +1,91 @@
+#!/usr/bin/python
+
+import logging
+import subprocess
+
+INDENT = "  "
+CC = "clang"
+
+class StdIncludePath():
+    def __init__(self, path, depth):
+        self.path = path
+        self.depth = depth
+
+    def __repr__(self):
+        incl_path = '/'.join(self.path.split('/')[-self.depth:])
+        return "#include <{}>".format(incl_path) 
+
+class Statement():
+    def __init__(self, st, err=[]):
+        self.st = st
+        self.err = err
+
+    def get(self):
+        st_out = self.st if (not self.err) else "// " + self.st
+        return ["// " + err_line for err_line in self.err] + [st_out]
+
+class Block():
+    def __init__(self, head):
+        self.head = head
+        self.children = []
+
+    def add(self, child):
+        self.children += [child]
+
+    def get(self):
+        out = []
+        out += ["{} {{\n".format(self.head)]
+        for child in self.children:
+            child_lines = child.get()
+            for child_line in child_lines:
+                out += ["{}{}\n".format(INDENT, child_line)]
+        out += ["}\n"]
+        return out
+
+class TranslationUnit():
+    def __init__(self, out_path=None):
+        self.out_path = out_path
+        self.incls = []
+        self.blks = []
+        self.main = Block("int main()")
+
+    def get(self):
+        out = []
+        for incl in self.incls:
+            out += [str(incl)]
+        if (self.blks):
+            out += [""]
+        for blk in self.blks:
+            out += blk.get()
+        out += [""]
+        out += self.main.get()
+        return out
+
+    def print(self):
+        try:
+            with open(self.out_path, 'w') as f:
+                f.writelines(self.get())
+        except:
+            logging.error("output failed.")
+            return False
+        return True
+
+class REPLoop():
+    def __init__(self, src_path="/tmp/c-repl.c", exe_path="/tmp/c-repl"):
+        self.src_path = src_path
+        self.exe_path = exe_path
+        self.tu = TranslationUnit(out_path=src_path)
+        self.cur_blk = self.tu.main
+    
+    def loop(self):
+        while True:
+            print("> ", end='')
+            line = input()
+            self.cur_blk.add(Statement(line))
+            assert(self.tu.print())
+            cc_out = subprocess.check_output([CC, self.src_path, "-o", self.exe_path], text=True)
+            print(cc_out)
+            exe_out = subprocess.check_output([self.exe_path], text=True)
+            print(exe_out)
+
+REPLoop().loop()
