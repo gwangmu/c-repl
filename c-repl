@@ -82,11 +82,12 @@ class TranslationUnit():
         out = []
         for incl in self.incls:
             out += [str(incl)]
-        if (self.funcs):
+        if (out and self.funcs):
             out += [""]
         for func in self.funcs:
             out += func.get()
-        out += [""]
+        if (out):
+            out += [""]
         out += self.main.get()
         return out
 
