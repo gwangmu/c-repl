@@ -40,10 +40,20 @@ class Statement():
 
 class Block():
     def __init__(self, head, err=[]):
-        self.head = head
+        self.head = head.strip()
         self.err = err
         self.children = []
         self.commented = False
+
+        re_block_kw = re.search("^(for|while|if|else|case) *\(", self.head)
+        if (re_block_kw):
+            self.kind = re_block_kw.group(1)
+        else:
+            re_block = re.search("^{+$", self.head)
+            if (re_block):
+                self.kind = "block"
+            else:
+                self.kind = "function"
 
     def add(self, child):
         self.children += [child]
@@ -167,12 +177,16 @@ class REPLoop():
             n_block_close = self.get_block_close(line)
             if (block_head):
                 # TODO: comment out the existing duplicate function
-                # re_func_name = re.search("([a-zA-Z0-9_]+) *\(", block_head)
                 cur_obj = Block(block_head)
+                if (cur_obj.kind == "function"):
+                    self.tu.funcs += [cur_obj]
+                else:
+                    self.stack[-1].add(cur_obj)
                 self.stack += [cur_obj]
-                self.tu.funcs += [cur_obj]
             elif (n_block_close):
                 cur_obj = None
+                if (n_block_close >= len(self.stack)):
+                    self.interrupt(None, None)
                 self.stack = self.stack[:-n_block_close]
             else:
                 cur_obj = Statement(line.strip())
@@ -246,4 +260,4 @@ print("C REPL (version {})".format(VERSION))
 repl = REPLoop()
 repl.loop()
 
-# TODO: function, block support.
+# TODO: keyboard up to navigate previous statements
