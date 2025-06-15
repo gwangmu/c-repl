@@ -1,13 +1,20 @@
 #!/usr/bin/python
 
+import argparse
 import logging
 import re
+import signal
 import subprocess
+import sys
 
 VERSION = "v0.1"
 INDENT = "  "
 CC = "clang"
 FIND_HEADER = "./find-header"
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-o", "--out-path", help="Code output path", type=str)
+args = parser.parse_args()
 
 class StdIncludePath():
     def __init__(self, path, depth):
@@ -25,7 +32,7 @@ class Statement():
 
     def get(self):
         st_out = self.st if (not self.err) else "// " + self.st
-        return ["// " + err_line for err_line in self.err] + [st_out]
+        return ["// * " + err_line for err_line in self.err] + [st_out]
 
 class Block():
     def __init__(self, head):
@@ -79,18 +86,67 @@ class REPLoop():
         self.exe_path = exe_path
         self.tu = TranslationUnit(out_path=src_path)
         self.cur_blk = self.tu.main
+
+        self.wait_subproc = False
+        self.dfn_sigint = signal.signal(signal.SIGINT, self.interrupt)
+
+    def interrupt(self, sig, frame):
+        if (not self.wait_subproc):
+            print("\nGoodbye...")
+            exit(0)
+
+    def run(self, *args, **kwargs):
+        self.wait_subproc = True
+        try:
+            ret = subprocess.run(*args, **kwargs)
+        except subprocess.CalledProcessError:
+            pass
+        self.wait_subproc = False
+        return ret
+
+    def input(self, *args, **kwargs):
+        prev_sighandler = signal.signal(signal.SIGINT, self.dfn_sigint)
+        try:
+            ret = input(*args, **kwargs)
+        except KeyboardInterrupt:
+            ret = ""
+        signal.signal(signal.SIGINT, prev_sighandler)
+        return ret
+
+    def system(self, line):
+        line = line.strip()
+
+        if (line[0:1] != '%'):
+            return False
+        
+        if (line[1:] == "exit"):
+            self.interrupt(None, None)
+        elif (line[1:] == "print"):
+            with open(self.src_path, 'r') as f:
+                lines = f.readlines()
+            for line in lines:
+                print(line[:-1])
+        else:
+            logging.warning("unrecognized system command.")
+
+        return True
     
     def loop(self):
         prev_exe_out = ""
         while True:
             print("> ", end='')
-            line = input()
+            try:
+                line = input()
+            except EOFError:
+                self.interrupt(None, None)
+            if (self.system(line)):
+                continue
             cur_st = Statement(line.strip())
             self.cur_blk.add(cur_st)
 
             # First compile attempt.
             assert(self.tu.print())
-            cc_out = subprocess.run([CC, self.src_path, "-o", self.exe_path], check=False, capture_output=True)
+            cc_out = self.run([CC, self.src_path, "-o", self.exe_path], check=False, capture_output=True)
 
             # Obvious library function not included?
             re_impl_lib_func = re.search("implicitly declaring library function '([a-zA-Z_0-9]+)'", cc_out.stderr.decode())
@@ -110,14 +166,14 @@ class REPLoop():
             if (re_impl_func):
                 impl_func_name = re_impl_func.group(1)
                 logging.warning("function '{}' not included.".format(impl_func_name))
-                find_header_out = subprocess.check_output([FIND_HEADER, "find", impl_func_name, "-f"], text=True)
-                if (find_header_out.strip()):
-                    # TODO: cancel with Ctrl+C
-                    cand_headers = [StdIncludePath(e.split('\t')[0], int(e.split('\t')[1])) for e in find_header_out.strip().split('\n')]
+                find_header_out = self.run([FIND_HEADER, "find", impl_func_name, "-f"], check=False, capture_output=True)
+                find_header_out_stdout = find_header_out.stdout.decode().strip()
+                if (find_header_out_stdout):
+                    cand_headers = [StdIncludePath(e.split('\t')[0], int(e.split('\t')[1])) for e in find_header_out_stdout.split('\n')]
                     for i, cand_header in enumerate(cand_headers):
                         logging.warning("[{}] {} (at '{}')".format(i, str(cand_header), cand_header.path))
                     logging.warning("which to include? ")
-                    header_num = input()
+                    header_num = self.input()
                     try:
                         self.tu.incls += [cand_headers[int(header_num)]]
                     except:
@@ -127,11 +183,11 @@ class REPLoop():
 
             # Second compile attempt.
             assert(self.tu.print())
-            cc_out = subprocess.run([CC, self.src_path, "-o", self.exe_path], check=False, capture_output=True)
+            cc_out = self.run([CC, self.src_path, "-Werror=implicit-function-declaration", "-o", self.exe_path], check=False, capture_output=True)
 
             # Execute.
             if (cc_out.returncode == 0):
-                exe_out = subprocess.run([self.exe_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                exe_out = self.run([self.exe_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 new_exe_out = exe_out.stdout.decode().strip()
                 incl_exe_out = new_exe_out.removeprefix(prev_exe_out).strip()
                 prev_exe_out = new_exe_out
@@ -148,12 +204,13 @@ class REPLoop():
                 print(cc_out.stderr.decode())
                 err_str = cc_out.stderr.decode().strip()
                 err_str = re.sub("^.* error:", "error:", err_str)
-                err_str = re.sub(".*error.*generated.*", "", err_str)
+                err_str = re.sub("\n.*error.*generated.*", "", err_str)
                 cur_st.err = [l.strip() for l in err_str.split('\n')]
                 assert(self.tu.print())
 
 print("C REPL (version {})".format(VERSION))
-REPLoop().loop()
+repl = REPLoop()
+repl.loop()
 
 # TODO: Ctrl+C to quit.
 # TODO: '%print' to print the current code.
