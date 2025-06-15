@@ -29,27 +29,35 @@ class Statement():
     def __init__(self, st, err=[]):
         self.st = st
         self.err = err
+        self.commented = False
 
     def get(self):
-        st_out = self.st if (not self.err) else "// " + self.st
-        return ["// * " + err_line for err_line in self.err] + [st_out]
+        out = [" * " + err_line for err_line in self.err]
+        out += [self.st]
+        if (self.commented) or (self.err):
+            out = ["// " + l for l in out]
+        return out
 
 class Block():
-    def __init__(self, head):
+    def __init__(self, head, err=[]):
         self.head = head
+        self.err = err
         self.children = []
+        self.commented = False
 
     def add(self, child):
         self.children += [child]
 
     def get(self):
-        out = []
+        out = [" * " + err_line for err_line in self.err]
         out += ["{} {{".format(self.head)]
         for child in self.children:
             child_lines = child.get()
             for child_line in child_lines:
                 out += ["{}{}".format(INDENT, child_line)]
         out += ["}"]
+        if (self.commented) or (self.err):
+            out = ["// " + l for l in out]
         return out
 
 class TranslationUnit():
@@ -63,21 +71,17 @@ class TranslationUnit():
         out = []
         for incl in self.incls:
             out += [str(incl)]
-        if (self.blks):
+        if (self.funcs):
             out += [""]
-        for blk in self.blks:
-            out += blk.get()
+        for func in self.funcs:
+            out += func.get()
         out += [""]
         out += self.main.get()
         return out
 
     def print(self):
-        try:
-            with open(self.out_path, 'w') as f:
-                f.writelines([l + '\n' for l in self.get()])
-        except:
-            logging.error("output failed.")
-            return False
+        with open(self.out_path, 'w') as f:
+            f.writelines([l + '\n' for l in self.get()])
         return True
 
 class REPLoop():
@@ -85,7 +89,7 @@ class REPLoop():
         self.src_path = src_path
         self.exe_path = exe_path
         self.tu = TranslationUnit(out_path=src_path)
-        self.cur_blk = self.tu.main
+        self.stack = [self.tu.main]
 
         self.wait_subproc = False
         self.dfn_sigint = signal.signal(signal.SIGINT, self.interrupt)
@@ -130,19 +134,49 @@ class REPLoop():
             logging.warning("unrecognized system command.")
 
         return True
+
+    def get_block_head(self, line):
+        line = line.strip()
+        re_block_head = re.search("([^{]*){", line)
+        if (re_block_head):
+            return re_block_head.group(1).strip()
+        else:
+            return None
+
+    def get_block_close(self, line):
+        line = line.strip()
+        re_block_close = re.search("}+", line)
+        if (re_block_close):
+            return line.count('}')
+        else:
+            return None
     
     def loop(self):
         prev_exe_out = ""
         while True:
-            print("> ", end='')
+            print("{} > ".format(self.stack[-1].head), end='')
             try:
                 line = input()
             except EOFError:
                 self.interrupt(None, None)
+
             if (self.system(line)):
                 continue
-            cur_st = Statement(line.strip())
-            self.cur_blk.add(cur_st)
+
+            block_head = self.get_block_head(line)
+            n_block_close = self.get_block_close(line)
+            if (block_head):
+                # TODO: comment out the existing duplicate function
+                # re_func_name = re.search("([a-zA-Z0-9_]+) *\(", block_head)
+                cur_obj = Block(block_head)
+                self.stack += [cur_obj]
+                self.tu.funcs += [cur_obj]
+            elif (n_block_close):
+                cur_obj = None
+                self.stack = self.stack[:-n_block_close]
+            else:
+                cur_obj = Statement(line.strip())
+                self.stack[-1].add(cur_obj)
 
             # First compile attempt.
             assert(self.tu.print())
@@ -197,7 +231,7 @@ class REPLoop():
                     # TODO: print the return value of the last statement.
                     pass
                 if (exe_out.returncode != 0):
-                    cur_st.err = ["error: (unknown runtime error)"]
+                    cur_obj.err = ["error: (unknown runtime error)"]
                     assert(self.tu.print())
                     logging.warning("unknown runtime error occurred.")
             else:
@@ -205,7 +239,7 @@ class REPLoop():
                 err_str = cc_out.stderr.decode().strip()
                 err_str = re.sub("^.* error:", "error:", err_str)
                 err_str = re.sub("\n.*error.*generated.*", "", err_str)
-                cur_st.err = [l.strip() for l in err_str.split('\n')]
+                cur_obj.err = [l.strip() for l in err_str.split('\n')]
                 assert(self.tu.print())
 
 print("C REPL (version {})".format(VERSION))
