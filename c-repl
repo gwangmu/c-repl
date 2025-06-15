@@ -44,14 +44,15 @@ class Block():
         self.err = err
         self.children = []
         self.commented = False
+        self.repr = self.head
 
-        re_block_kw = re.search("^(for|while|if|else|case) *\(", self.head)
-        if (re_block_kw):
-            self.kind = re_block_kw.group(1)
+        if (not self.head):
+            self.kind = "block"
+            self.repr = "(block)"
         else:
-            re_block = re.search("^{+$", self.head)
-            if (re_block):
-                self.kind = "block"
+            re_block_kw = re.search("^(for|while|if|else|case) *\(", self.head)
+            if (re_block_kw):
+                self.kind = re_block_kw.group(1)
             else:
                 self.kind = "function"
 
@@ -60,7 +61,7 @@ class Block():
 
     def get(self):
         out = [" * " + err_line for err_line in self.err]
-        out += ["{} {{".format(self.head)]
+        out += ["{}{{".format(self.head + " " if (self.head) else "")]
         for child in self.children:
             child_lines = child.get()
             for child_line in child_lines:
@@ -164,7 +165,7 @@ class REPLoop():
     def loop(self):
         prev_exe_out = ""
         while True:
-            print("{} > ".format(self.stack[-1].head), end='')
+            print("{} > ".format(self.stack[-1].repr), end='')
             try:
                 line = input()
             except EOFError:
@@ -175,7 +176,7 @@ class REPLoop():
 
             block_head = self.get_block_head(line)
             n_block_close = self.get_block_close(line)
-            if (block_head):
+            if (block_head != None):
                 # TODO: comment out the existing duplicate function
                 cur_obj = Block(block_head)
                 if (cur_obj.kind == "function"):
@@ -183,7 +184,7 @@ class REPLoop():
                 else:
                     self.stack[-1].add(cur_obj)
                 self.stack += [cur_obj]
-            elif (n_block_close):
+            elif (n_block_close != None):
                 cur_obj = None
                 if (n_block_close >= len(self.stack)):
                     self.interrupt(None, None)
