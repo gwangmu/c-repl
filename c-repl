@@ -56,7 +56,7 @@ class TranslationUnit():
     def __init__(self, out_path=None):
         self.out_path = out_path
         self.incls = []
-        self.blks = []
+        self.funcs = []
         self.main = Block("int main()")
 
     def get(self):
@@ -212,6 +212,4 @@ print("C REPL (version {})".format(VERSION))
 repl = REPLoop()
 repl.loop()
 
-# TODO: Ctrl+C to quit.
-# TODO: '%print' to print the current code.
 # TODO: function, block support.
