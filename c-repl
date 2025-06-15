@@ -13,7 +13,7 @@ CC = "clang"
 FIND_HEADER = "./find-header"
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-o", "--out-path", help="Code output path", type=str)
+parser.add_argument("-o", "--out-path", help="Code output path", type=str, default="/tmp/c-repl.c")
 args = parser.parse_args()
 
 class StdIncludePath():
@@ -259,7 +259,7 @@ class REPLoop():
                 assert(self.tu.print())
 
 print("C REPL (version {})".format(VERSION))
-repl = REPLoop()
+repl = REPLoop(src_path=args.out_path)
 repl.loop()
 
 # TODO: keyboard up to navigate previous statements
