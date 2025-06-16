@@ -55,6 +55,9 @@ class Block():
                 self.kind = re_block_kw.group(1)
             else:
                 self.kind = "function"
+        
+        if (self.head == "int main()"):
+            self.repr = ""
 
     def add(self, child):
         self.children += [child]
