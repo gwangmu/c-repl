@@ -13,38 +13,58 @@ CC = "clang"
 FIND_HEADER = "./find-header"
 
 parser = argparse.ArgumentParser()
+parser.add_argument("-e", "--error-diag", help="Attach full error diagnostic", action="store_true")
 parser.add_argument("-o", "--out-path", help="Code output path", type=str, default="/tmp/c-repl.c")
 args = parser.parse_args()
 
-class StdIncludePath():
+class StdIncludePreproc():
     def __init__(self, path, depth):
         self.path = path
         self.depth = depth
-
-    def __repr__(self):
-        incl_path = '/'.join(self.path.split('/')[-self.depth:])
-        return "#include <{}>".format(incl_path) 
-
-class Statement():
-    def __init__(self, st, err=[]):
-        self.st = st
-        self.err = err
+        self.err = []
         self.commented = False
 
     def get(self):
-        out = [" * " + err_line for err_line in self.err]
+        incl_path = '/'.join(self.path.split('/')[-self.depth:])
+        out = ["* " + err_line for err_line in self.err]
+        out += ["#include <{}>".format(incl_path)]
+        if (self.commented) or (self.err):
+            out = ["// " + l for l in out]
+        return out
+
+class Preproc():
+    def __init__(self, s):
+        self.s = s.strip()
+        self.err = []
+        self.commented = False
+
+    def get(self):
+        out = ["* " + err_line for err_line in self.err]
+        out += [self.s]
+        if (self.commented) or (self.err):
+            out = ["// " + l for l in out]
+        return out 
+
+class Statement():
+    def __init__(self, st):
+        self.st = st
+        self.err = []
+        self.commented = False
+
+    def get(self):
+        out = ["* " + err_line for err_line in self.err]
         out += [self.st]
         if (self.commented) or (self.err):
             out = ["// " + l for l in out]
         return out
 
 class Block():
-    def __init__(self, head, err=[]):
+    def __init__(self, head):
         self.head = head.strip()
-        self.err = err
         self.children = []
-        self.commented = False
         self.repr = self.head
+        self.err = []
+        self.commented = False
 
         if (not self.head):
             self.kind = "block"
@@ -63,7 +83,7 @@ class Block():
         self.children += [child]
 
     def get(self):
-        out = [" * " + err_line for err_line in self.err]
+        out = ["* " + err_line for err_line in self.err]
         out += ["{}{{".format(self.head + " " if (self.head) else "")]
         for child in self.children:
             child_lines = child.get()
@@ -84,13 +104,11 @@ class TranslationUnit():
     def get(self):
         out = []
         for incl in self.incls:
-            out += [str(incl)]
-        if (out and self.funcs):
-            out += [""]
+            out += incl.get()
+        if (out and self.funcs): out += [""]
         for func in self.funcs:
             out += func.get()
-        if (out):
-            out += [""]
+        if (out): out += [""]
         out += self.main.get()
         return out
 
@@ -150,6 +168,9 @@ class REPLoop():
 
         return True
 
+    def is_preproc(self, line):
+        return (re.search("#.*", line.strip()) != None)
+
     def get_block_head(self, line):
         line = line.strip()
         re_block_head = re.search("([^{]*){", line)
@@ -178,24 +199,29 @@ class REPLoop():
             if (self.system(line)):
                 continue
 
-            block_head = self.get_block_head(line)
-            n_block_close = self.get_block_close(line)
-            if (block_head != None):
-                # TODO: comment out the existing duplicate function
-                cur_obj = Block(block_head)
-                if (cur_obj.kind == "function"):
-                    self.tu.funcs += [cur_obj]
-                else:
-                    self.stack[-1].add(cur_obj)
-                self.stack += [cur_obj]
-            elif (n_block_close != None):
-                cur_obj = None
-                if (n_block_close >= len(self.stack)):
-                    self.interrupt(None, None)
-                self.stack = self.stack[:-n_block_close]
+            # Identify the type of input.
+            if (self.is_preproc(line)):
+                cur_obj = Preproc(line)
+                self.tu.incls += [cur_obj]
             else:
-                cur_obj = Statement(line.strip())
-                self.stack[-1].add(cur_obj)
+                block_head = self.get_block_head(line)
+                n_block_close = self.get_block_close(line)
+                if (block_head != None):
+                    # TODO: comment out the existing duplicate function
+                    cur_obj = Block(block_head)
+                    if (cur_obj.kind == "function"):
+                        self.tu.funcs += [cur_obj]
+                    else:
+                        self.stack[-1].add(cur_obj)
+                    self.stack += [cur_obj]
+                elif (n_block_close != None):
+                    cur_obj = None
+                    if (n_block_close >= len(self.stack)):
+                        self.interrupt(None, None)
+                    self.stack = self.stack[:-n_block_close]
+                else:
+                    cur_obj = Statement(line.strip())
+                    self.stack[-1].add(cur_obj)
 
             # First compile attempt.
             assert(self.tu.print())
@@ -210,7 +236,7 @@ class REPLoop():
                 if (re_incl_suggest):
                     suggested_header_path = re_incl_suggest.group(1)
                     logging.warning("automatically including suggested header '{}'...".format(suggested_header_path))
-                    self.tu.incls += [StdIncludePath(suggested_header_path, 0)]
+                    self.tu.incls += [StdIncludePreproc(suggested_header_path, 0)]
                 else:
                     assert(False)
 
@@ -222,7 +248,7 @@ class REPLoop():
                 find_header_out = self.run([FIND_HEADER, "find", impl_func_name, "-f"], check=False, capture_output=True)
                 find_header_out_stdout = find_header_out.stdout.decode().strip()
                 if (find_header_out_stdout):
-                    cand_headers = [StdIncludePath(e.split('\t')[0], int(e.split('\t')[1])) for e in find_header_out_stdout.split('\n')]
+                    cand_headers = [StdIncludePreproc(e.split('\t')[0], int(e.split('\t')[1])) for e in find_header_out_stdout.split('\n')]
                     for i, cand_header in enumerate(cand_headers):
                         logging.warning("[{}] {} (at '{}')".format(i, str(cand_header), cand_header.path))
                     logging.warning("which to include? ")
@@ -256,8 +282,12 @@ class REPLoop():
             else:
                 print(cc_out.stderr.decode())
                 err_str = cc_out.stderr.decode().strip()
-                err_str = re.sub("^.* error:", "error:", err_str)
-                err_str = re.sub("\n.*error.*generated.*", "", err_str)
+                re_error_msg = re.search("(error: .*)\n", err_str)
+                if (not args.error_diag and re_error_msg):
+                    err_str = re_error_msg.group(1)
+                else:
+                    err_str = re.sub("^.* error:", "error:", err_str)
+                    err_str = re.sub("\n.*error.*generated.*", "", err_str)
                 cur_obj.err = [l.strip() for l in err_str.split('\n')]
                 assert(self.tu.print())
 
