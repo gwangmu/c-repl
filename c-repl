@@ -14,7 +14,7 @@ FIND_HEADER = "./find-header"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-e", "--error-diag", help="Attach full error diagnostic", action="store_true")
-parser.add_argument("-o", "--out-path", help="Code output path", type=str, default="/tmp/c-repl.c")
+parser.add_argument("-o", "--out-path", help="Set output path for code", type=str, default="/tmp/c-repl.c")
 args = parser.parse_args()
 
 class StdIncludePreproc():
