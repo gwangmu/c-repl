@@ -1,5 +1,0 @@
-LLVMAddCoroCleanupPass
-LLVMAddCoroEarlyPass
-LLVMAddCoroElidePass
-LLVMAddCoroSplitPass
-LLVMPassManagerBuilderAddCoroutinePassesToExtensionPoints

@@ -1,2 +1,0 @@
-nl_langinfo
-nl_langinfo_l

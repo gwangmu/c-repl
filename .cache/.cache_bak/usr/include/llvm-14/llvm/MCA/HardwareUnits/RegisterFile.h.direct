@@ -1,7 +1,0 @@
-dump
-file
-getSourceIndex
-getWriteState
-hasKnownWriteBackCycle
-isAvailable
-isValid

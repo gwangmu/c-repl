@@ -1,9 +1,0 @@
-g_bookmark_file_add_application
-g_bookmark_file_add_group
-g_bookmark_file_free
-g_bookmark_file_set_description
-g_bookmark_file_set_groups
-g_bookmark_file_set_icon
-g_bookmark_file_set_is_private
-g_bookmark_file_set_mime_type
-g_bookmark_file_set_title

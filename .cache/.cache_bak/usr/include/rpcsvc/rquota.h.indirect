@@ -1,9 +1,0 @@
-rquotaproc_getquota_1
-rquotaproc_getquota_1_svc
-rquotaproc_getactivequota_1
-rquotaproc_getactivequota_1_svc
-rquotaprog_1_freeresult
-xdr_getquota_args
-xdr_rquota
-xdr_gqr_status
-xdr_getquota_rslt

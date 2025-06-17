@@ -1,7 +1,0 @@
-assignPassManager
-createPrinterPass
-getAsImmutablePass
-getPotentialPassManagerType
-lookupPassInfo
-postlink
-runOnModule

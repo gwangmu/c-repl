@@ -1,6 +1,0 @@
-g_input_stream_clear_pending
-g_input_stream_close_async
-g_input_stream_read_all_async
-g_input_stream_read_async
-g_input_stream_read_bytes_async
-g_input_stream_skip_async

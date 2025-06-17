@@ -1,4 +1,0 @@
-g_tls_client_connection_set_validation_flags
-g_tls_client_connection_set_server_identity
-g_tls_client_connection_set_use_ssl3
-g_tls_client_connection_copy_session_state

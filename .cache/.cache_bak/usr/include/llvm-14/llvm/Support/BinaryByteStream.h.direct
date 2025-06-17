@@ -1,8 +1,0 @@
-commit
-getBufferEnd
-getBufferStart
-getEndian
-getLength
-readBytes
-readLongestContiguousChunk
-writeBytes

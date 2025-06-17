@@ -1,9 +1,0 @@
-g_socket_get_fd
-g_socket_set_blocking
-g_socket_set_keepalive
-g_socket_set_listen_backlog
-g_socket_set_timeout
-g_socket_set_ttl
-g_socket_set_broadcast
-g_socket_set_multicast_loopback
-g_socket_set_multicast_ttl

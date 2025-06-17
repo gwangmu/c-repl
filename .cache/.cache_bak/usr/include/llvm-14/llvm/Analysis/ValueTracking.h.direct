@@ -1,7 +1,0 @@
-computeKnownBits
-computeOverflowForSignedAdd
-findAllocaForValue
-GetPointerBaseWithConstantOffset
-getUnderlyingObject
-isGuaranteedToTransferExecutionToSuccessor
-matchSimpleRecurrence

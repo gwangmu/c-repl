@@ -1,8 +1,0 @@
-endrpcent
-getrpcbyname
-getrpcbyname_r
-getrpcbynumber
-getrpcbynumber_r
-getrpcent
-getrpcent_r
-setrpcent

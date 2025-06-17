@@ -1,6 +1,0 @@
-clear
-const_iterator
-const_reverse_iterator
-iterator
-reverse_iterator
-set

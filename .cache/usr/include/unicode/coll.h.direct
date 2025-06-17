@@ -1,8 +1,0 @@
-compare
-createInstance
-fromUCollator
-getAvailableLocales
-getDisplayName
-getSortKey
-setVariableTop
-toUCollator

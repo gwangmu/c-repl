@@ -1,7 +1,0 @@
-register_printf_specifier
-register_printf_function
-register_printf_modifier
-register_printf_type
-parse_printf_format
-printf_size
-printf_size_info

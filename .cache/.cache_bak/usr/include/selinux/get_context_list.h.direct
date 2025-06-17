@@ -1,8 +1,0 @@
-get_default_context
-get_default_context_with_level
-get_default_context_with_role
-get_default_context_with_rolelevel
-get_ordered_context_list
-get_ordered_context_list_with_level
-manual_user_enter_context
-query_user_context

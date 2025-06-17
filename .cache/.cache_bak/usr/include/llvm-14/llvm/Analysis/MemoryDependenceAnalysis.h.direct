@@ -1,6 +1,0 @@
-BasicBlock
-getBB
-getPointerDependencyFrom
-MemDepResult
-releaseMemory
-setResult

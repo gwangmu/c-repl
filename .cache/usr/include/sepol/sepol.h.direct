@@ -1,7 +1,0 @@
-fscanf
-scanf
-sepol_set_policydb_from_file
-sscanf
-vfscanf
-vscanf
-vsscanf

@@ -1,4 +1,0 @@
-__builtin_shufflevector
-_mm_loaddup_pd
-posix_memalign
-reallocarray

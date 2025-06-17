@@ -1,6 +1,0 @@
-ftok
-__getpagesize
-shmctl
-shmget
-shmat
-shmdt

@@ -1,5 +1,0 @@
-__attribute__
-constexpr
-__do_alloc_on_move
-__do_alloc_on_swap
-__test

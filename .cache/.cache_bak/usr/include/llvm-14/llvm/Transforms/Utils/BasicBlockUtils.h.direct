@@ -1,7 +1,0 @@
-branch
-ReplaceInstWithInst
-SplitBlock
-SplitBlockAndInsertIfThen
-SplitBlockPredecessors
-SplitCriticalEdge
-SplitLandingPadPredecessors

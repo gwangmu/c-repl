@@ -1,6 +1,0 @@
-__declspec
-gmk_add_function
-gmk_alloc
-gmk_eval
-gmk_expand
-gmk_free

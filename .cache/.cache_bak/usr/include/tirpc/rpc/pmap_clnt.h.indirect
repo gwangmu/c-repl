@@ -1,6 +1,0 @@
-pmap_set
-pmap_unset
-pmap_getmaps
-pmap_rmtcall
-clnt_broadcast
-pmap_getport

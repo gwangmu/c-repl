@@ -1,7 +1,0 @@
-g_cancellable_get_fd
-g_cancellable_release_fd
-g_cancellable_push_current
-g_cancellable_pop_current
-g_cancellable_reset
-g_cancellable_disconnect
-g_cancellable_cancel

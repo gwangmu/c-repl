@@ -1,9 +1,0 @@
-begin
-empty
-end
-erase
-find
-getEmptyNode
-getKind
-getNode
-size

@@ -1,9 +1,0 @@
-getEndColumn
-getEndLine
-getLineDelta
-getRawData
-getStartColumn
-getStartLine
-isAlwaysStepInto
-isNeverStepInto
-isStatement

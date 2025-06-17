@@ -1,8 +1,0 @@
-IDEA_options
-IDEA_ecb_encrypt
-IDEA_set_encrypt_key
-IDEA_set_decrypt_key
-IDEA_cbc_encrypt
-IDEA_cfb64_encrypt
-IDEA_ofb64_encrypt
-IDEA_encrypt

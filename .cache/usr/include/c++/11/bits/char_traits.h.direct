@@ -1,8 +1,0 @@
-__builtin_is_constant_evaluated
-__builtin_memcmp
-char_type
-eq_int_type
-_GLIBCXX_VISIBILITY
-if
-int_type
-sizeof

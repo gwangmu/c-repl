@@ -1,3 +1,0 @@
-g_file_enumerator_close_async
-g_file_enumerator_next_files_async
-g_file_enumerator_set_pending

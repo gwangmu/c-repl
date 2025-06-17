@@ -1,6 +1,0 @@
-__IMPL_S3SI
-pop_macro
-push_macro
-__run
-__tex_fetch
-__tex_len

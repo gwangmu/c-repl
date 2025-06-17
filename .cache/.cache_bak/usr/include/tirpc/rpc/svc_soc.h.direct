@@ -1,9 +1,0 @@
-svcfd_create
-svcraw_create
-svctcp6_create
-svctcp_create
-svcudp6_bufcreate
-svcudp6_create
-svcudp_bufcreate
-svcudp_create
-svcudp_enablecache

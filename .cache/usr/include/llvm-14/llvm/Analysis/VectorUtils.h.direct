@@ -1,6 +1,0 @@
-a
-getSplatValue
-linear
-requiresScalarEpilogue
-store
-ToVectorTy

@@ -1,4 +1,0 @@
-_mm256_mask_popcnt_epi32
-_mm256_mask_popcnt_epi64
-_mm_mask_popcnt_epi32
-_mm_mask_popcnt_epi64

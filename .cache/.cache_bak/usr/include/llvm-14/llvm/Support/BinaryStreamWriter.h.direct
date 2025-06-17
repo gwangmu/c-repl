@@ -1,5 +1,0 @@
-BinaryStreamWriter
-getLength
-writeArray
-writeBytes
-writeStreamRef

@@ -1,7 +1,0 @@
-_CONF_add_string
-_CONF_free_data
-_CONF_get_number
-_CONF_get_section
-_CONF_get_string
-_CONF_new_data
-_CONF_new_section

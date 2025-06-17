@@ -1,8 +1,0 @@
-fscanf
-scanf
-sscanf
-symtab_destroy
-symtab_init
-vfscanf
-vscanf
-vsscanf

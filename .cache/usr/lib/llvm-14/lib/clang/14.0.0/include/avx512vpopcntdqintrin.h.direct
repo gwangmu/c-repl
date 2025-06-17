@@ -1,4 +1,0 @@
-_mm512_mask_popcnt_epi32
-_mm512_mask_popcnt_epi64
-_mm512_popcnt_epi32
-_mm512_popcnt_epi64

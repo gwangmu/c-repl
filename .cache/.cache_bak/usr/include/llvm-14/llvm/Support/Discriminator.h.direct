@@ -1,9 +1,0 @@
-base
-encodeComponent
-encodingBits
-getFSPassBitBegin
-getFSPassBitEnd
-getNextComponentInDiscriminator
-getNumFSPasses
-getPrefixEncodingFromUnsigned
-getUnsignedFromPrefixEncoding

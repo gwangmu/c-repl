@@ -1,3 +1,0 @@
-g_regex_unref
-g_match_info_unref
-g_match_info_free

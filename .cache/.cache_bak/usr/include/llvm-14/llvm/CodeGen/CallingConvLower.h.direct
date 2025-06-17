@@ -1,8 +1,0 @@
-AllocateReg
-AllocateStack
-AnalyzeArguments
-AnalyzeCallOperands
-AnalyzeCallResult
-getReg
-MCRegister
-stored

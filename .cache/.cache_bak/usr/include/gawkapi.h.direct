@@ -1,7 +1,0 @@
-awk_bool_t
-check_mpfr_version
-dl_load
-r_make_string_type
-set_array_element
-sym_update
-version

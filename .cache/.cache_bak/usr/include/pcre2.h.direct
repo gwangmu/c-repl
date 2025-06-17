@@ -1,7 +1,0 @@
-pcre2_compile
-pcre2_config
-pcre2_dfa_match
-pcre2_jit_compile
-pcre2_match
-PCRE2_SUFFIX
-reallocarray

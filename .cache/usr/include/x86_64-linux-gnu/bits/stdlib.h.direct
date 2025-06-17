@@ -1,5 +1,0 @@
-__glibc_fortify
-__NTH
-__realpath_chk
-__REDIRECT_NTH
-__wctomb_chk

@@ -1,7 +1,0 @@
-anchor
-assignValueToAddress
-assignValueToReg
-getTLI
-isIncomingArgumentHandler
-lowerCall
-lowerReturn

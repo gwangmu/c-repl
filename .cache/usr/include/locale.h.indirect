@@ -1,6 +1,0 @@
-setlocale
-localeconv
-newlocale
-duplocale
-freelocale
-uselocale

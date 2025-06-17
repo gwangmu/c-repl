@@ -1,8 +1,0 @@
-g_resolver_free_addresses
-g_resolver_free_targets
-g_resolver_lookup_by_address_async
-g_resolver_lookup_by_name_async
-g_resolver_lookup_by_name_with_flags_async
-g_resolver_lookup_records_async
-g_resolver_lookup_service_async
-g_resolver_set_default

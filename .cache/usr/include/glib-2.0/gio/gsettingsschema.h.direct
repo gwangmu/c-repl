@@ -1,4 +1,0 @@
-g_settings_schema_key_unref
-g_settings_schema_source_list_schemas
-g_settings_schema_source_unref
-g_settings_schema_unref

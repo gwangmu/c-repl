@@ -1,6 +1,0 @@
-g_io_channel_error_quark
-g_io_channel_init
-g_io_channel_set_buffer_size
-g_io_channel_set_line_term
-g_io_channel_unref
-g_io_channel_win32_new_messages

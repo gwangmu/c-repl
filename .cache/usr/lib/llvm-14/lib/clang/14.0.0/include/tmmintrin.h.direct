@@ -1,5 +1,0 @@
-__attribute__
-_mm_alignr_epi8
-_mm_alignr_pi8
-posix_memalign
-reallocarray

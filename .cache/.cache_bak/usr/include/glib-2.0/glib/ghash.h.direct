@@ -1,9 +1,0 @@
-g_hash_table_destroy
-g_hash_table_foreach
-g_hash_table_iter_init
-g_hash_table_iter_remove
-g_hash_table_iter_replace
-g_hash_table_iter_steal
-g_hash_table_remove_all
-g_hash_table_steal_all
-g_hash_table_unref

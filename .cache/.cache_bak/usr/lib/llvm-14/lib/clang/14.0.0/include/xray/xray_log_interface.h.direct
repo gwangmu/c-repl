@@ -1,5 +1,0 @@
-__xray_log_flushLog
-__xray_log_init_mode
-__xray_log_register_mode
-__xray_log_select_mode
-__xray_set_log_impl

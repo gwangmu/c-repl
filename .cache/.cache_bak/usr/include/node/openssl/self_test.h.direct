@@ -1,7 +1,0 @@
-OSSL_SELF_TEST_free
-OSSL_SELF_TEST_get_callback
-OSSL_SELF_TEST_new
-OSSL_SELF_TEST_onbegin
-OSSL_SELF_TEST_oncorrupt_byte
-OSSL_SELF_TEST_onend
-OSSL_SELF_TEST_set_callback

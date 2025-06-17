@@ -1,6 +1,0 @@
-g_action_group_change_action_state
-g_action_group_activate_action
-g_action_group_action_added
-g_action_group_action_removed
-g_action_group_action_enabled_changed
-g_action_group_action_state_changed

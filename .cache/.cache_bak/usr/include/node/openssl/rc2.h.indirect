@@ -1,7 +1,0 @@
-RC2_set_key
-RC2_ecb_encrypt
-RC2_encrypt
-RC2_decrypt
-RC2_cbc_encrypt
-RC2_cfb64_encrypt
-RC2_ofb64_encrypt

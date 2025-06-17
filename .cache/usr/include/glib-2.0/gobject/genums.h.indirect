@@ -1,4 +1,0 @@
-g_value_set_enum
-g_value_set_flags
-g_enum_complete_type_info
-g_flags_complete_type_info

@@ -1,9 +1,0 @@
-defined
-FORM_EXPORT
-FORM_EXPORT_VAR
-fscanf
-scanf
-sscanf
-vfscanf
-vscanf
-vsscanf

@@ -1,7 +1,0 @@
-getNext
-getPrev
-initializeSentinel
-isKnownSentinel
-isSentinel
-setNext
-setPrev

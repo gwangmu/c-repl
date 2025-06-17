@@ -1,8 +1,0 @@
-BinaryStreamReader
-bytesRemaining
-copy
-getLength
-getUnderlyingStream
-readArray
-readStreamRef
-sizeof

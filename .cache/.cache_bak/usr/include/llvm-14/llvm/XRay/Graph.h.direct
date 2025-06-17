@@ -1,9 +1,0 @@
-begin
-cbegin
-cend
-const_iterator
-count
-empty
-end
-iterator
-size

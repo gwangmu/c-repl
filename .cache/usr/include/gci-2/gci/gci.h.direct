@@ -1,6 +1,0 @@
-gci_entry_controller_construct
-gci_entry_controller_construct_for_entry
-gci_entry_controller_get_entry
-gci_entry_controller_new
-gci_entry_controller_new_for_entry
-gci_entry_controller_set_entry

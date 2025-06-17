@@ -1,5 +1,0 @@
-LLVMCreateDisasm
-LLVMCreateDisasmCPU
-LLVMDisasmDispose
-LLVMDisasmInstruction
-LLVMSetDisasmOptions

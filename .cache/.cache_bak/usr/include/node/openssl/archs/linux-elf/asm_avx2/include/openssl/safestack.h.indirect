@@ -1,6 +1,0 @@
-ossl_check_OPENSSL_STRING_type
-ossl_check_const_OPENSSL_STRING_sk_type
-ossl_check_OPENSSL_CSTRING_type
-ossl_check_const_OPENSSL_CSTRING_sk_type
-ossl_check_OPENSSL_BLOCK_type
-ossl_check_const_OPENSSL_BLOCK_sk_type

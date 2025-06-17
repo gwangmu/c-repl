@@ -1,7 +1,0 @@
-bool
-dump
-getAbbreviationDeclarationPtr
-getAttributeValueAsReferencedDie
-isValid
-iterator
-subprogram

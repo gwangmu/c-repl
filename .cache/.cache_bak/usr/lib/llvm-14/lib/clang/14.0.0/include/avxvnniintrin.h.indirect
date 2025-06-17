@@ -1,8 +1,0 @@
-_mm256_dpbusd_avx_epi32
-_mm256_dpbusds_avx_epi32
-_mm256_dpwssd_avx_epi32
-_mm256_dpwssds_avx_epi32
-_mm_dpbusd_avx_epi32
-_mm_dpbusds_avx_epi32
-_mm_dpwssd_avx_epi32
-_mm_dpwssds_avx_epi32

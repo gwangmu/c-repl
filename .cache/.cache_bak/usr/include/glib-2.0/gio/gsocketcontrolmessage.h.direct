@@ -1,3 +1,0 @@
-g_socket_control_message_get_level
-g_socket_control_message_get_msg_type
-g_socket_control_message_serialize

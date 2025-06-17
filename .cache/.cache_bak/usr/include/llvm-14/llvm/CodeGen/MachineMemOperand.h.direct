@@ -1,5 +1,0 @@
-getAddrSpace
-getSuccessOrdering
-isDereferenceable
-MachinePointerInfo
-setValue

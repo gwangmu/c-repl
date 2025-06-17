@@ -1,7 +1,0 @@
-clear
-dump
-hasFileAtIndex
-isDWARF64
-one
-parse
-reset

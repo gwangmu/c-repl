@@ -1,5 +1,0 @@
-block
-getEntryBB
-getPredecessors
-getSuccessors
-if

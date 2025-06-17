@@ -1,5 +1,0 @@
-DEBUG_WITH_TYPE
-isCurrentDebugType
-LLVM_DEBUG
-setCurrentDebugType
-setCurrentDebugTypes

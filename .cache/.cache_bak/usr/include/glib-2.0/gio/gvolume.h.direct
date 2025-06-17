@@ -1,6 +1,0 @@
-g_volume_eject_with_operation
-g_volume_enumerate_identifiers
-g_volume_get_identifier
-g_volume_get_name
-g_volume_get_uuid
-g_volume_mount

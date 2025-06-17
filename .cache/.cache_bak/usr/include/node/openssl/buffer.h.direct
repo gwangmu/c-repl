@@ -1,6 +1,0 @@
-BUF_MEM_free
-BUF_MEM_grow
-BUF_MEM_grow_clean
-BUF_MEM_new
-BUF_MEM_new_ex
-BUF_reverse

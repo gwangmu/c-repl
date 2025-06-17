@@ -1,4 +1,0 @@
-addDefinedDataSymbol
-addDefinedFunctionSymbol
-isBitcodeFile
-lto_symbol_attributes

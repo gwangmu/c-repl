@@ -1,6 +1,0 @@
-begin
-clear
-empty
-end
-getEntryKind
-initialize

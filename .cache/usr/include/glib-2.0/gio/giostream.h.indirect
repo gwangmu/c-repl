@@ -1,3 +1,0 @@
-g_io_stream_splice_async
-g_io_stream_close_async
-g_io_stream_clear_pending

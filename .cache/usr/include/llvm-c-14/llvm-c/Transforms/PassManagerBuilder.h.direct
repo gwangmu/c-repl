@@ -1,3 +1,0 @@
-LLVMPassManagerBuilderCreate
-LLVMPassManagerBuilderDispose
-LLVMPassManagerBuilderPopulateLTOPassManager

@@ -1,5 +1,0 @@
-g_subprocess_launcher_set_cwd
-g_subprocess_launcher_setenv
-g_subprocess_launcher_set_environ
-g_subprocess_launcher_set_flags
-g_subprocess_launcher_unsetenv

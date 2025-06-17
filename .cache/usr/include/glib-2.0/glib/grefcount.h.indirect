@@ -1,4 +1,0 @@
-g_ref_count_init
-g_ref_count_inc
-g_atomic_ref_count_init
-g_atomic_ref_count_inc

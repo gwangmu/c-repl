@@ -1,4 +1,0 @@
-_mm_extracti_si64
-_mm_inserti_si64
-posix_memalign
-reallocarray
