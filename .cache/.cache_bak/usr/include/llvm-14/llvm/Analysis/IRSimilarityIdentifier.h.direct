@@ -1,0 +1,9 @@
+allocateIRInstructionData
+getBasicBlocks
+getStartBB
+getStartIdx
+hash_value
+initializeForBBs
+isClose
+populateMapper
+run

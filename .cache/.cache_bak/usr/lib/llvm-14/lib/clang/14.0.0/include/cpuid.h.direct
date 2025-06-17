@@ -1,0 +1,5 @@
+__cpuid
+__cpuid_count
+__get_cpuid
+__get_cpuid_count
+__get_cpuid_max

@@ -1,0 +1,8 @@
+cantFail
+Emit
+getFile
+getLabel
+isMD5UsageConsistent
+MCCFIInstruction
+resetFileTable
+setRootFile

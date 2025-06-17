@@ -1,0 +1,7 @@
+anyBlockMayThrow
+blockMayThrow
+computeLoopSafetyInfo
+doesNotWriteMemoryBefore
+findInContextOf
+isGuaranteedToExecute
+run

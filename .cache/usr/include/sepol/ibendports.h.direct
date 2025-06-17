@@ -1,0 +1,11 @@
+fscanf
+scanf
+sepol_ibendport_count
+sepol_ibendport_exists
+sepol_ibendport_iterate
+sepol_ibendport_modify
+sepol_ibendport_query
+sscanf
+vfscanf
+vscanf
+vsscanf

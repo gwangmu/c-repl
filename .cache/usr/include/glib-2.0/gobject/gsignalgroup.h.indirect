@@ -1,0 +1,8 @@
+g_signal_group_set_target
+g_signal_group_block
+g_signal_group_unblock
+g_signal_group_connect_object
+g_signal_group_connect_data
+g_signal_group_connect
+g_signal_group_connect_after
+g_signal_group_connect_swapped

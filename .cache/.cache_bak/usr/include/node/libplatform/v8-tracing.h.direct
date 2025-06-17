@@ -1,0 +1,8 @@
+AddTraceEvent
+CreateJSONTraceWriter
+defined
+Flush
+GetCategoryGroupEnabled
+Initialize
+StartTracing
+V8_PLATFORM_NON_EXPORTED_BASE

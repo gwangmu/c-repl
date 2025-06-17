@@ -1,0 +1,12 @@
+callSPSWrapperAsync
+callWrapper
+callWrapperAsync
+disconnect
+fn
+IncomingWFRHandler
+operator
+writeBuffersAsync
+writeUInt16sAsync
+writeUInt32sAsync
+writeUInt64sAsync
+writeUInt8sAsync

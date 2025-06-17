@@ -1,0 +1,13 @@
+mmap
+munmap
+mprotect
+msync
+madvise
+posix_madvise
+mlock
+munlock
+mlockall
+munlockall
+mincore
+shm_open
+shm_unlink

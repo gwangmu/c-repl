@@ -1,0 +1,2 @@
+g_dbus_object_manager_client_new
+g_dbus_object_manager_client_new_for_bus

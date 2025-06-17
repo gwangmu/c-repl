@@ -1,0 +1,10 @@
+emitCFIInstruction
+emitDwarfStringOffset
+emitDwarfUnitLength
+GetBlockAddressSymbol
+getDwarfDebug
+getFunctionCFISectionType
+getSymbol
+PrintSpecial
+runOnMachineFunction
+SetupMachineFunction

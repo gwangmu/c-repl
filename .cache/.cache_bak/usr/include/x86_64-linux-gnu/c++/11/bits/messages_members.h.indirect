@@ -1,0 +1,11 @@
+gettext
+dgettext
+__dgettext
+dcgettext
+__dcgettext
+ngettext
+dngettext
+dcngettext
+textdomain
+bindtextdomain
+bind_textdomain_codeset

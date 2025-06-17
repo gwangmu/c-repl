@@ -1,0 +1,6 @@
+TXT_DB_create_index
+TXT_DB_free
+TXT_DB_get_by_index
+TXT_DB_insert
+TXT_DB_read
+TXT_DB_write

@@ -1,0 +1,4 @@
+getFirstSpecialInstruction
+hasSpecialInstructions
+isPreceededBySpecialInstruction
+isSpecialInstruction

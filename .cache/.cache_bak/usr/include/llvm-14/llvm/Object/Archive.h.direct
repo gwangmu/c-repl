@@ -1,0 +1,11 @@
+child_end
+getArchiveMagicLen
+getChildOffset
+getFirstChildOffset
+getOffset
+getRawAccessMode
+getRawGID
+getRawLastModified
+getRawUID
+getSizeOf
+make_range

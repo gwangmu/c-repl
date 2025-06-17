@@ -1,0 +1,11 @@
+fscanf
+scanf
+sepol_iface_count
+sepol_iface_exists
+sepol_iface_iterate
+sepol_iface_modify
+sepol_iface_query
+sscanf
+vfscanf
+vscanf
+vsscanf

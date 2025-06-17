@@ -1,0 +1,15 @@
+fixed_vector
+getElementCount
+getFieldValue
+getMask
+getSizeInBits
+if
+isValid
+isVector
+LLT
+maskAndShift
+pointer
+scalable_vector
+scalar
+scalarOrVector
+vector

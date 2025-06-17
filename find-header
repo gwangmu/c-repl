@@ -1,1 +1,274 @@
-/home/gwangmu/Projects/personal/find-c-header/find-header
+#!/bin/bash
+
+set -eu
+
+SCRIPT_ROOT="$(dirname $(realpath ${BASH_SOURCE[0]}))"
+CACHE_ROOT="$SCRIPT_ROOT/.cache"
+
+CLANG="clang"
+
+log::echo() {
+  echo "$@"
+}
+
+log::info() {
+  local prefix="info: "
+  local newline="\n" 
+  local maybe_option="${2:-}"
+
+  if [[ $maybe_option == *">"* ]]; then
+    newline=""
+  fi
+  if [[ $maybe_option == *"-"* ]]; then
+    prefix=""
+  fi
+
+  printf "${prefix}$1${newline}"
+}
+
+log::warn() {
+  echo "warning: $@"
+}
+
+log::error() {
+  echo "error: $@"
+}
+
+#--
+
+help::top() {
+  log::echo "usage: $0 <command>"
+  log::echo ""
+  log::echo "Available commands:"
+  log::echo "  cache       Update stale cache entry."
+  log::echo "  find        Find a header for a given function declaration."
+}
+
+help::cache() {
+  log::echo "usage: $0 cache [<option> ...]"
+  log::echo ""
+  log::echo "Options:"
+  log::echo "  -f, --force-update     Force every cache entry to update."
+}
+
+help::find() {
+  log::echo "usage: $0 find <func_name> [<option> ...]"
+  log::echo ""
+  log::echo "Arguments:"
+  log::echo "  <func_name>      Function name to find the header for."
+  log::echo ""
+  log::echo "Options:"
+  log::echo "  -a, --all-depth      Search all depths. (default: stop at the lowest found depth)"
+  log::echo "  -p, --print-depth    Print the current depth."
+}
+
+util::parse_arguments() {
+  local -rn _pa_opts=$1
+  local -rn _pa_poss=$2
+  local -n _pa_etcs_out=$3
+  shift 3
+
+  local n_pos=0
+  while [[ ! -z "$@" ]]; do
+    if [[ "$1" == "--" ]]; then
+      local etc_began=1
+      shift
+      continue
+    fi
+
+    if [[ ! -v etc_began ]]; then
+      unset opt_found 
+      for opt in "${_pa_opts[@]}"; do
+        IFS="|" read -r opt_short opt_long opt_val <<< "$opt"
+        if [[ $1 == $opt_short ]] || [[ $1 == $opt_long ]]; then
+          local opt_long_conv=${opt_long#--*}
+          opt_long_conv=${opt_long_conv//-/}
+          if [[ "$opt_val" != "*" ]]; then
+            eval "export opt_$opt_long_conv=\"1\""
+          else
+            shift
+            eval "export opt_$opt_long_conv=\"\$1\""
+          fi
+          local opt_found=1
+          break
+        fi
+      done
+
+      if [[ ! -v opt_found ]]; then
+        if (( n_pos >= ${#_pa_poss[@]} )); then
+          echo "error: too many positional arguments."
+          exit 1
+        fi
+        
+        local -n pos_arg=${_pa_poss[$n_pos]}
+        pos_arg="$1"
+        (( n_pos = n_pos + 1 ))
+      fi
+    else
+      _pa_etcs_out+=("$1")  
+    fi
+
+    shift
+  done 
+}
+
+#--
+
+cmd::cache() {
+  log::info "updating cache..."
+
+  local opts=("-f|--force-update")
+  local poss=()
+  local etcs_out=()
+  util::parse_arguments opts poss etcs_out $@
+
+  if [[ -v opt_forceupdate ]]; then
+    cd "$CACHE_ROOT" >/dev/null 2>&1 && rm -rf *
+  fi
+
+  mkdir -p "$CACHE_ROOT"
+
+  local std_headers=$(echo | $CLANG -E -Wp,-v - 2>&1 | grep "^ /" | xargs -i@ find @ -name '*.h')
+  log::info "found $(echo "$std_headers" | wc -l) header(s)."
+
+  local n_updated=0
+  for header in $std_headers; do
+    #log::info "updating: [                    " ">"
+    if [[ ! -f "$CACHE_ROOT/$header.direct" ]] || [ $(date +%s -r "$header") -gt $(date +%s -r "$CACHE_ROOT/$header.direct") ]; then
+      local syms=""
+      mkdir -p "$(dirname "$CACHE_ROOT/$header")"
+
+      syms=$($CLANG -fsyntax-only -Xclang -ast-dump "$header" 2>/dev/null || true)
+      syms=$(echo "$syms" | awk '/FunctionDecl/{ print $0 }' || true)
+      syms=$(echo "$syms" | awk '!/implicit/{ print $0 }' || true)
+      syms=$(echo "$syms" | grep -Po '(?<= )[a-zA-Z0-9_]+(?= '"'"')' || true)
+      echo "$syms" > "$CACHE_ROOT/$header.indirect"
+
+      cat "$header" | sed '/^ *\*.*$/d' > "/tmp/.header.stripped.h"
+      grep -Po "[a-zA-Z0-9_]+[ \*]+[a-zA-Z0-9_]+ *\(" "/tmp/.header.stripped.h" | sed 's/^.*[ \*]\+\([a-zA-Z0-9_]\+\).*$/\1/g' > /tmp/.tokens
+      sort "$CACHE_ROOT/$header.indirect" /tmp/.tokens | uniq -d > "$CACHE_ROOT/$header.direct"
+
+      touch --reference "$header" "$CACHE_ROOT/$header.direct"
+      touch --reference "$header" "$CACHE_ROOT/$header.indirect"
+
+      (( n_updated = n_updated + 1 ))
+
+      if (( n_updated % 100 == 0 )); then
+        log::info "updated $n_updated headers. still going..."
+      fi
+    fi
+    #log::info "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" "->"
+    #(( cells = n_updated * 100 / $(echo "$std_headers" | wc -l) / 5 ))
+    #(( n_cells = 20 - cells ))
+    #for i in {1..$cells}; do
+    #  log::info "=" "->"
+    #done
+    #for i in {1..$n_cells}; do
+    #  log::info " " "->"
+    #done
+    #log::info "]" "->"
+  done
+
+  log::info "total $n_updated header(s) updated."
+}
+
+cmd::find() {
+  local target_name=""
+
+  local opts=("-a|--all-depth" "-d|--print-depth" "-i|--include" "-f|--formatted")
+  local poss=(target_name)
+  local etcs_out=()
+  util::parse_arguments opts poss etcs_out $@
+
+  if [[ ! -d "$CACHE_ROOT" ]]; then
+    cmd::cache
+  fi
+
+  local base_dirs=()
+  readarray -td' ' base_dirs < <(echo | $CLANG -E -Wp,-v - 2>&1 | grep "^ /" | xargs | tr -d '\n')
+
+  local n_depth=1
+  while true; do
+    unset found_at_current_depth
+
+    if [[ -v opt_printdepth ]]; then
+      log::info "searching depth $n_depth..."
+    fi
+
+    header_dirs=()
+    for base_dir in "${base_dirs[@]}"; do
+      readarray -td' ' new_header_dirs < <(find "$base_dir" -mindepth $n_depth -maxdepth $n_depth -type d 2>/dev/null | xargs | tr -d '\n')
+      header_dirs+=${new_header_dirs[@]}
+    done
+
+    if [[ -z "$header_dirs" ]]; then
+      break
+    fi
+
+    dir_headers=()
+    for base_dir in "${base_dirs[@]}"; do
+      readarray -td' ' new_dir_headers < <(find "$CACHE_ROOT$base_dir" -mindepth $n_depth -maxdepth $n_depth -type f -name '*.direct' 2>/dev/null | xargs | tr -d '\n')
+      dir_headers+=${new_dir_headers[@]}
+    done
+    
+    for header in $dir_headers; do
+      if grep "^$target_name$" "$header" >/dev/null 2>&1; then
+        local header_path=${header#$CACHE_ROOT*}
+        header_path=${header_path%*.direct}
+        if [[ -v opt_include ]]; then
+          local include_path=$(grep -Po "(?<=/)([^/]*/){$(( n_depth - 1 ))}[^/]*$" <<<"$header_path")
+          printf "%-24s  %s\n" "#include <$include_path>" "# from '$header_path'"
+        elif [[ -v opt_formatted ]]; then
+          printf "$header_path\t$n_depth\n"
+        else
+          log::info "symbol '$target_name' found at '$header_path'."
+        fi
+        local found_at_current_depth=1
+      fi
+    done
+
+    if [[ -v opt_alldepth ]] || [[ ! -v found_at_current_depth ]]; then
+      indir_headers=()
+      for base_dir in "${base_dirs[@]}"; do
+        readarray -td' ' new_indir_headers < <(find "$CACHE_ROOT$base_dir" -mindepth $n_depth -maxdepth $n_depth -type f -name '*.indirect' 2>/dev/null | xargs | tr -d '\n')
+        indir_headers+=${new_indir_headers[@]}
+      done
+
+      for header in $indir_headers; do
+        if grep "^$target_name$" "$header" >/dev/null 2>&1; then
+          local header_path=${header#$CACHE_ROOT*}
+          header_path=${header_path%*.indirect}
+          log::info "symbol '$target_name' found at '$header_path'. (indirect)"
+          local found_at_current_depth=1
+        fi
+      done
+    fi
+
+    if [[ ! -v opt_alldepth ]] &&[[ -v found_at_current_depth ]]; then
+      break
+    fi
+
+    (( n_depth = n_depth + 1 ))
+  done
+}
+
+#--
+
+main() {
+  cmd_major="${1:-}"
+  case $cmd_major in
+    "cache")
+      shift
+      cmd::cache $@
+      ;;
+    "find")
+      shift
+      cmd::find $@
+      ;;
+    *)
+      help::top
+      ;;
+  esac
+}
+
+main $@

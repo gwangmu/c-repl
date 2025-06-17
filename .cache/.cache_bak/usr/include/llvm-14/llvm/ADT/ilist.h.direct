@@ -1,0 +1,11 @@
+clear
+deleteNode
+erase
+getNextNode
+getPrevNode
+insert
+member
+merge
+remove
+splice
+swap

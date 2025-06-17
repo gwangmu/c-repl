@@ -1,0 +1,9 @@
+g_cond_free
+GLIB_DEPRECATED_TYPE_IN_2_32_FOR
+g_mutex_free
+g_static_private_init
+g_thread_foreach
+g_thread_init
+g_thread_init_with_errorcheck_mutexes
+g_thread_set_priority
+guint64

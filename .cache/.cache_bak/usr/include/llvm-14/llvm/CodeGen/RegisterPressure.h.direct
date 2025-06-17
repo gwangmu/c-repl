@@ -1,0 +1,15 @@
+advance
+clear
+closeRegion
+dump
+getDownwardPressure
+getMaxDownwardPressureDelta
+getMaxUpwardPressureDelta
+getUpwardPressure
+init
+initLiveThru
+openBottom
+openTop
+recede
+recedeSkipDebugValues
+reset

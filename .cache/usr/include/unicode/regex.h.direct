@@ -1,0 +1,17 @@
+compile
+end
+end64
+find
+getDynamicClassID
+getStaticClassID
+group
+groupNumberFromName
+init
+lookingAt
+matcher
+matches
+replaceAll
+replaceFirst
+split
+start
+start64

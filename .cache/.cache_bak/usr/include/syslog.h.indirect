@@ -1,0 +1,5 @@
+closelog
+openlog
+setlogmask
+syslog
+vsyslog

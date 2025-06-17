@@ -1,0 +1,5 @@
+g_list_free
+g_list_free_1
+g_list_free_full
+g_list_foreach
+g_clear_list

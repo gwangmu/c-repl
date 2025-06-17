@@ -1,0 +1,14 @@
+g_task_report_error
+g_task_set_task_data
+g_task_set_priority
+g_task_set_check_cancellable
+g_task_set_source_tag
+g_task_set_name
+g_task_run_in_thread
+g_task_run_in_thread_sync
+g_task_attach_source
+g_task_return_pointer
+g_task_return_boolean
+g_task_return_int
+g_task_return_error
+g_task_return_value

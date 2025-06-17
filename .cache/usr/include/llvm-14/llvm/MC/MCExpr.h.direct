@@ -1,0 +1,11 @@
+classof
+comparison
+create
+encodeSubclassData
+evaluateAsAbsolute
+evaluateAsRelocatableImpl
+findAssociatedFragment
+form
+getKind
+getOpcode
+getSubclassData

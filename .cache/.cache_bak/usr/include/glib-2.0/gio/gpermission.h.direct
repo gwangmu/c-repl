@@ -1,0 +1,3 @@
+g_permission_acquire_async
+g_permission_impl_update
+g_permission_release_async

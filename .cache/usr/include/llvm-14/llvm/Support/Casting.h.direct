@@ -1,0 +1,6 @@
+cast
+doit
+dyn_cast
+isa
+unique_dyn_cast
+unique_dyn_cast_or_null

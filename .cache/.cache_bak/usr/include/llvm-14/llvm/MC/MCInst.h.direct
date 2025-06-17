@@ -1,0 +1,6 @@
+begin
+dump
+dump_pretty
+end
+erase
+print

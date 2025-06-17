@@ -1,0 +1,9 @@
+OSSL_trace_get_category_num
+OSSL_trace_get_category_name
+OSSL_trace_set_channel
+OSSL_trace_set_prefix
+OSSL_trace_set_suffix
+OSSL_trace_set_callback
+OSSL_trace_enabled
+OSSL_trace_begin
+OSSL_trace_end

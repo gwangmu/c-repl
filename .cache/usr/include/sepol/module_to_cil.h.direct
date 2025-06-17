@@ -1,0 +1,10 @@
+fscanf
+reallocarray
+scanf
+sepol_module_package_to_cil
+sepol_module_policydb_to_cil
+sepol_ppfile_to_module_package
+sscanf
+vfscanf
+vscanf
+vsscanf

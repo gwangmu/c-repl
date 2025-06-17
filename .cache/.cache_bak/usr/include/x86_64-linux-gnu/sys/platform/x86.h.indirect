@@ -1,0 +1,3 @@
+__x86_get_cpuid_feature_leaf
+x86_cpu_present
+x86_cpu_active

@@ -1,0 +1,7 @@
+g_drive_get_name
+g_drive_poll_for_media
+g_drive_get_identifier
+g_drive_enumerate_identifiers
+g_drive_start
+g_drive_stop
+g_drive_eject_with_operation

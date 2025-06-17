@@ -1,0 +1,4 @@
+g_boxed_free
+g_value_set_boxed
+g_value_set_static_boxed
+g_value_take_boxed

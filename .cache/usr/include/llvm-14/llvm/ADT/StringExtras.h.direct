@@ -1,0 +1,14 @@
+hexDigitValue
+isAlpha
+isASCII
+join
+join_impl
+join_items_impl
+join_items_size
+join_one_item_size
+StringRef
+to_float
+toHex
+toString
+toStringRef
+utostr

@@ -1,0 +1,9 @@
+getAlignment
+getCommonSymbolSizeImpl
+getObject
+getRawDataRefImpl
+isBerkeleyData
+isBerkeleyText
+isDebugSection
+moveNext
+value

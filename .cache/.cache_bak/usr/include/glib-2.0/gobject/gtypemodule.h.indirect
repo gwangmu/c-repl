@@ -1,0 +1,4 @@
+G_DEFINE_AUTOPTR_CLEANUP_FUNC
+g_type_module_unuse
+g_type_module_set_name
+g_type_module_add_interface

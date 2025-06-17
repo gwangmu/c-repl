@@ -1,0 +1,2 @@
+g_match_info_unref
+g_regex_error_quark

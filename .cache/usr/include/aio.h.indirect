@@ -1,0 +1,16 @@
+__bswap_16
+__bswap_32
+__bswap_64
+__uint16_identity
+__uint32_identity
+__uint64_identity
+select
+pselect
+aio_read
+aio_write
+lio_listio
+aio_error
+aio_return
+aio_cancel
+aio_suspend
+aio_fsync

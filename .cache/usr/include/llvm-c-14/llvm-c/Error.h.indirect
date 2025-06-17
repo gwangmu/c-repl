@@ -1,0 +1,6 @@
+LLVMGetErrorTypeId
+LLVMConsumeError
+LLVMGetErrorMessage
+LLVMDisposeErrorMessage
+LLVMGetStringErrorTypeId
+LLVMCreateStringError

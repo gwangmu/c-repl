@@ -1,0 +1,15 @@
+__be16_to_cpup
+__be32_to_cpup
+__be64_to_cpup
+__cpu_to_be16p
+__cpu_to_be32p
+__cpu_to_be64p
+__cpu_to_le16p
+__cpu_to_le32p
+__cpu_to_le64p
+__le16_to_cpup
+__le32_to_cpup
+__le64_to_cpup
+__swab16p
+__swab32p
+__swab64p

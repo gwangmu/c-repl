@@ -1,0 +1,15 @@
+__attribute__
+__builtin_arm_cls
+__builtin_arm_cls64
+__builtin_arm_qadd
+__builtin_bswap32
+__builtin_bswap64
+defined
+__pldx
+__plix
+__rbit
+__rbitll
+__rev16
+__rev16ll
+__ror
+__rorll

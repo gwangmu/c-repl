@@ -1,0 +1,6 @@
+begin
+empty
+getUnderlyingStream
+Iterator
+size
+VarStreamArray

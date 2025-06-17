@@ -1,0 +1,9 @@
+any
+const_set_bits_iterator
+find_first_in
+find_first_unset_in
+find_last_in
+find_last_unset_in
+size
+swap
+test

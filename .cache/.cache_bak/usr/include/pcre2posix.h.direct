@@ -1,0 +1,7 @@
+Copyright
+__declspec
+pcre2_regcomp
+pcre2_regerror
+pcre2_regexec
+pcre2_regfree
+reallocarray

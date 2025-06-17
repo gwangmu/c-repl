@@ -1,0 +1,17 @@
+addFile
+classof
+close
+copyWithNewName
+dir_begin
+dump
+exists
+getName
+getRealPath
+isLocal
+makeAbsolute
+overlays_begin
+overlays_end
+overlays_rbegin
+overlays_rend
+path
+setCurrentWorkingDirectory

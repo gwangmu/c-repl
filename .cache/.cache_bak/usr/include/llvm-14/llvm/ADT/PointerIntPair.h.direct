@@ -1,0 +1,5 @@
+getAddrOfPointer
+getFromOpaqueValue
+getInt
+getPointer
+PointerIntPair

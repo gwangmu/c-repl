@@ -1,0 +1,5 @@
+LLVMGetComdat
+LLVMGetComdatSelectionKind
+LLVMGetOrInsertComdat
+LLVMSetComdat
+LLVMSetComdatSelectionKind

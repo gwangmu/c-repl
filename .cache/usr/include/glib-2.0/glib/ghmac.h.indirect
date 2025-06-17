@@ -1,0 +1,7 @@
+g_checksum_reset
+g_checksum_free
+g_checksum_update
+g_checksum_get_digest
+g_hmac_unref
+g_hmac_update
+g_hmac_get_digest

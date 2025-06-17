@@ -1,0 +1,12 @@
+Cast
+CheckCast
+fscanf
+scanf
+Set
+SetAccessor
+SetHandler
+SetNativeDataProperty
+sscanf
+vfscanf
+vscanf
+vsscanf

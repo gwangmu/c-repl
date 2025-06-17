@@ -1,0 +1,10 @@
+select
+pselect
+gettimeofday
+settimeofday
+adjtime
+getitimer
+setitimer
+utimes
+lutimes
+futimes

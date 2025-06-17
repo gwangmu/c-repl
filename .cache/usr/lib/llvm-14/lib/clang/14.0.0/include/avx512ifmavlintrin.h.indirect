@@ -1,0 +1,12 @@
+_mm_madd52hi_epu64
+_mm_mask_madd52hi_epu64
+_mm_maskz_madd52hi_epu64
+_mm256_madd52hi_epu64
+_mm256_mask_madd52hi_epu64
+_mm256_maskz_madd52hi_epu64
+_mm_madd52lo_epu64
+_mm_mask_madd52lo_epu64
+_mm_maskz_madd52lo_epu64
+_mm256_madd52lo_epu64
+_mm256_mask_madd52lo_epu64
+_mm256_maskz_madd52lo_epu64

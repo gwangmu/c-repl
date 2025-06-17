@@ -1,0 +1,12 @@
+Clear
+CompressedPointer
+Decompress
+defined
+GetAsInteger
+IsCleared
+IsSentinel
+Load
+LoadAtomic
+RawPointer
+Store
+StoreAtomic

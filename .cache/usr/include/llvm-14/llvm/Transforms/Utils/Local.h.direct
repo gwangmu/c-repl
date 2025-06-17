@@ -1,0 +1,4 @@
+ConvertDebugDeclareToDebugValue
+getOrEnforceKnownAlignment
+RecursivelyDeleteTriviallyDeadInstructions
+replaceDominatedUsesWith

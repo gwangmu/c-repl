@@ -1,0 +1,6 @@
+duplocale
+freelocale
+localeconv
+newlocale
+setlocale
+uselocale

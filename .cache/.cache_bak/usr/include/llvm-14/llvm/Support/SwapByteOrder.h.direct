@@ -1,0 +1,6 @@
+ByteSwap_16
+ByteSwap_32
+ByteSwap_64
+defined
+getSwappedBytes
+sizeof

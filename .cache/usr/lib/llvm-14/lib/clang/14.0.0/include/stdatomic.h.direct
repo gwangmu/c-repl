@@ -1,0 +1,8 @@
+_Atomic
+atomic_flag_clear
+atomic_flag_clear_explicit
+atomic_flag_test_and_set
+atomic_flag_test_and_set_explicit
+atomic_signal_fence
+atomic_thread_fence
+deprecated

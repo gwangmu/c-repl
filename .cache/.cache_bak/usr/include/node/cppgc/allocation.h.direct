@@ -1,0 +1,5 @@
+Allocate
+Call
+Invoke
+MakeGarbageCollected
+MarkObjectAsFullyConstructed

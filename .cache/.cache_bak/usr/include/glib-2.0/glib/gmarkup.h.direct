@@ -1,0 +1,5 @@
+g_markup_error_quark
+g_markup_parse_context_free
+g_markup_parse_context_get_position
+g_markup_parse_context_push
+g_markup_parse_context_unref

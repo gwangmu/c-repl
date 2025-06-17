@@ -1,0 +1,14 @@
+changeVectorElementTypeToInteger
+enum_seq_inclusive
+getScalableVectorVT
+getScalarType
+getSizeInBits
+getStoreSize
+getVectorMinNumElements
+getVectorVT
+isVector
+knownBitsGE
+knownBitsGT
+knownBitsLE
+knownBitsLT
+MVT

@@ -1,0 +1,14 @@
+array
+ArrayRef
+begin
+data
+drop_back
+drop_front
+end
+LLVM_GNUC_PREREQ
+MutableArrayRef
+rbegin
+rend
+reverse_iterator
+slice
+T

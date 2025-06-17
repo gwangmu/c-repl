@@ -1,0 +1,5 @@
+_mm256_castsi256_ps
+_mm256_cvtpbh_ps
+_mm_castsi128_ps
+_mm_cvtness_sbh
+_mm_cvtpbh_ps

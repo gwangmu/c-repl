@@ -1,0 +1,9 @@
+cbproc_error_1
+cbproc_error_1_svc
+cbproc_finish_1
+cbproc_finish_1_svc
+cbproc_receive_1
+cbproc_receive_1_svc
+cb_prog_1_freeresult
+xdr_cback_data
+xdr_obj_p

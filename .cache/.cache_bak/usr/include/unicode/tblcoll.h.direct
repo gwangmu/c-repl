@@ -1,0 +1,6 @@
+compare
+createCollationElementIterator
+doCompare
+getSortKey
+rbcFromUCollator
+setVariableTop

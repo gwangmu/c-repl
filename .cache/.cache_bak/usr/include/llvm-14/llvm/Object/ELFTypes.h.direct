@@ -1,0 +1,17 @@
+entry
+file
+flags
+getBinding
+getRInfo
+getSymbol
+getType
+name
+section
+segment
+setRInfo
+setSymbol
+setSymbolAndType
+setType
+StringRef
+structure
+type

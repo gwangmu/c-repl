@@ -1,0 +1,12 @@
+g_hook_list_init
+g_hook_list_clear
+g_hook_free
+g_hook_unref
+g_hook_destroy_link
+g_hook_prepend
+g_hook_insert_before
+g_hook_insert_sorted
+g_hook_list_invoke
+g_hook_list_invoke_check
+g_hook_list_marshal
+g_hook_list_marshal_check

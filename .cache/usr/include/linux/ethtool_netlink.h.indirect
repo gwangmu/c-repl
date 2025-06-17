@@ -1,0 +1,6 @@
+ethtool_cmd_speed_set
+ethtool_cmd_speed
+ethtool_get_flow_spec_ring
+ethtool_get_flow_spec_ring_vf
+ethtool_validate_speed
+ethtool_validate_duplex

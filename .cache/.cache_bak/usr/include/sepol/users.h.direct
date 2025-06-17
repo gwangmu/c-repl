@@ -1,0 +1,11 @@
+fscanf
+scanf
+sepol_user_count
+sepol_user_exists
+sepol_user_iterate
+sepol_user_modify
+sepol_user_query
+sscanf
+vfscanf
+vscanf
+vsscanf

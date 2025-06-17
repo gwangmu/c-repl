@@ -1,0 +1,16 @@
+ConstantAccessor
+constant_iterator
+FunctionAccessor
+function_iterator
+getDwarfRegNum
+getNumLocations
+getSizeInBytes
+LiveOutAccessor
+liveout_iterator
+LocationAccessor
+location_iterator
+make_range
+next
+RecordAccessor
+record_iterator
+sizeof

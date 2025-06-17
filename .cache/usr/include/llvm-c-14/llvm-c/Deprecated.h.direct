@@ -1,0 +1,4 @@
+__attribute__
+defined
+__has_feature
+LLVM_ATTRIBUTE_C_DEPRECATED

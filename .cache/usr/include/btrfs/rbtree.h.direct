@@ -1,0 +1,17 @@
+fscanf
+rb_erase
+rb_first
+rb_first_postorder
+rb_insert_color
+rb_last
+rb_link_node
+rb_next
+rb_next_postorder
+rb_prev
+rb_replace_node
+reallocarray
+scanf
+sscanf
+vfscanf
+vscanf
+vsscanf

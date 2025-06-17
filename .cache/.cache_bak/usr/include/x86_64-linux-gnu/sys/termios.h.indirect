@@ -1,0 +1,13 @@
+cfgetospeed
+cfgetispeed
+cfsetospeed
+cfsetispeed
+cfsetspeed
+tcgetattr
+tcsetattr
+cfmakeraw
+tcsendbreak
+tcdrain
+tcflush
+tcflow
+tcgetsid

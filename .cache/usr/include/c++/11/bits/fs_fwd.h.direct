@@ -1,0 +1,8 @@
+copy
+copy_file
+file_size
+hard_link_count
+last_write_time
+proximate
+status
+symlink_status

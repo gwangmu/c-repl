@@ -1,0 +1,7 @@
+cast
+Char16Ptr
+ConstChar16Ptr
+get
+toOldUCharPtr
+toUCharPtr
+U_ALIASING_BARRIER

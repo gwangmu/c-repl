@@ -1,0 +1,14 @@
+_mm512_conflict_epi64
+_mm512_mask_conflict_epi64
+_mm512_maskz_conflict_epi64
+_mm512_conflict_epi32
+_mm512_mask_conflict_epi32
+_mm512_maskz_conflict_epi32
+_mm512_lzcnt_epi32
+_mm512_mask_lzcnt_epi32
+_mm512_maskz_lzcnt_epi32
+_mm512_lzcnt_epi64
+_mm512_mask_lzcnt_epi64
+_mm512_maskz_lzcnt_epi64
+_mm512_broadcastmb_epi64
+_mm512_broadcastmw_epi32

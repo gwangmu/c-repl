@@ -1,0 +1,6 @@
+__attribute__
+_GLIBCXX_VISIBILITY
+if
+_M_extract_int
+_M_insert_int
+throw

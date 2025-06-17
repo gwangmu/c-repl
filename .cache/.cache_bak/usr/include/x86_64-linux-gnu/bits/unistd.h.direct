@@ -1,0 +1,8 @@
+__attr_access
+__getwd_chk
+__glibc_fortify
+__nonnull
+__NTH
+__REDIRECT
+__REDIRECT_NTH
+__warnattr

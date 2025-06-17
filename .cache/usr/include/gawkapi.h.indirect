@@ -1,0 +1,7 @@
+r_make_string_type
+r_make_string
+make_null_string
+make_number
+make_number_mpz
+make_number_mpfr
+dl_load

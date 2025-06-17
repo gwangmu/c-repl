@@ -1,0 +1,17 @@
+g_array_set_clear_func
+g_array_sort
+g_array_sort_with_data
+g_array_unref
+g_byte_array_sort
+g_byte_array_sort_with_data
+g_byte_array_unref
+g_ptr_array_add
+g_ptr_array_extend
+g_ptr_array_extend_and_steal
+g_ptr_array_foreach
+g_ptr_array_insert
+g_ptr_array_set_free_func
+g_ptr_array_set_size
+g_ptr_array_sort
+g_ptr_array_sort_with_data
+g_ptr_array_unref

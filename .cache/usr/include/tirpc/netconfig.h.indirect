@@ -1,0 +1,10 @@
+setnetconfig
+getnetconfig
+getnetconfigent
+freenetconfigent
+endnetconfig
+setnetpath
+getnetpath
+endnetpath
+nc_perror
+nc_sperror

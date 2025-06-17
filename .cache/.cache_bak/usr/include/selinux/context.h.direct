@@ -1,0 +1,11 @@
+context_free
+context_new
+context_range_get
+context_range_set
+context_role_get
+context_role_set
+context_str
+context_type_get
+context_type_set
+context_user_get
+context_user_set

@@ -1,0 +1,12 @@
+Cast
+CheckCast
+fscanf
+GetAlignedPointerFromInternalField
+GetIsolate
+InternalFieldCount
+scanf
+SlowGetAlignedPointerFromInternalField
+sscanf
+vfscanf
+vscanf
+vsscanf

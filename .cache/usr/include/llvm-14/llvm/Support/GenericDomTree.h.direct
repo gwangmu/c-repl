@@ -1,0 +1,17 @@
+applyUpdates
+begin
+changeImmediateDominator
+compare
+dominatedBySlowTreeWalk
+dominates
+end
+findNearestCommonDominator
+internally
+isPostDominator
+isReachableFromEntry
+make_range
+O
+properlyDominates
+recalculate
+root_begin
+root_end

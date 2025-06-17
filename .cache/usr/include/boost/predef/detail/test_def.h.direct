@@ -1,0 +1,12 @@
+add_predef_entry
+BOOST_PREDEF_DECLARE_TEST
+create_predef_entries
+fscanf
+predef_info_compare
+reallocarray
+scanf
+sscanf
+strcmp
+vfscanf
+vscanf
+vsscanf

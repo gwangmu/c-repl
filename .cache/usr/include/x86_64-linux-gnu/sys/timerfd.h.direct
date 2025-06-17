@@ -1,0 +1,5 @@
+defined
+__REDIRECT_NTH
+timerfd_create
+timerfd_gettime
+timerfd_settime

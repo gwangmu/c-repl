@@ -1,0 +1,16 @@
+__rpc_get_a_size
+__rpc_dtbsize
+_rpc_dtablesize
+__rpcgettp
+__rpc_get_default_domain
+__rpc_taddr2uaddr_af
+__rpc_uaddr2taddr_af
+__rpc_fixup_addr
+__rpc_sockinfo2netid
+__rpc_seman2socktype
+__rpc_socktype2seman
+rpc_nullproc
+__rpc_sockisbound
+__rpcb_findaddr
+rpc_control
+_get_next_token

@@ -1,0 +1,8 @@
+addAttribute
+delete
+getAttribute
+getAttributes
+getInitializer
+hasAttribute
+hasInitializer
+new

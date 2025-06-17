@@ -1,0 +1,5 @@
+PrintError
+PrintFatalError
+PrintFatalNote
+PrintNote
+PrintWarning

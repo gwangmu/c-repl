@@ -1,0 +1,5 @@
+MD4_Init
+MD4_Update
+MD4_Final
+MD4
+MD4_Transform

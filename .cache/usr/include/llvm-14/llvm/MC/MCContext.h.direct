@@ -1,0 +1,10 @@
+alignment
+createNamedTempSymbol
+createTempSymbol
+getCOFFSection
+getELFSection
+getMachOSection
+getMCDwarfLineTable
+getWasmSection
+memory
+this

@@ -1,0 +1,13 @@
+sepol_bool_clone
+sepol_bool_compare
+sepol_bool_compare2
+sepol_bool_create
+sepol_bool_free
+sepol_bool_get_name
+sepol_bool_get_value
+sepol_bool_key_create
+sepol_bool_key_extract
+sepol_bool_key_free
+sepol_bool_key_unpack
+sepol_bool_set_name
+sepol_bool_set_value

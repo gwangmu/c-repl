@@ -1,0 +1,13 @@
+avtab_alloc
+avtab_destroy
+avtab_hash_eval
+avtab_init
+avtab_insert
+avtab_insert_nonunique
+avtab_insert_with_parse_context
+avtab_map
+avtab_read
+avtab_read_item
+avtab_search
+avtab_search_node
+avtab_search_node_next

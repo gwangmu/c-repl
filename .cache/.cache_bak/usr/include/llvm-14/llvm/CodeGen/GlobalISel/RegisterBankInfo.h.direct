@@ -1,0 +1,12 @@
+applyDefaultMapping
+copyCost
+dbgs
+dump
+getID
+getInstructionMappingImpl
+getMI
+getOperandsMapping
+isValid
+print
+ValueMapping
+verify

@@ -1,0 +1,13 @@
+LLVMInitializeAggressiveInstCombiner
+LLVMInitializeAnalysis
+LLVMInitializeCodeGen
+LLVMInitializeCore
+LLVMInitializeInstCombine
+LLVMInitializeInstrumentation
+LLVMInitializeIPA
+LLVMInitializeIPO
+LLVMInitializeObjCARCOpts
+LLVMInitializeScalarOpts
+LLVMInitializeTarget
+LLVMInitializeTransformUtils
+LLVMInitializeVectorization

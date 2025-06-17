@@ -1,0 +1,3 @@
+G_DEFINE_AUTOPTR_CLEANUP_FUNC
+g_unix_connection_send_credentials_async
+g_unix_connection_receive_credentials_async

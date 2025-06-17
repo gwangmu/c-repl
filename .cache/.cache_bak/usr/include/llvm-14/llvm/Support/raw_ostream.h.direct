@@ -1,0 +1,16 @@
+anchor
+clear_error
+current_pos
+enable_color
+enable_colors
+error
+flush
+has_colors
+has_error
+is_displayed
+preferred_buffer_size
+pwrite_impl
+reserveExtraSpace
+tell
+write
+write_impl

@@ -1,0 +1,11 @@
+setsgent
+endsgent
+getsgent
+getsgnam
+sgetsgent
+fgetsgent
+putsgent
+getsgent_r
+getsgnam_r
+sgetsgent_r
+fgetsgent_r

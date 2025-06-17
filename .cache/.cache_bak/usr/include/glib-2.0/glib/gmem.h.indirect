@@ -1,0 +1,5 @@
+g_free
+g_clear_pointer
+g_aligned_free
+g_mem_set_vtable
+g_mem_profile

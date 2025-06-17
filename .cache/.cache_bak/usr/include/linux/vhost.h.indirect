@@ -1,0 +1,3 @@
+vring_init
+vring_size
+vring_need_event

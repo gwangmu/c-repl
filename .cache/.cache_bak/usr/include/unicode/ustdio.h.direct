@@ -1,0 +1,8 @@
+format
+fscanf
+scanf
+setvbuf
+sscanf
+vfscanf
+vscanf
+vsscanf

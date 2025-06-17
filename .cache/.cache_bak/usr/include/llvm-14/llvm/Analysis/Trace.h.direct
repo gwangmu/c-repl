@@ -1,0 +1,6 @@
+begin
+end
+erase
+getBlockIndex
+rbegin
+rend

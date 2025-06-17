@@ -1,0 +1,10 @@
+emplace
+F
+getPointer
+getValue
+getValueOr
+hasValue
+map
+Optional
+OptionalStorage
+reset

@@ -1,0 +1,7 @@
+g_timer_destroy
+g_timer_start
+g_timer_stop
+g_timer_reset
+g_timer_continue
+g_usleep
+g_time_val_add

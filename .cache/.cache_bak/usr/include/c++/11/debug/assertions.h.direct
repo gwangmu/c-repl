@@ -1,0 +1,6 @@
+_GLIBCXX_DEBUG_ASSERT
+_GLIBCXX_DEBUG_ONLY
+_GLIBCXX_DEBUG_PEDASSERT
+__glibcxx_requires_nonempty
+__glibcxx_requires_non_empty_range
+__glibcxx_requires_subscript

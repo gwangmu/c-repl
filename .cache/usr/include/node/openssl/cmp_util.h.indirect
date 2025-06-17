@@ -1,0 +1,4 @@
+OSSL_CMP_log_open
+OSSL_CMP_log_close
+OSSL_CMP_print_to_bio
+OSSL_CMP_print_errors_cb

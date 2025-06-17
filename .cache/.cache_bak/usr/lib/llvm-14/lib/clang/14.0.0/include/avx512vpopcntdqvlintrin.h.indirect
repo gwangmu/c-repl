@@ -1,0 +1,12 @@
+_mm_popcnt_epi64
+_mm_mask_popcnt_epi64
+_mm_maskz_popcnt_epi64
+_mm_popcnt_epi32
+_mm_mask_popcnt_epi32
+_mm_maskz_popcnt_epi32
+_mm256_popcnt_epi64
+_mm256_mask_popcnt_epi64
+_mm256_maskz_popcnt_epi64
+_mm256_popcnt_epi32
+_mm256_mask_popcnt_epi32
+_mm256_maskz_popcnt_epi32

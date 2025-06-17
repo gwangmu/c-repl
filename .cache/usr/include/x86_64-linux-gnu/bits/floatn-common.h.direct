@@ -1,0 +1,14 @@
+__attribute__
+__builtin_huge_valf64
+__builtin_huge_valf64x
+__builtin_inff64
+__builtin_inff64x
+__builtin_nanf64
+__builtin_nanf64x
+__builtin_nansf64
+__builtin_nansf64x
+__f16
+__f32
+__f32x
+__f64
+__f64x

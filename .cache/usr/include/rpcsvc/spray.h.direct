@@ -1,0 +1,11 @@
+defined
+sprayproc_clear_1
+sprayproc_clear_1_svc
+sprayproc_get_1
+sprayproc_get_1_svc
+sprayproc_spray_1
+sprayproc_spray_1_svc
+sprayprog_1_freeresult
+xdr_sprayarr
+xdr_spraycumul
+xdr_spraytimeval

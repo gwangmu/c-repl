@@ -1,0 +1,6 @@
+__attr_access
+preadv
+pwritev
+readv
+__REDIRECT
+writev

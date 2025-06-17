@@ -1,0 +1,3 @@
+g_type_module_add_interface
+g_type_module_set_name
+g_type_module_unuse

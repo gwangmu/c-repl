@@ -1,0 +1,11 @@
+generateIRRepresentation
+handleAfter
+handleFiltered
+handleFunctionCompare
+handleIgnored
+handleInitialIR
+handleInvalidated
+IR
+isPoisoned
+omitAfter
+registerCallbacks

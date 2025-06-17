@@ -1,0 +1,6 @@
+__assert
+assert
+__assert_fail
+assert_perror
+__assert_perror_fail
+__attribute__

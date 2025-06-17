@@ -1,0 +1,10 @@
+g_free
+g_clear_pointer
+g_aligned_free
+g_mem_set_vtable
+g_mem_profile
+g_ref_string_new
+g_ref_string_new_len
+g_ref_string_new_intern
+g_ref_string_acquire
+g_ref_string_release

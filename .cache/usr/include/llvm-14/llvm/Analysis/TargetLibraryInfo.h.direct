@@ -1,0 +1,12 @@
+disableAllFunctions
+getIntSize
+getLibFunc
+getState
+getVectorizedFunction
+getWCharSize
+getWidestVF
+invalidate
+isCallingConvCCompatible
+isFunctionVectorizable
+setUnavailable
+TargetLibraryInfoWrapperPass

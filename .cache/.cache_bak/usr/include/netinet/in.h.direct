@@ -1,0 +1,15 @@
+__attribute__
+bindresvport
+bindresvport6
+htonl
+htons
+IN6_ARE_ADDR_EQUAL
+IN6_IS_ADDR_LINKLOCAL
+IN6_IS_ADDR_LOOPBACK
+IN6_IS_ADDR_SITELOCAL
+IN6_IS_ADDR_UNSPECIFIED
+IN6_IS_ADDR_V4COMPAT
+IN6_IS_ADDR_V4MAPPED
+ntohl
+ntohs
+Processing

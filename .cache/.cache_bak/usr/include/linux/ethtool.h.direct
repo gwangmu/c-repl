@@ -1,0 +1,10 @@
+bitmap
+enable
+ethtool_cmd_speed
+ethtool_cmd_speed_set
+ethtool_get_flow_spec_ring
+ethtool_get_flow_spec_ring_vf
+ethtool_validate_duplex
+ethtool_validate_speed
+only
+spec

@@ -1,0 +1,9 @@
+g_datalist_clear
+g_datalist_foreach
+g_datalist_id_set_data_full
+g_datalist_init
+g_datalist_set_flags
+g_datalist_unset_flags
+g_dataset_destroy
+g_dataset_foreach
+g_dataset_id_set_data_full

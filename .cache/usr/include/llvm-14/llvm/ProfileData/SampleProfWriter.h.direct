@@ -1,0 +1,16 @@
+addContext
+addSectionFlag
+resetSecLayout
+setPartialProfile
+setProfileSymbolList
+setToCompressAllSections
+setUseMD5
+verifySecLayout
+write
+writeCustomSection
+writeFuncMetadata
+writeFuncOffsetTable
+writeHeader
+writeNameTable
+writer
+writeSample

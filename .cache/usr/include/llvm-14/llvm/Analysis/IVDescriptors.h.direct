@@ -1,0 +1,5 @@
+getExactFPMathInst
+getOpcode
+isIntMinMaxRecurrenceKind
+of
+select

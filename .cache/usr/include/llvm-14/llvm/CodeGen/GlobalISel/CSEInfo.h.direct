@@ -1,0 +1,4 @@
+releaseMemory
+setMF
+shouldCSE
+shouldCSEOpc

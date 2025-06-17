@@ -1,0 +1,7 @@
+__attribute__
+_mm256_mask_bitshuffle_epi64_mask
+_mm256_mask_popcnt_epi16
+_mm256_mask_popcnt_epi8
+_mm_mask_bitshuffle_epi64_mask
+_mm_mask_popcnt_epi16
+_mm_mask_popcnt_epi8

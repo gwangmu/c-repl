@@ -1,0 +1,13 @@
+endspent
+fgetspent
+fgetspent_r
+getspent
+getspent_r
+getspnam
+getspnam_r
+lckpwdf
+putspent
+setspent
+sgetspent
+sgetspent_r
+ulckpwdf

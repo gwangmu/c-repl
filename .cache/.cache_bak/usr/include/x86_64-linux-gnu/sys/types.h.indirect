@@ -1,0 +1,8 @@
+__bswap_16
+__bswap_32
+__bswap_64
+__uint16_identity
+__uint32_identity
+__uint64_identity
+select
+pselect

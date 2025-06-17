@@ -1,0 +1,9 @@
+constraint_expr_destroy
+constraint_expr_init
+fscanf
+reallocarray
+scanf
+sscanf
+vfscanf
+vscanf
+vsscanf

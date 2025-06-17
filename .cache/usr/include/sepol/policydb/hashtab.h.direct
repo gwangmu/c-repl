@@ -1,0 +1,15 @@
+fscanf
+hashtab_create
+hashtab_destroy
+hashtab_hash_eval
+hashtab_insert
+hashtab_map
+hashtab_remove
+hashtab_search
+int
+scanf
+sscanf
+to
+vfscanf
+vscanf
+vsscanf

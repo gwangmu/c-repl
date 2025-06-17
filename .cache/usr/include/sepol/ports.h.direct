@@ -1,0 +1,11 @@
+fscanf
+scanf
+sepol_port_count
+sepol_port_exists
+sepol_port_iterate
+sepol_port_modify
+sepol_port_query
+sscanf
+vfscanf
+vscanf
+vsscanf

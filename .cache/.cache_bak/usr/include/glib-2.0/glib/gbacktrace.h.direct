@@ -1,0 +1,5 @@
+defined
+G_BREAKPOINT
+g_on_error_query
+g_on_error_stack_trace
+__volatile__

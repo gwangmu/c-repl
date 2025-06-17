@@ -1,0 +1,8 @@
+g_mount_eject_with_operation
+g_mount_get_name
+g_mount_get_uuid
+g_mount_guess_content_type
+g_mount_remount
+g_mount_shadow
+g_mount_unmount_with_operation
+g_mount_unshadow

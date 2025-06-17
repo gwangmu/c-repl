@@ -1,0 +1,5 @@
+g_dbus_object_skeleton_flush
+g_dbus_object_skeleton_add_interface
+g_dbus_object_skeleton_remove_interface
+g_dbus_object_skeleton_remove_interface_by_name
+g_dbus_object_skeleton_set_object_path

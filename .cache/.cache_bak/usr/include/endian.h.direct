@@ -1,0 +1,12 @@
+be16toh
+be32toh
+be64toh
+htobe16
+htobe32
+htobe64
+htole16
+htole32
+htole64
+le16toh
+le32toh
+le64toh

@@ -1,0 +1,10 @@
+addGlobalMapping
+addObjectFile
+create
+ExecutionEngine
+getPointerToFunction
+getPointerToGlobal
+getPointerToGlobalIfAvailable
+runStaticConstructorsDestructors
+selectTarget
+updateGlobalMapping

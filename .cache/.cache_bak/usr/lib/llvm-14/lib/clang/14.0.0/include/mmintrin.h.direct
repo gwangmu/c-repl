@@ -1,0 +1,4 @@
+__attribute__
+_mm_set_pi16
+_mm_set_pi32
+_mm_set_pi8

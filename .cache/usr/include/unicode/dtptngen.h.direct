@@ -1,0 +1,5 @@
+createInstance
+getBestPattern
+replaceFieldTypes
+staticGetBaseSkeleton
+staticGetSkeleton

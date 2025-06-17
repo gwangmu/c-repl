@@ -1,0 +1,8 @@
+BarrierEnabledGet
+CheckParams
+constexpr
+defined
+GenerationalBarrier
+Get
+GetNoSlot
+GetWriteBarrierType

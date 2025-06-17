@@ -1,0 +1,11 @@
+insque
+remque
+hsearch
+hcreate
+hdestroy
+tsearch
+tfind
+tdelete
+twalk
+lfind
+lsearch

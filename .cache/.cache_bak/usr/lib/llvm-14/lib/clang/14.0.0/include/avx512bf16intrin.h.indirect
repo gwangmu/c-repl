@@ -1,0 +1,13 @@
+_mm_cvtsbh_ss
+_mm512_cvtne2ps_pbh
+_mm512_mask_cvtne2ps_pbh
+_mm512_maskz_cvtne2ps_pbh
+_mm512_cvtneps_pbh
+_mm512_mask_cvtneps_pbh
+_mm512_maskz_cvtneps_pbh
+_mm512_dpbf16_ps
+_mm512_mask_dpbf16_ps
+_mm512_maskz_dpbf16_ps
+_mm512_cvtpbh_ps
+_mm512_maskz_cvtpbh_ps
+_mm512_mask_cvtpbh_ps

@@ -1,0 +1,7 @@
+RC5_32_set_key
+RC5_32_ecb_encrypt
+RC5_32_encrypt
+RC5_32_decrypt
+RC5_32_cbc_encrypt
+RC5_32_cfb64_encrypt
+RC5_32_ofb64_encrypt

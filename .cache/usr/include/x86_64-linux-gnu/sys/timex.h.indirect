@@ -1,0 +1,14 @@
+select
+pselect
+gettimeofday
+settimeofday
+adjtime
+getitimer
+setitimer
+utimes
+lutimes
+futimes
+adjtimex
+ntp_gettimex
+ntp_gettime
+ntp_adjtime

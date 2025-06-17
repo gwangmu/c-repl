@@ -1,0 +1,8 @@
+rpcb_set
+rpcb_unset
+rpcb_getmaps
+rpcb_rmtcall
+rpcb_getaddr
+rpcb_gettime
+rpcb_taddr2uaddr
+rpcb_uaddr2taddr

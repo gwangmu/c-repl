@@ -1,0 +1,7 @@
+FullIsNull
+FullIsString
+FullIsUndefined
+QuickIsNull
+QuickIsNullOrUndefined
+QuickIsString
+QuickIsUndefined

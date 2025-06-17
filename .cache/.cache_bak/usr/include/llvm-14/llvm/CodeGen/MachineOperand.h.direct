@@ -1,0 +1,14 @@
+clearParent
+clobbersPhysReg
+CreateRegMask
+dump
+getParent
+hash_value
+isReg
+isRenamable
+MachineOperand
+Op
+print
+readsReg
+reference
+sizeof

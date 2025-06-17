@@ -1,0 +1,14 @@
+errors
+madvise
+mincore
+mlock
+mlockall
+mmap
+mprotect
+msync
+munlock
+munlockall
+munmap
+posix_madvise
+shm_open
+shm_unlink

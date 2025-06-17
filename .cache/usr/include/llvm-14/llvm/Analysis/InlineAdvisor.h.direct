@@ -1,0 +1,4 @@
+recordInliningImpl
+recordInliningWithCalleeDeletedImpl
+recordUnsuccessfulInliningImpl
+run

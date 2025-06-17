@@ -1,0 +1,3 @@
+getTimeTraceProfilerInstance
+timeTraceProfilerBegin
+timeTraceProfilerWrite

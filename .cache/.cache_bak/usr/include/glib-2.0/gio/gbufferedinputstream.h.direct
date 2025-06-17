@@ -1,0 +1,4 @@
+g_buffered_input_stream_fill_async
+g_buffered_input_stream_peek_buffer
+g_buffered_input_stream_read_byte
+g_buffered_input_stream_set_buffer_size

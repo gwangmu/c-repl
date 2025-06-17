@@ -1,0 +1,3 @@
+emit
+getEmitSize
+StringRef

@@ -1,0 +1,6 @@
+AllocateNode
+ClearAllUsedNodes
+FreeNode
+Iterate
+NodesInUse
+RefillFreeListAndAllocateNode

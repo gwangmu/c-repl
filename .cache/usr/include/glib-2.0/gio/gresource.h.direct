@@ -1,0 +1,7 @@
+g_resource_enumerate_children
+g_resources_enumerate_children
+g_resources_register
+g_resources_unregister
+g_resource_unref
+g_static_resource_fini
+g_static_resource_init

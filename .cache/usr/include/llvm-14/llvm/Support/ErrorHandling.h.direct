@@ -1,0 +1,4 @@
+abort
+exit
+llvm_unreachable
+report_fatal_error

@@ -1,0 +1,6 @@
+getFromVoidPointer
+getLiveOuts
+getMIOperand
+isSafeToDefRegAt
+isSafeToRemove
+ReachingDef

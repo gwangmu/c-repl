@@ -1,0 +1,8 @@
+getpriority
+getrlimit
+getrusage
+__nonnull
+not
+__REDIRECT_NTH
+setpriority
+setrlimit

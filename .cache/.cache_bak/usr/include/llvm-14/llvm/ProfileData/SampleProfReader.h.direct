@@ -1,0 +1,14 @@
+Checksum
+collectFuncsFromModule
+dumpSectionInfo
+getSamplesFor
+hasFormat
+readFuncMetadata
+readFuncOffsetTable
+readHeader
+readImpl
+readNameTable
+setSkipFlatProf
+useMD5
+value
+verifySPMagic

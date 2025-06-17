@@ -1,0 +1,6 @@
+extendToIndices
+getCachedRegUnit
+getSpillWeight
+pruneValue
+repairIntervalsInRange
+shrinkToUses

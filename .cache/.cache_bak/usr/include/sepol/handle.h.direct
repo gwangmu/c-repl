@@ -1,0 +1,7 @@
+sepol_get_disable_dontaudit
+sepol_get_preserve_tunables
+sepol_handle_create
+sepol_handle_destroy
+sepol_set_disable_dontaudit
+sepol_set_expand_consume_base
+sepol_set_preserve_tunables

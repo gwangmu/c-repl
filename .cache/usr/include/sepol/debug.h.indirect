@@ -1,0 +1,12 @@
+sepol_handle_create
+sepol_get_disable_dontaudit
+sepol_set_disable_dontaudit
+sepol_set_expand_consume_base
+sepol_handle_destroy
+sepol_get_preserve_tunables
+sepol_set_preserve_tunables
+sepol_debug
+sepol_msg_get_level
+sepol_msg_get_channel
+sepol_msg_get_fname
+sepol_msg_set_callback

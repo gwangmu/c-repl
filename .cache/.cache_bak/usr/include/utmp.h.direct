@@ -1,0 +1,15 @@
+endutent
+getutent
+getutent_r
+getutid
+getutid_r
+getutline
+getutline_r
+login
+login_tty
+logout
+logwtmp
+pututline
+setutent
+updwtmp
+utmpname

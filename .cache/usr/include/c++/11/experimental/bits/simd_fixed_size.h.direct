@@ -1,0 +1,17 @@
+__as_vector
+__binary_op
+__builtin_constant_p
+__builtin_is_constant_evaluated
+__call_with_subscripts
+constexpr
+__data
+decltype
+if
+_M_subscript_read
+_M_test
+_SimdTuple
+__simd_tuple_get_impl
+sizeof
+_S_masked_cassign
+_S_size
+UB

@@ -1,0 +1,15 @@
+sepol_iface_clone
+sepol_iface_compare
+sepol_iface_compare2
+sepol_iface_create
+sepol_iface_free
+sepol_iface_get_ifcon
+sepol_iface_get_msgcon
+sepol_iface_get_name
+sepol_iface_key_create
+sepol_iface_key_extract
+sepol_iface_key_free
+sepol_iface_key_unpack
+sepol_iface_set_ifcon
+sepol_iface_set_msgcon
+sepol_iface_set_name

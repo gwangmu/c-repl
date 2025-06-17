@@ -1,0 +1,13 @@
+_appendToPat
+contains
+containsAll
+containsNone
+containsSome
+fromUSet
+if
+resemblesPropertyPattern
+serialize
+setPattern
+span
+spanBack
+toUSet

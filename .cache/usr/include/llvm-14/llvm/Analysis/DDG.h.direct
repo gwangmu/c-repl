@@ -1,0 +1,15 @@
+appendInstructions
+child_begin
+child_edge_begin
+child_edge_end
+child_end
+ChildIteratorType
+classof
+DDGEdge
+DDGGetTargetNode
+getEntryNode
+getInstructions
+getKind
+nodes_begin
+nodes_end
+run

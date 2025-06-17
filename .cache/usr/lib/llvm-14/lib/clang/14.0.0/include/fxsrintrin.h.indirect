@@ -1,0 +1,4 @@
+_fxsave
+_fxrstor
+_fxsave64
+_fxrstor64

@@ -1,0 +1,13 @@
+combine
+hash_16_bytes
+hash_17to32_bytes
+hash_1to3_bytes
+hash_33to64_bytes
+hash_4to8_bytes
+hash_9to16_bytes
+hash_code
+hash_combine
+hash_combine_range
+hash_short
+hash_value
+shift_mix

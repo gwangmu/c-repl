@@ -1,0 +1,7 @@
+chip
+data
+modes
+mtd_type_is_nand_user
+OOB
+OTP
+structure

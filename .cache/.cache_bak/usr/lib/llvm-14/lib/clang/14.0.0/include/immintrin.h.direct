@@ -1,0 +1,5 @@
+__attribute__
+defined
+posix_memalign
+reallocarray
+__volatile__

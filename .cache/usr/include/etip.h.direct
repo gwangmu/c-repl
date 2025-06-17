@@ -1,0 +1,14 @@
+classname
+defined
+fscanf
+NCURSES_CPP_CATCH
+NCURSES_PARAM_INIT
+scanf
+sscanf
+STATIC_CAST
+THROW
+THROW2
+THROWS
+vfscanf
+vscanf
+vsscanf

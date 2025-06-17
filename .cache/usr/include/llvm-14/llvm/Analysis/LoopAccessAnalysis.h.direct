@@ -1,0 +1,8 @@
+addAccess
+addPointer
+getMaxSafeDepDistBytes
+isSafeForVectorization
+location
+needsChecking
+print
+sizeof

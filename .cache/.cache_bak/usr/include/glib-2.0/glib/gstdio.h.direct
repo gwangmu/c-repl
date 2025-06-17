@@ -1,0 +1,14 @@
+defined
+g_access
+g_chdir
+g_chmod
+g_creat
+g_lstat
+g_mkdir
+g_open
+g_remove
+g_rename
+g_rmdir
+g_stat
+g_unlink
+g_utime

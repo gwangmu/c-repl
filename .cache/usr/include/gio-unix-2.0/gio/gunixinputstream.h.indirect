@@ -1,0 +1,2 @@
+G_DEFINE_AUTOPTR_CLEANUP_FUNC
+g_unix_input_stream_set_close_fd

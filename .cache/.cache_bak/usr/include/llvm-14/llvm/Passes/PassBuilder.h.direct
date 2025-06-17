@@ -1,0 +1,3 @@
+parsePassPipeline
+registerAnalysisRegistrationCallback
+registerPipelineParsingCallback

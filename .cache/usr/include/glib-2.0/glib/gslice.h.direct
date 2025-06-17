@@ -1,0 +1,4 @@
+G_GNUC_ALLOC_SIZE
+g_slice_free_chain_with_offset
+g_slice_new0
+memset

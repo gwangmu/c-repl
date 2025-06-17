@@ -1,0 +1,11 @@
+begin
+dump
+dumpName
+end
+extract
+getCUOffset
+getHashValue
+isEqual
+NameIterator
+next
+tag

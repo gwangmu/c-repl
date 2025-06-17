@@ -1,0 +1,11 @@
+reallocarray
+sepol_sidtab_context_to_sid
+sepol_sidtab_destroy
+sepol_sidtab_hash_eval
+sepol_sidtab_init
+sepol_sidtab_insert
+sepol_sidtab_map
+sepol_sidtab_map_remove_on_error
+sepol_sidtab_search
+sepol_sidtab_set
+sepol_sidtab_shutdown

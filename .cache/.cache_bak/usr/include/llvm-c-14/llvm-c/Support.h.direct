@@ -1,0 +1,4 @@
+LLVMAddSymbol
+LLVMLoadLibraryPermanently
+LLVMParseCommandLineOptions
+LLVMSearchForAddressOfSymbol

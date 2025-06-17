@@ -1,0 +1,16 @@
+breakPartialRegDependency
+BuildMI
+canInsertSelect
+findCommutedOpIndices
+foldMemoryOperand
+genAlternativeCodeSequence
+getFrameSize
+getInstrLatency
+getInstSizeInBytes
+getOperandLatency
+insertBranch
+isLoadFromStackSlot
+isProfitableToIfCvt
+isStoreToStackSlot
+isTriviallyReMaterializable
+shouldClusterMemOps

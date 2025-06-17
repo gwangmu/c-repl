@@ -1,0 +1,16 @@
+u_versionFromString_70
+u_versionFromUString_70
+u_versionToString_70
+u_getVersion_70
+utf8_nextCharSafeBody_70
+utf8_appendCharSafeBody_70
+utf8_prevCharSafeBody_70
+utf8_back1SafeBody_70
+u_errorName_70
+utrace_setLevel_70
+utrace_getLevel_70
+utrace_setFunctions_70
+utrace_getFunctions_70
+utrace_vformat_70
+utrace_format_70
+utrace_functionName_70

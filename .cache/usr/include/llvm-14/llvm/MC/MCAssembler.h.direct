@@ -1,0 +1,10 @@
+begin
+data_region_begin
+data_region_end
+end
+indirect_symbol_begin
+indirect_symbol_end
+make_range
+symbol_begin
+symbol_end
+symbols

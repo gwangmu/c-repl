@@ -1,0 +1,3 @@
+_mm512_mask_bitshuffle_epi64_mask
+_mm512_mask_popcnt_epi16
+_mm512_mask_popcnt_epi8

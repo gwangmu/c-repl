@@ -1,0 +1,17 @@
+alphasort
+closedir
+_D_ALLOC_NAMLEN
+_D_EXACT_NAMLEN
+dirfd
+fdopendir
+getdirentries
+__nonnull
+opendir
+readdir
+readdir_r
+__REDIRECT
+__REDIRECT_NTH
+rewinddir
+scandir
+seekdir
+telldir

@@ -1,0 +1,4 @@
+LLVMWriteBitcodeToFD
+LLVMWriteBitcodeToFile
+LLVMWriteBitcodeToFileHandle
+LLVMWriteBitcodeToMemoryBuffer

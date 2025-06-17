@@ -1,0 +1,4 @@
+__attribute__
+vring_init
+vring_need_event
+vring_size

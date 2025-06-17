@@ -1,0 +1,3 @@
+createFunctionInliningPass
+createSampleProfileLoaderPass
+globals

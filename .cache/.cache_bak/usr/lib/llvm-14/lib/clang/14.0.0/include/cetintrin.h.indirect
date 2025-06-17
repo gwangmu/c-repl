@@ -1,0 +1,16 @@
+_incsspd
+_incsspq
+_inc_ssp
+_rdsspd
+_rdsspd_i32
+_rdsspq
+_rdsspq_i64
+_get_ssp
+_saveprevssp
+_rstorssp
+_wrssd
+_wrssq
+_wrussd
+_wrussq
+_setssbsy
+_clrssbsy

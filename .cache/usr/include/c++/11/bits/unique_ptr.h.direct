@@ -1,0 +1,6 @@
+bool
+compare_three_way
+default_delete
+get
+reset
+unique_ptr

@@ -1,0 +1,11 @@
+__alloc
+const_iterator
+const_local_iterator
+erase
+__first
+function
+__i
+iterator
+__last
+local_iterator
+make_pair

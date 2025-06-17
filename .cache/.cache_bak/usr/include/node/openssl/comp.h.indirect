@@ -1,0 +1,9 @@
+COMP_CTX_new
+COMP_CTX_get_method
+COMP_CTX_get_type
+COMP_get_type
+COMP_get_name
+COMP_CTX_free
+COMP_compress_block
+COMP_expand_block
+COMP_zlib

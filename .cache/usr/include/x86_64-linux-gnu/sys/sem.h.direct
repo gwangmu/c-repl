@@ -1,0 +1,4 @@
+__REDIRECT_NTH
+semctl
+semget
+semop

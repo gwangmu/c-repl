@@ -1,0 +1,15 @@
+u_versionFromString_70
+u_versionFromUString_70
+u_versionToString_70
+u_getVersion_70
+utf8_nextCharSafeBody_70
+utf8_appendCharSafeBody_70
+utf8_prevCharSafeBody_70
+utf8_back1SafeBody_70
+u_errorName_70
+u_getDataDirectory_70
+u_setDataDirectory_70
+u_getTimeZoneFilesDirectory_70
+u_setTimeZoneFilesDirectory_70
+u_charsToUChars_70
+u_UCharsToChars_70

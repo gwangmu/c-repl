@@ -1,0 +1,13 @@
+BYTE
+capability
+DEBUG
+fscanf
+NCURSES_EXPORT
+NCURSES_EXPORT_VAR
+scanf
+size
+sscanf
+_tracef
+vfscanf
+vscanf
+vsscanf

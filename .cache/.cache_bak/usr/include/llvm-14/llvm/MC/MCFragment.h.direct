@@ -1,0 +1,10 @@
+classof
+fixup_begin
+fixup_end
+getAlignment
+getLoc
+getSubtargetInfo
+getSymbol
+getValue
+getValueSize
+hasInstructions

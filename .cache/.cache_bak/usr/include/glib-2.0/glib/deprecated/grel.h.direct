@@ -1,0 +1,5 @@
+g_relation_destroy
+g_relation_index
+g_relation_insert
+g_relation_print
+g_tuples_destroy

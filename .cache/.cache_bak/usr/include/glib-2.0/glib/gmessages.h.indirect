@@ -1,0 +1,16 @@
+g_log_remove_handler
+g_log_default_handler
+g_log_structured
+g_log_structured_array
+g_log_variant
+g_log_set_writer_func
+g_log_writer_default_set_use_stderr
+g_log_set_debug_enabled
+_g_log_fallback_handler
+g_assert_warning
+g_error
+g_message
+g_critical
+g_warning
+g_info
+g_debug

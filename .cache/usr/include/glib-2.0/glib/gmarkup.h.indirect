@@ -1,0 +1,4 @@
+g_markup_parse_context_unref
+g_markup_parse_context_free
+g_markup_parse_context_push
+g_markup_parse_context_get_position

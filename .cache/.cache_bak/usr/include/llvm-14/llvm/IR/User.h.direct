@@ -1,0 +1,14 @@
+const_value_op_iterator
+delete
+getIntrusiveOperands
+getOperandList
+getSimplifiedValue
+make_range
+new
+op_begin
+op_end
+operands
+sizeof
+value_op_begin
+value_op_end
+value_op_iterator

@@ -1,0 +1,14 @@
+clear
+CopyFrom
+end
+EndPointer
+erase_imp
+find_imp
+insert
+isSmall
+iterator
+makeIterator
+MoveFrom
+shrink_and_clear
+size
+swap

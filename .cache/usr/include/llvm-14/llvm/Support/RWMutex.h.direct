@@ -1,0 +1,5 @@
+defined
+lock
+lock_shared
+unlock
+unlock_shared

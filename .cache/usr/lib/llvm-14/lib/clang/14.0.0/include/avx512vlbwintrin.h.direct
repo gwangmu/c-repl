@@ -1,0 +1,17 @@
+__attribute__
+_mm256_cmpeq_epi16_mask
+_mm256_cmpeq_epi8_mask
+_mm256_cmpneq_epi16_mask
+_mm256_cmpneq_epi8_mask
+_mm256_mask_cmpeq_epi16_mask
+_mm256_mask_cmpeq_epi8_mask
+_mm256_mask_cmpneq_epi16_mask
+_mm256_mask_cmpneq_epi8_mask
+_mm_cmpeq_epi16_mask
+_mm_cmpeq_epi8_mask
+_mm_cmpneq_epi16_mask
+_mm_cmpneq_epi8_mask
+_mm_mask_cmpeq_epi16_mask
+_mm_mask_cmpeq_epi8_mask
+_mm_mask_cmpneq_epi16_mask
+_mm_mask_cmpneq_epi8_mask

@@ -1,0 +1,15 @@
+btrfs_subvolid_resolve
+fscanf
+path_cat3_out
+path_cat_out
+reallocarray
+scanf
+sscanf
+subvol_uuid_search
+subvol_uuid_search2
+subvol_uuid_search_add
+subvol_uuid_search_finit
+subvol_uuid_search_init
+vfscanf
+vscanf
+vsscanf

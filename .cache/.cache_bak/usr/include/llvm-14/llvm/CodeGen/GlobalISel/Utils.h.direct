@@ -1,0 +1,6 @@
+constrainOperandRegClass
+getOpcodeDef
+isBuildVectorConstantSplat
+isKnownNeverNaN
+RegOrConstant
+reportGISelFailure

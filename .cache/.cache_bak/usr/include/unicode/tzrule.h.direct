@@ -1,0 +1,9 @@
+clone
+getDynamicClassID
+getFinalStart
+getFirstStart
+getNextStart
+getPreviousStart
+getStartInYear
+getStaticClassID
+isEquivalentTo

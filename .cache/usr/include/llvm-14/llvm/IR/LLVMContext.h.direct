@@ -1,0 +1,3 @@
+emitError
+getLLVMRemarkStreamer
+getMainRemarkStreamer

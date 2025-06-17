@@ -1,0 +1,16 @@
+u_versionFromString_70
+u_versionFromUString_70
+u_versionToString_70
+u_getVersion_70
+utf8_nextCharSafeBody_70
+utf8_appendCharSafeBody_70
+utf8_prevCharSafeBody_70
+utf8_back1SafeBody_70
+u_errorName_70
+uenum_close_70
+uenum_count_70
+uenum_unext_70
+uenum_next_70
+uenum_reset_70
+uenum_openUCharStringsEnumeration_70
+uenum_openCharStringsEnumeration_70

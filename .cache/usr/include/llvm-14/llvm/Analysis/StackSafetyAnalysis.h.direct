@@ -1,0 +1,4 @@
+getAnalysisUsage
+global
+print
+run

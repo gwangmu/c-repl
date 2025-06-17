@@ -1,0 +1,6 @@
+xdr_callmsg
+xdr_callhdr
+xdr_replymsg
+xdr_accepted_reply
+xdr_rejected_reply
+_seterr_reply

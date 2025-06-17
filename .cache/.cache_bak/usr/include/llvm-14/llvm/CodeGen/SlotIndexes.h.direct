@@ -1,0 +1,15 @@
+advanceMBBIndex
+distance
+dump
+getIndex
+getLastIndex
+getMBBEndIdx
+getMBBRange
+getMBBStartIdx
+getSlot
+instruction
+isValid
+listEntry
+SlotIndex
+slots
+the

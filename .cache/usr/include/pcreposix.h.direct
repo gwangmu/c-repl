@@ -1,0 +1,6 @@
+__declspec
+pcreposix_regcomp
+pcreposix_regerror
+pcreposix_regexec
+pcreposix_regfree
+reallocarray

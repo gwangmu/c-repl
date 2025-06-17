@@ -1,0 +1,12 @@
+begin
+const_reverse_iterator
+__deque_buf_size
+difference_type
+erase
+if
+insert
+_M_erase
+_M_push_back_aux
+_M_push_front_aux
+reverse_iterator
+_S_buffer_size

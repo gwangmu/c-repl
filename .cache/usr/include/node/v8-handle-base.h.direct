@@ -1,0 +1,8 @@
+Clear
+DirectHandleBase
+IndirectHandleBase
+IsEmpty
+ptr
+SlotAsValue
+value
+ValueAsAddress

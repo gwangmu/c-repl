@@ -1,0 +1,17 @@
+u_versionFromString_70
+u_versionFromUString_70
+u_versionToString_70
+u_getVersion_70
+utf8_nextCharSafeBody_70
+utf8_appendCharSafeBody_70
+utf8_prevCharSafeBody_70
+utf8_back1SafeBody_70
+u_errorName_70
+uiter_current32_70
+uiter_next32_70
+uiter_previous32_70
+uiter_getState_70
+uiter_setState_70
+uiter_setString_70
+uiter_setUTF16BE_70
+uiter_setUTF8_70

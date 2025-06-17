@@ -1,0 +1,10 @@
+addIRModule
+addLazyIRModule
+addObjectFile
+deinitialize
+impl
+initialize
+lookupLinkerMangled
+name
+prepareForConstruction
+setUpGenericLLVMIRPlatform

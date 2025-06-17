@@ -1,0 +1,12 @@
+begin
+clear
+contains
+end
+erase
+find
+findIndex
+getSparseSetIndex
+insert
+operator
+size
+value

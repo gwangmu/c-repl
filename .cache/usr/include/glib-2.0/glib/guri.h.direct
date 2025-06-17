@@ -1,0 +1,10 @@
+g_uri_escape_bytes
+g_uri_escape_string
+g_uri_params_iter_init
+g_uri_parse_scheme
+g_uri_peek_scheme
+g_uri_to_string
+g_uri_to_string_partial
+g_uri_unescape_segment
+g_uri_unescape_string
+g_uri_unref

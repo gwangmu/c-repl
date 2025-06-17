@@ -1,0 +1,7 @@
+_bzhi_u32
+_pdep_u32
+_pext_u32
+_bzhi_u64
+_pdep_u64
+_pext_u64
+_mulx_u64

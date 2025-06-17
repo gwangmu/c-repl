@@ -1,0 +1,14 @@
+__bswap_16
+__bswap_32
+__bswap_64
+__uint16_identity
+__uint32_identity
+__uint64_identity
+select
+pselect
+selinux_restorecon
+selinux_restorecon_set_sehandle
+selinux_restorecon_default_handle
+selinux_restorecon_set_exclude_list
+selinux_restorecon_set_alt_rootpath
+selinux_restorecon_xattr

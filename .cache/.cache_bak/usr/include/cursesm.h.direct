@@ -1,0 +1,16 @@
+action
+attributes
+NCursesMenuException
+_nc_xx_itm_init
+_nc_xx_itm_term
+_nc_xx_mnu_init
+_nc_xx_mnu_term
+OnError
+operator
+options
+options_off
+options_on
+set_options
+setUserData
+THROW2
+UserData

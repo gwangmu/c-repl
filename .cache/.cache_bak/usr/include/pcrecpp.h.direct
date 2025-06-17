@@ -1,0 +1,12 @@
+caseless
+Init
+match
+match_limit
+match_limit_recursion
+PCRE_IS_SET
+re
+RE
+reallocarray
+RE_Options
+Replace
+UTF8

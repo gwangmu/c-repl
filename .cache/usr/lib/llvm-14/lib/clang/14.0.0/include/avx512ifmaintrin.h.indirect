@@ -1,0 +1,6 @@
+_mm512_madd52hi_epu64
+_mm512_mask_madd52hi_epu64
+_mm512_maskz_madd52hi_epu64
+_mm512_madd52lo_epu64
+_mm512_mask_madd52lo_epu64
+_mm512_maskz_madd52lo_epu64

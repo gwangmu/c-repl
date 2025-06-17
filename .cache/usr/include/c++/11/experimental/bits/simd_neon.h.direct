@@ -1,0 +1,3 @@
+constexpr
+vpadd_s16
+vpadd_s32

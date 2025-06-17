@@ -1,0 +1,10 @@
+clear
+createStringError
+dump
+extract
+getAddrSize
+getFormat
+getHeaderOffset
+getHeaderSize
+getOffsetEntryCount
+length

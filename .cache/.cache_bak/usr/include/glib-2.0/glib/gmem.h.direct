@@ -1,0 +1,10 @@
+defined
+g_aligned_free
+g_clear_pointer
+G_GNUC_ALLOC_SIZE
+G_GNUC_ALLOC_SIZE2
+g_mem_set_vtable
+_G_NEW
+_G_RENEW
+g_steal_pointer
+if

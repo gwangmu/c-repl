@@ -1,0 +1,5 @@
+__attribute__
+defined
+malloc
+posix_memalign
+reallocarray

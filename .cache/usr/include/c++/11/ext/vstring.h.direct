@@ -1,0 +1,10 @@
+const_iterator
+const_reverse_iterator
+_GLIBCXX_VISIBILITY
+iterator
+_M_append
+_M_replace
+_M_replace_aux
+reverse_iterator
+size
+sizeof

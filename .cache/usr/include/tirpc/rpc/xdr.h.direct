@@ -1,0 +1,15 @@
+fscanf
+scanf
+sscanf
+vfscanf
+vscanf
+vsscanf
+xdrmem_create
+xdr_netobj
+xdr_putlong
+xdrrec_create
+xdrrec_endofrecord
+xdrrec_eof
+xdrrec_readbytes
+xdrrec_skiprecord
+xdrstdio_create

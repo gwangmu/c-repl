@@ -1,0 +1,4 @@
+_mm256_2intersect_epi32
+_mm256_2intersect_epi64
+_mm_2intersect_epi32
+_mm_2intersect_epi64

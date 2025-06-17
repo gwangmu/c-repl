@@ -1,0 +1,13 @@
+addTarget
+addTargets
+addUUID
+file
+generated
+getArchitectures
+getInstallName
+getPlatforms
+make_filter_range
+mapToArchitectureSet
+mapToPlatformSet
+SymbolsMapKey
+targets

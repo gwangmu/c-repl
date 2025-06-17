@@ -1,0 +1,9 @@
+decimal_to_double
+decimal_to_float
+decimal_to_long_double
+decimal_to_long_long
+make_decimal128
+make_decimal32
+make_decimal64
+_Op
+_Op1

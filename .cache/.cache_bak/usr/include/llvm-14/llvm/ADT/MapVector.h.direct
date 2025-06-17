@@ -1,0 +1,8 @@
+begin
+end
+erase
+find
+lookup
+rbegin
+remove_if
+rend

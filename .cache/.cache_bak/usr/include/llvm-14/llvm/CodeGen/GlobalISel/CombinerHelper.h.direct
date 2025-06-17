@@ -1,0 +1,4 @@
+fabs
+fneg
+replaceInstWithConstant
+trunc

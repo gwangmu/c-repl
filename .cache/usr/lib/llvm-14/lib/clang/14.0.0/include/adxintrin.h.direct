@@ -1,0 +1,3 @@
+__attribute__
+__builtin_ia32_addcarryx_u32
+__builtin_ia32_addcarryx_u64

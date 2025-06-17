@@ -1,0 +1,8 @@
+g_atomic_ref_count_compare
+g_atomic_ref_count_dec
+g_atomic_ref_count_inc
+g_atomic_ref_count_init
+g_ref_count_compare
+g_ref_count_dec
+g_ref_count_inc
+g_ref_count_init

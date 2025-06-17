@@ -1,0 +1,3 @@
+assignPassManager
+getAnalysisUsage
+runOnFunction

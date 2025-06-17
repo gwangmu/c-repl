@@ -1,0 +1,7 @@
+begin
+bool
+const_iterator
+const_reverse_iterator
+_M_erase
+reverse_iterator
+size_type

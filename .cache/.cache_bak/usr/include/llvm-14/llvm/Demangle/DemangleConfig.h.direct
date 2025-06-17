@@ -1,0 +1,6 @@
+__attribute__
+defined
+DEMANGLE_GNUC_PREREQ
+__has_attribute
+__has_builtin
+__has_cpp_attribute

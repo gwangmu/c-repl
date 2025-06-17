@@ -1,0 +1,3 @@
+_directstoreu_u32
+_directstoreu_u64
+_movdir64b

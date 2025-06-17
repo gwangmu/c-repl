@@ -1,0 +1,6 @@
+fromUCollationElements
+getMaxExpansion
+reset
+setOffset
+setText
+toUCollationElements

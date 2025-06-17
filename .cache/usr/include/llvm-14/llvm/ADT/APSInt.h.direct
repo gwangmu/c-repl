@@ -1,0 +1,4 @@
+APSInt
+compareValues
+isNonNegative
+isSigned

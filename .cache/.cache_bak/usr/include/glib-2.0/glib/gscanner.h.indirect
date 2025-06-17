@@ -1,0 +1,8 @@
+g_scanner_destroy
+g_scanner_input_file
+g_scanner_sync_file_offset
+g_scanner_input_text
+g_scanner_scope_add_symbol
+g_scanner_scope_remove_symbol
+g_scanner_scope_foreach_symbol
+g_scanner_unexp_token

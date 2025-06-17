@@ -1,0 +1,9 @@
+a
+GetRootSlot
+index
+IntToSmi
+IsValidSmi
+SmiToInt
+SmiValue
+table
+tagging

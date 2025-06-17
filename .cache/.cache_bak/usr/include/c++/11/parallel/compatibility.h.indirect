@@ -1,0 +1,11 @@
+__sched_cpucount
+__sched_cpualloc
+__sched_cpufree
+sched_setparam
+sched_getparam
+sched_setscheduler
+sched_getscheduler
+sched_yield
+sched_get_priority_max
+sched_get_priority_min
+sched_rr_get_interval

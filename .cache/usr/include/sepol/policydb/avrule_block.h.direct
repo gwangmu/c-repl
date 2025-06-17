@@ -1,0 +1,16 @@
+avrule_block_create
+avrule_block_destroy
+avrule_block_list_destroy
+avrule_decl_create
+avrule_decl_destroy
+fscanf
+get_avrule_decl
+get_decl_cond_list
+is_id_enabled
+is_perm_enabled
+reallocarray
+scanf
+sscanf
+vfscanf
+vscanf
+vsscanf

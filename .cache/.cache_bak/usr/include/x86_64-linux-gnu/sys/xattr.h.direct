@@ -1,0 +1,14 @@
+fgetxattr
+flistxattr
+fremovexattr
+fsetxattr
+getxattr
+lgetxattr
+LIST
+listxattr
+llistxattr
+lremovexattr
+lsetxattr
+removexattr
+setxattr
+VALUE

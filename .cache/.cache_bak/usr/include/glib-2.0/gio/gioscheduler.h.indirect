@@ -1,0 +1,3 @@
+GLIB_DEPRECATED_IN_2_36_FOR
+g_io_scheduler_push_job
+g_io_scheduler_cancel_all_jobs

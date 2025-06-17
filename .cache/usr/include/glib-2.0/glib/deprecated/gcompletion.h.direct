@@ -1,0 +1,5 @@
+g_completion_add_items
+g_completion_clear_items
+g_completion_free
+g_completion_remove_items
+g_completion_set_compare

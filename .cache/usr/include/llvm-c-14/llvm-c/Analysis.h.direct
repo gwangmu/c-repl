@@ -1,0 +1,4 @@
+LLVMVerifyFunction
+LLVMVerifyModule
+LLVMViewFunctionCFG
+LLVMViewFunctionCFGOnly

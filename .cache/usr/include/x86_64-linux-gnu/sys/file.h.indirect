@@ -1,0 +1,8 @@
+fcntl
+open
+openat
+creat
+lockf
+posix_fadvise
+posix_fallocate
+flock

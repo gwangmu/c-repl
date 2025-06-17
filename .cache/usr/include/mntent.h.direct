@@ -1,0 +1,6 @@
+addmntent
+endmntent
+getmntent
+getmntent_r
+hasmntopt
+setmntent

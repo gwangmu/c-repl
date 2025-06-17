@@ -1,0 +1,12 @@
+block
+CurrentClockTimeMillis
+DecommitPages
+DiscardSystemPages
+floor
+FreePages
+GetMemory
+IdleTasksEnabled
+NotifyConcurrencyIncrease
+reallocarray
+RecommitPages
+Run

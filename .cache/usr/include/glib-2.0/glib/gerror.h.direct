@@ -1,0 +1,6 @@
+g_clear_error
+g_error_free
+g_prefix_error_literal
+g_propagate_error
+g_set_error_literal
+void

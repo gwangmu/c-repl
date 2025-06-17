@@ -1,0 +1,10 @@
+bool
+get
+getFixed
+getFixedValue
+getKnownMinValue
+getScalable
+getValue
+isNonZero
+isZero
+TypeSize

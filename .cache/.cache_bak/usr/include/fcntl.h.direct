@@ -1,0 +1,10 @@
+creat
+fcntl
+lockf
+open
+openat
+__OPEN_NEEDS_MODE
+posix_fadvise
+posix_fallocate
+__REDIRECT
+__REDIRECT_NTH

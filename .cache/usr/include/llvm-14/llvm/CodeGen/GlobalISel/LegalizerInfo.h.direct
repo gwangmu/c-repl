@@ -1,0 +1,16 @@
+actionFor
+actionForCartesianProduct
+actionForTypeWithAnyImm
+actionIf
+all
+any
+changeElementTo
+changeTo
+getAction
+isLegal
+isLegalOrCustom
+isPointer
+LegalityQuery
+narrowScalarIf
+P0
+widenScalarIf

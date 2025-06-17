@@ -1,0 +1,7 @@
+g_dbus_proxy_call
+g_dbus_proxy_call_with_unix_fd_list
+g_dbus_proxy_new
+g_dbus_proxy_new_for_bus
+g_dbus_proxy_set_cached_property
+g_dbus_proxy_set_default_timeout
+g_dbus_proxy_set_interface_info

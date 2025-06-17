@@ -1,0 +1,7 @@
+CMAC_CTX_cleanup
+CMAC_CTX_free
+CMAC_CTX_copy
+CMAC_Init
+CMAC_Update
+CMAC_Final
+CMAC_resume

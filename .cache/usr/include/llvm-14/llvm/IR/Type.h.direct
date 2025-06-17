@@ -1,0 +1,12 @@
+getContainedType
+getNonOpaquePointerElementType
+getScalarType
+getTypeID
+isFloatingPointTy
+isIntegerTy
+isIntOrIntVectorTy
+isSizedDerivedType
+subtype_reverse_iterator
+type
+types
+vectors

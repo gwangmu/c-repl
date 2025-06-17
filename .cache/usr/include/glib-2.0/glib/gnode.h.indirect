@@ -1,0 +1,5 @@
+g_node_destroy
+g_node_unlink
+g_node_traverse
+g_node_children_foreach
+g_node_reverse_children

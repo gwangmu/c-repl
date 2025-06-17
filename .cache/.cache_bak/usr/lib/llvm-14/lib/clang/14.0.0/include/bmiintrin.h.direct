@@ -1,0 +1,5 @@
+__attribute__
+__builtin_ia32_bextr_u32
+__builtin_ia32_bextr_u64
+__builtin_ia32_tzcnt_u32
+__builtin_ia32_tzcnt_u64

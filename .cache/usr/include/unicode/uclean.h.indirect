@@ -1,0 +1,14 @@
+u_versionFromString_70
+u_versionFromUString_70
+u_versionToString_70
+u_getVersion_70
+utf8_nextCharSafeBody_70
+utf8_appendCharSafeBody_70
+utf8_prevCharSafeBody_70
+utf8_back1SafeBody_70
+u_errorName_70
+u_init_70
+u_cleanup_70
+u_setMemoryFunctions_70
+u_setMutexFunctions_70
+u_setAtomicIncDecFunctions_70

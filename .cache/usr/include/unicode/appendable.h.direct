@@ -1,0 +1,5 @@
+appendCodePoint
+appendCodeUnit
+appendString
+getAppendBuffer
+reserveAppendCapacity

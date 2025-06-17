@@ -1,0 +1,7 @@
+__attribute__
+imaxabs
+imaxdiv
+strtoimax
+strtoumax
+wcstoimax
+wcstoumax

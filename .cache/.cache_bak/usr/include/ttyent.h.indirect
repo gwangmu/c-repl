@@ -1,0 +1,4 @@
+getttyent
+getttynam
+setttyent
+endttyent

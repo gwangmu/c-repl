@@ -1,0 +1,11 @@
+feclearexcept
+fegetexceptflag
+feraiseexcept
+fesetexceptflag
+fetestexcept
+fegetround
+fesetround
+fegetenv
+feholdexcept
+fesetenv
+feupdateenv

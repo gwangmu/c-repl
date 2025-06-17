@@ -1,0 +1,9 @@
+getIterator
+getNext
+getNextNode
+getNodePtr
+getPrev
+getPrevNode
+getReverseIterator
+getValuePtr
+isSentinel

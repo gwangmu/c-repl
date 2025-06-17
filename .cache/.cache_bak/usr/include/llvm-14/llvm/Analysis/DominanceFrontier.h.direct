@@ -1,0 +1,7 @@
+begin
+dump
+end
+find
+print
+releaseMemory
+run

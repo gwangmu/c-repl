@@ -65,6 +65,8 @@ class Block():
         self.repr = self.head
         self.err = []
         self.commented = False
+        self.kind = "?"
+        self.name = ""
 
         if (not self.head):
             self.kind = "block"
@@ -75,8 +77,11 @@ class Block():
                 self.kind = re_block_kw.group(1)
             else:
                 self.kind = "function"
+                re_func_name = re.search("([a-zA-Z_0-9]+) *\(", self.head)
+                if (re_func_name):
+                    self.name = re_func_name.group(1)
         
-        if (self.head == "int main()"):
+        if (self.name == "main"):
             self.repr = ""
 
     def add(self, child):
@@ -108,7 +113,7 @@ class TranslationUnit():
         if (out and self.funcs): out += [""]
         for func in self.funcs:
             out += func.get()
-        if (out): out += [""]
+            out += [""]
         out += self.main.get()
         return out
 
@@ -207,9 +212,11 @@ class REPLoop():
                 block_head = self.get_block_head(line)
                 n_block_close = self.get_block_close(line)
                 if (block_head != None):
-                    # TODO: comment out the existing duplicate function
                     cur_obj = Block(block_head)
                     if (cur_obj.kind == "function"):
+                        for f in self.tu.funcs:
+                            if (f.name == cur_obj.name):
+                                f.commented = True
                         self.tu.funcs += [cur_obj]
                     else:
                         self.stack[-1].add(cur_obj)
@@ -296,3 +303,4 @@ repl = REPLoop(src_path=args.out_path)
 repl.loop()
 
 # TODO: keyboard up to navigate previous statements
+# TODO: accept base code

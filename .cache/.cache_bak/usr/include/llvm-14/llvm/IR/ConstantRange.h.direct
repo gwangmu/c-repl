@@ -1,0 +1,5 @@
+ConstantRange
+contains
+getEmpty
+getFull
+getSingleElement

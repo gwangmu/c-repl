@@ -1,0 +1,11 @@
+findValueFromBuildVector
+findValueFromConcat
+findValueFromDef
+findValueFromDefImpl
+findValueFromInsert
+G_TRUNC
+if
+isInstUnsupported
+trunc
+tryFoldImplicitDef
+tryFoldUnmergeCast

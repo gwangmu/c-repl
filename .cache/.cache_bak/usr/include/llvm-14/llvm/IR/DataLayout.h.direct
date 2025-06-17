@@ -1,0 +1,14 @@
+DataLayout
+getAlignment
+getElementOffset
+getIntegerAlignment
+getIntPtrType
+getMaxIndexSize
+getPointerAlignElem
+getPointerTypeSizeInBits
+getTypeAllocSize
+getTypeSizeInBits
+getTypeStoreSize
+isNonIntegralAddressSpace
+isNonIntegralPointerType
+reset

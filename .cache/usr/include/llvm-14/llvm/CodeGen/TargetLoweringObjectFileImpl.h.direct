@@ -1,0 +1,13 @@
+emitModuleMetadata
+getCFIPersonalitySymbol
+getExplicitSectionGlobal
+getNameWithPrefix
+getSectionForConstant
+getSectionForJumpTable
+getStaticCtorSection
+getStaticDtorSection
+getTTypeGlobalReference
+Initialize
+lowerRelativeReference
+SelectSectionForGlobal
+shouldPutJumpTableInFunctionSection

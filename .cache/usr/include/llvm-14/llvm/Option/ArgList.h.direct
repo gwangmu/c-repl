@@ -1,0 +1,15 @@
+AddAllArgs
+begin
+ClaimAllArgs
+end
+getArgString
+getLastArg
+getLastArgNoClaim
+getNumInputArgStrings
+hasFlag
+MakeArgStringRef
+MakeIndex
+make_range
+rbegin
+rend
+strings

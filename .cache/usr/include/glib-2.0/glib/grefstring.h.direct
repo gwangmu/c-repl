@@ -1,0 +1,5 @@
+g_ref_string_acquire
+g_ref_string_new
+g_ref_string_new_intern
+g_ref_string_new_len
+g_ref_string_release

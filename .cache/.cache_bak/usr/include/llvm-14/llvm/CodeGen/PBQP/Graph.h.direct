@@ -1,0 +1,16 @@
+begin
+edge
+EdgeIdSet
+EdgeItr
+empty
+end
+findNextInUse
+getEdge
+getNode
+invalid
+invalidEdgeId
+node
+NodeIdSet
+NodeItr
+size
+unsetSolver

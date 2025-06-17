@@ -1,0 +1,7 @@
+getBlockSize
+getEndian
+getLength
+getNumBlocks
+getStreamLength
+readBytes
+readLongestContiguousChunk

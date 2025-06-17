@@ -1,0 +1,11 @@
+addInsertPoint
+begin
+canMaterialize
+end
+frequency
+getInsertMBBImpl
+getKind
+getPointImpl
+isSplit
+MachineFunctionProperties
+materialize

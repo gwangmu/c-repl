@@ -1,0 +1,3 @@
+LLVMAddAddDiscriminatorsPass
+LLVMAddLowerSwitchPass
+LLVMAddPromoteMemoryToRegisterPass

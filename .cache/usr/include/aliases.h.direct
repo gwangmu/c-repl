@@ -1,0 +1,6 @@
+endaliasent
+getaliasbyname
+getaliasbyname_r
+getaliasent
+getaliasent_r
+setaliasent
