@@ -4,7 +4,7 @@ Minimal C REPL prompt, written in Python and Bash.
 
 ## Requirements
 
- - Clang (any version)
+ - Clang (any version, maybe)
 
 ## How to Use
 
