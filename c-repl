@@ -24,10 +24,13 @@ class StdIncludePreproc():
         self.err = []
         self.commented = False
 
-    def get(self):
+    def __repr__(self):
         incl_path = '/'.join(self.path.split('/')[-self.depth:])
+        return "#include <{}>".format(incl_path)
+
+    def get(self):
         out = ["* " + err_line for err_line in self.err]
-        out += ["#include <{}>".format(incl_path)]
+        out += [self.__repr__()]
         if (self.commented) or (self.err):
             out = ["// " + l for l in out]
         return out
@@ -110,7 +113,7 @@ class TranslationUnit():
         out = []
         for incl in self.incls:
             out += incl.get()
-        if (out and self.funcs): out += [""]
+            out += [""]
         for func in self.funcs:
             out += func.get()
             out += [""]
