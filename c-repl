@@ -7,12 +7,14 @@ import signal
 import subprocess
 import sys
 
-VERSION = "v0.1"
+VERSION = "0.1.1"
 INDENT = "  "
-CC = "clang"
+CLANG = "clang"
 FIND_HEADER = "./find-header"
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(
+		description="For those who'd like to use C like an interpreted language but just don't want to install ANYTHING, caveman style.",
+		epilog="To be fair, you still need to install 'clang' (any non-ancient version) and 'python' (which you obviously have if you can read this).")
 parser.add_argument("-e", "--error-diag", help="attach full error diagnostic", action="store_true")
 parser.add_argument("-o", "--out-path", help="set output path for code", type=str, default="/tmp/c-repl.c")
 args = parser.parse_args()
@@ -135,10 +137,14 @@ class REPLoop():
         self.wait_subproc = False
         self.dfn_sigint = signal.signal(signal.SIGINT, self.interrupt)
 
+    def exit(self):
+        print("Goodbye ᕕ(⌐■_■)ᕗ ♪♬")
+        exit(0)
+
     def interrupt(self, sig, frame):
         if (not self.wait_subproc):
-            print("\nGoodbye...")
-            exit(0)
+            print()
+            self.exit()
 
     def run(self, *args, **kwargs):
         self.wait_subproc = True
@@ -165,7 +171,7 @@ class REPLoop():
             return False
         
         if (line[1:] == "exit"):
-            self.interrupt(None, None)
+            self.exit()
         elif (line[1:] == "print"):
             with open(self.src_path, 'r') as f:
                 lines = f.readlines()
@@ -198,7 +204,9 @@ class REPLoop():
     def loop(self):
         prev_exe_out = ""
         while True:
-            print("{} > ".format(self.stack[-1].repr), end='')
+            prompt_head = self.stack[-1].repr
+            if (prompt_head): prompt_head += " "
+            print("{}>>> ".format(prompt_head), end='')
             try:
                 line = input()
             except EOFError:
@@ -227,7 +235,7 @@ class REPLoop():
                 elif (n_block_close != None):
                     cur_obj = None
                     if (n_block_close >= len(self.stack)):
-                        self.interrupt(None, None)
+                        self.exit()
                     self.stack = self.stack[:-n_block_close]
                 else:
                     cur_obj = Statement(line.strip())
@@ -235,14 +243,14 @@ class REPLoop():
 
             # First compile attempt.
             assert(self.tu.print())
-            cc_out = self.run([CC, self.src_path, "-o", self.exe_path], check=False, capture_output=True)
+            clang_out = self.run([CLANG, self.src_path, "-o", self.exe_path, "-x", "c"], check=False, capture_output=True)
 
             # Obvious library function not included?
-            re_impl_lib_func = re.search("implicitly declaring library function '([a-zA-Z_0-9]+)'", cc_out.stderr.decode())
+            re_impl_lib_func = re.search("implicitly declaring library function '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
             if (re_impl_lib_func):
                 impl_func_name = re_impl_lib_func.group(1)
                 logging.warning("function '{}' not included.".format(impl_func_name))
-                re_incl_suggest = re.search("include the header <([a-zA-Z_0-9/\.]+)>", cc_out.stderr.decode())
+                re_incl_suggest = re.search("include the header <([a-zA-Z_0-9/\.]+)>", clang_out.stderr.decode())
                 if (re_incl_suggest):
                     suggested_header_path = re_incl_suggest.group(1)
                     logging.warning("automatically including suggested header '{}'...".format(suggested_header_path))
@@ -251,7 +259,7 @@ class REPLoop():
                     assert(False)
 
             # Less obvious function not included?
-            re_impl_func = re.search("implicit declaration of function '([a-zA-Z_0-9]+)'", cc_out.stderr.decode())
+            re_impl_func = re.search("implicit declaration of function '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
             if (re_impl_func):
                 impl_func_name = re_impl_func.group(1)
                 logging.warning("function '{}' not included.".format(impl_func_name))
@@ -272,10 +280,10 @@ class REPLoop():
 
             # Second compile attempt.
             assert(self.tu.print())
-            cc_out = self.run([CC, self.src_path, "-Werror=implicit-function-declaration", "-o", self.exe_path], check=False, capture_output=True)
+            clang_out = self.run([CLANG, self.src_path, "-Werror=implicit-function-declaration", "-o", self.exe_path, "-x", "c"], check=False, capture_output=True)
 
             # Execute.
-            if (cc_out.returncode == 0):
+            if (clang_out.returncode == 0):
                 exe_out = self.run([self.exe_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                 new_exe_out = exe_out.stdout.decode().strip()
                 incl_exe_out = new_exe_out.removeprefix(prev_exe_out).strip()
@@ -290,8 +298,8 @@ class REPLoop():
                     assert(self.tu.print())
                     logging.warning("unknown runtime error occurred.")
             else:
-                print(cc_out.stderr.decode())
-                err_str = cc_out.stderr.decode().strip()
+                print(clang_out.stderr.decode())
+                err_str = clang_out.stderr.decode().strip()
                 re_error_msg = re.search("(error: .*)\n", err_str)
                 if (not args.error_diag and re_error_msg):
                     err_str = re_error_msg.group(1)
@@ -301,9 +309,24 @@ class REPLoop():
                 cur_obj.err = [l.strip() for l in err_str.split('\n')]
                 assert(self.tu.print())
 
-print("C REPL (version {})".format(VERSION))
+try:
+    c_repl_moddate = subprocess.check_output(["LANG=en date -r {} +\"%d %b %Y %H:%M:%S\"".format(__file__)], shell=True).decode().strip()
+except:
+    c_repl_moddate = "?? ??? ???? ??:??:??"
+
+try:
+    clang_version_str = subprocess.check_output(["clang -dM -E -x c /dev/null | grep __VERSION__"], shell=True).decode().strip()
+    clang_version = clang_version_str.split(' ', 2)[2].replace('"', '')
+except:
+    clang_version = "Clang ?"
+
+print("C-REPL {} (main, {}) [{}] on linux".format(VERSION, c_repl_moddate, clang_version))
+print("Type \"%print\" for the working code or \"%exit\" to exit.")
 repl = REPLoop(src_path=args.out_path)
 repl.loop()
 
 # TODO: keyboard up to navigate previous statements
 # TODO: accept base code
+# TODO: support incremental build
+# TODO: print last return value (if nothing is to print)
+# TODO: replay input after the first time
