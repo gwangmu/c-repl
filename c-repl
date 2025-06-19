@@ -77,14 +77,18 @@ class Block():
             self.kind = "block"
             self.repr = "(block)"
         else:
-            re_block_kw = re.search("^(for|while|if|else|case) *\(", self.head)
+            re_block_kw = re.search("^(for|while|if|case) *\(", self.head)
             if (re_block_kw):
                 self.kind = re_block_kw.group(1)
             else:
-                self.kind = "function"
-                re_func_name = re.search("([a-zA-Z_0-9]+) *\(", self.head)
-                if (re_func_name):
-                    self.name = re_func_name.group(1)
+                re_block_else = re.search("^else$", self.head)
+                if (re_block_else):
+                    self.kind = "else"
+                else:
+                    self.kind = "function"
+                    re_func_name = re.search("([a-zA-Z_0-9]+) *\(", self.head)
+                    if (re_func_name):
+                        self.name = re_func_name.group(1)
         
         if (self.name == "main"):
             self.repr = ""
