@@ -199,9 +199,9 @@ class REPLoop():
 
     def get_block_close(self, line):
         line = line.strip()
-        re_block_close = re.search("}+", line)
+        re_block_close = re.search("^(}+)$", line)
         if (re_block_close):
-            return line.count('}')
+            return re_block_close.group(1).count('}')
         else:
             return None
     
