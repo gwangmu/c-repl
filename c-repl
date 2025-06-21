@@ -170,17 +170,31 @@ class REPLoop():
 
     def system(self, line):
         line = line.strip()
+        tokens = line.split()
 
-        if (line[0:1] != '%'):
+        if (len(tokens) == 0 or line[0:1] != '%'):
             return False
         
-        if (line[1:] == "exit"):
+        if (tokens[0] == "%exit"):
             self.exit()
-        elif (line[1:] == "print"):
-            with open(self.src_path, 'r') as f:
-                lines = f.readlines()
-            for line in lines:
-                print(line[:-1])
+        elif (tokens[0] == "%print"):
+            if (len(tokens) == 1):
+                with open(self.src_path, 'r') as f:
+                    lines = f.readlines()
+                for line in lines:
+                    print(line[:-1])
+            else:
+                symbol_name = tokens[1]
+                options = tokens[2] if (len(tokens) >= 3) else ""
+
+                ast_out = subprocess.run([CLANG, "-x", "c", "-fsyntax-only", "-Xclang", "-ast-dump", self.src_path], capture_output=True)
+                ast_lines = ast_out.stdout.decode().split('\n')
+
+                for ast_line in ast_lines:
+                    re_type = re.search("Decl .* {} '([^']+)'".format(symbol_name), ast_line)
+                    if (re_type):
+                        print(re_type.group(1))
+                        break
         else:
             logging.warning("unrecognized system command.")
 
@@ -256,9 +270,9 @@ class REPLoop():
             clang_out = self.run([CLANG, "-x", "c", self.src_path, "-o", self.exe_path], check=False, capture_output=True)
 
             # Obvious library function not included?
-            re_impl_lib_func = re.search("implicitly declaring library function '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
+            re_impl_lib_func = re.search("(implicitly declaring library function|call to undeclared library function) '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
             if (re_impl_lib_func):
-                impl_func_name = re_impl_lib_func.group(1)
+                impl_func_name = re_impl_lib_func.group(2)
                 logging.warning("function '{}' not included.".format(impl_func_name))
                 re_incl_suggest = re.search("include the header <([a-zA-Z_0-9/\\.]+)>", clang_out.stderr.decode())
                 if (re_incl_suggest):
