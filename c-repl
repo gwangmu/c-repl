@@ -253,7 +253,7 @@ class REPLoop():
 
             # First compile attempt.
             assert(self.tu.print())
-            clang_out = self.run([CLANG, self.src_path, "-o", self.exe_path, "-x", "c"], check=False, capture_output=True)
+            clang_out = self.run([CLANG, "-x", "c", self.src_path, "-o", self.exe_path], check=False, capture_output=True)
 
             # Obvious library function not included?
             re_impl_lib_func = re.search("implicitly declaring library function '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
@@ -290,7 +290,7 @@ class REPLoop():
 
             # Second compile attempt.
             assert(self.tu.print())
-            clang_out = self.run([CLANG, self.src_path, "-Werror=implicit-function-declaration", "-o", self.exe_path, "-x", "c"], check=False, capture_output=True)
+            clang_out = self.run([CLANG, "-x", "c", self.src_path, "-Werror=implicit-function-declaration", "-o", self.exe_path], check=False, capture_output=True)
 
             # Execute.
             if (clang_out.returncode == 0):
@@ -306,6 +306,8 @@ class REPLoop():
                 if (exe_out.returncode != 0):
                     cur_obj.err = ["error: (unknown runtime error)"]
                     assert(self.tu.print())
+                    if (self.stack[-1] == cur_obj):
+                        self.stack = self.stack[:-1]
                     logging.warning("unknown runtime error occurred.")
             else:
                 print(clang_out.stderr.decode())
@@ -318,6 +320,8 @@ class REPLoop():
                     err_str = re.sub("\n.*error.*generated.*", "", err_str)
                 cur_obj.err = [l.strip() for l in err_str.split('\n')]
                 assert(self.tu.print())
+                if (self.stack[-1] == cur_obj):
+                    self.stack = self.stack[:-1]
 
 try:
     c_repl_moddate = subprocess.check_output(["LANG=en date -r {} +\"%d %b %Y %H:%M:%S\"".format(__file__)], shell=True).decode().strip()
