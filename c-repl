@@ -77,7 +77,7 @@ class Block():
             self.kind = "block"
             self.repr = "(block)"
         else:
-            re_block_kw = re.search("^(for|while|if|case) *\(", self.head)
+            re_block_kw = re.search("^(for|while|if|case) *\\(", self.head)
             if (re_block_kw):
                 self.kind = re_block_kw.group(1)
             else:
@@ -86,7 +86,7 @@ class Block():
                     self.kind = "else"
                 else:
                     self.kind = "function"
-                    re_func_name = re.search("([a-zA-Z_0-9]+) *\(", self.head)
+                    re_func_name = re.search("([a-zA-Z_0-9]+) *\\(", self.head)
                     if (re_func_name):
                         self.name = re_func_name.group(1)
         
@@ -229,10 +229,16 @@ class REPLoop():
                 if (block_head != None):
                     cur_obj = Block(block_head)
                     if (cur_obj.kind == "function"):
+                        func_dup = False
                         for f in self.tu.funcs:
                             if (f.name == cur_obj.name):
-                                f.commented = True
-                        self.tu.funcs += [cur_obj]
+                                func_dup = True
+                                break
+                        if (func_dup):
+                            logging.error("function '{}' already defined.".format(cur_obj.name))
+                            continue
+                        else:
+                            self.tu.funcs += [cur_obj]
                     else:
                         self.stack[-1].add(cur_obj)
                     self.stack += [cur_obj]
@@ -254,7 +260,7 @@ class REPLoop():
             if (re_impl_lib_func):
                 impl_func_name = re_impl_lib_func.group(1)
                 logging.warning("function '{}' not included.".format(impl_func_name))
-                re_incl_suggest = re.search("include the header <([a-zA-Z_0-9/\.]+)>", clang_out.stderr.decode())
+                re_incl_suggest = re.search("include the header <([a-zA-Z_0-9/\\.]+)>", clang_out.stderr.decode())
                 if (re_incl_suggest):
                     suggested_header_path = re_incl_suggest.group(1)
                     logging.warning("automatically including suggested header '{}'...".format(suggested_header_path))
