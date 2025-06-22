@@ -4,6 +4,7 @@ import argparse
 import cmd
 import copy
 import logging
+import os
 import re
 import signal
 import subprocess
@@ -12,7 +13,7 @@ import sys
 VERSION = "0.1.2"
 INDENT = "  "
 CLANG = "clang"
-FIND_HEADER = "./find-header"
+FIND_HEADER = "./assets/find-header"
 
 parser = argparse.ArgumentParser(
 		description="For those who'd like to use C like an interpreted language but just don't want to install ANYTHING, caveman style.",
@@ -238,8 +239,18 @@ class REPLoop(cmd.Cmd):
                 for ast_line in ast_lines:
                     re_type = re.search("Decl .* {} '([^']+)'".format(symbol_name), ast_line)
                     if (re_type):
-                        print('(' + re_type.group(1) + ')')
+                        print("{} = ({})".format(symbol_name, re_type.group(1)))
                         break
+
+                self.stack[-1].add(Statement("RAW_PRINT({});".format(symbol_name)))
+                tu_copy = copy.deepcopy(self.tu)
+                self.stack[-1] = self.stack[:-1]
+                tu_copy.out_path = "/tmp/c-repl.c"
+                tu_copy.incls += [Preproc("#include \"{}\"".format(os.path.realpath("./assets/print.h")))]
+                assert(tu_copy.print())
+                clang_out = self.run([CLANG, "-x", "c", tu_copy.out_path, "-o", "/tmp/c-repl"], check=False)
+                exe_out = self.run("/tmp/c-repl 3>&1 >/dev/null 2>&1", shell=True, capture_output=True)
+                print(exe_out.stdout.decode())
 
                 # TODO: deep-copy 'self.tu' and change 'src_path' to another.
                 # TODO: inject '#define' for primitive types.
