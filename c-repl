@@ -121,7 +121,7 @@ class TranslationUnit():
         out = []
         for incl in self.incls:
             out += incl.get()
-        out += [""]
+        if (self.incls): out += [""]
         for func in self.funcs:
             out += func.get()
             out += [""]
@@ -161,6 +161,9 @@ class REPLoop(cmd.Cmd):
         self.dfn_sigint = signal.signal(signal.SIGINT, self.interrupt)
         self.prev_exe_out = ""
 
+        open(self.src_path, 'w').close()
+        open(self.exe_path, 'w').close()
+
     def exit(self):
         print("Goodbye ᕕ(⌐■_■)ᕗ ♪♬")
         exit(0)
@@ -179,20 +182,43 @@ class REPLoop(cmd.Cmd):
         self.wait_subproc = False
         return ret
 
-    def precmd(self, line):
-        tokens = line.split()
-
-        if (len(tokens) == 0 or line[0:1] != '%'):
+    def is_system_cmd(self, line):
+        if (line[0:1] == '%'):
             return line
+
+    def is_preproc(self, line):
+        return (re.search("#.*", line.strip()) != None)
+
+    def get_block_head(self, line):
+        line = line.strip()
+        re_block_head = re.search("([^{]*){", line)
+        if (re_block_head):
+            return re_block_head.group(1).strip()
+        else:
+            return None
+
+    def get_block_close(self, line):
+        line = line.strip()
+        re_block_close = re.search("^(}+)$", line)
+        if (re_block_close):
+            return re_block_close.group(1).count('}')
+        else:
+            return None
+
+    def precmd(self, line):
+        if (not self.is_system_cmd(line)):
+            return line
+
+        tokens = line.split()
         
         if (tokens[0] == "%exit"):
             self.exit()
         elif (tokens[0] == "%print"):
             if (len(tokens) == 1):
                 with open(self.src_path, 'r') as f:
-                    lines = f.readlines()
-                for line in lines:
-                    print(line[:-1])
+                    src_lines = f.readlines()
+                for src_line in src_lines:
+                    print(src_line[:-1])
             else:
                 symbol_name = tokens[1]
                 options = tokens[2] if (len(tokens) >= 3) else ""
@@ -220,30 +246,13 @@ class REPLoop(cmd.Cmd):
         else:
             logging.warning("unrecognized system command.")
 
-        return None
-
-    def is_preproc(self, line):
-        return (re.search("#.*", line.strip()) != None)
-
-    def get_block_head(self, line):
-        line = line.strip()
-        re_block_head = re.search("([^{]*){", line)
-        if (re_block_head):
-            return re_block_head.group(1).strip()
-        else:
-            return None
-
-    def get_block_close(self, line):
-        line = line.strip()
-        re_block_close = re.search("^(}+)$", line)
-        if (re_block_close):
-            return re_block_close.group(1).count('}')
-        else:
-            return None
+        return line 
     
     def default(self, line):
         if (line == "EOF"):
             self.interrupt(None, None)
+        elif (self.is_system_cmd(line)):
+            return
 
         # Identify the type of input.
         if (self.is_preproc(line)):
