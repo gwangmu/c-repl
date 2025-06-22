@@ -239,7 +239,7 @@ class REPLoop(cmd.Cmd):
                     print(src_line[:-1])
             else:
                 symbol_name = tokens[1]
-                options = tokens[2] if (len(tokens) >= 3) else ""
+                options = tokens[2].split(',') if (len(tokens) >= 3) else ""
                 type_str = "?"
                 value_str = "?"
 
@@ -255,12 +255,27 @@ class REPLoop(cmd.Cmd):
                 # TranslationUnit has no concept of a stack (or the context),
                 # so add the print statement to the current TranslationUnit,
                 # copy it, and restore the TranslationUnit. Dirty hack I guess.
-                self.stack[-1].add(Statement("RAW_PRINT({});".format(symbol_name)))
+                if ("ptr" in options):
+                    self.stack[-1].add(Statement("AUTO_PRINT((void *){});".format(symbol_name)))
+                elif (any(o.startswith("len=") for o in options)):
+                    len_option = [o for o in options if o.startswith("len=")][-1]
+                    n_len = len_option.split("=")[1]
+                    self.stack[-1].add(Statement(""" 
+                        RAW_PRINT("[ ");
+                        for (int i = 0; i < {}; i++) {{
+                            AUTO_PRINT({}[i]);
+                            if (i < {} - 1)
+                                RAW_PRINT(", ");
+                            else
+                                RAW_PRINT(" ]");
+                        }}""".format(n_len, symbol_name, n_len)))
+                else:
+                    self.stack[-1].add(Statement("AUTO_PRINT({});".format(symbol_name)))
                 tu_copy = copy.deepcopy(self.tu)
                 self.stack[-1].pop()
 
-                tmp_src_path = "/tmp/c-repl.c"
-                tmp_exe_path = "/tmp/c-repl"
+                tmp_src_path = "/tmp/c-repl.tmp.c"
+                tmp_exe_path = "/tmp/c-repl.tmp"
                 tu_copy.out_path = tmp_src_path
                 
                 tu_copy.incls += [Preproc("#include \"{}\"".format(os.path.realpath("./assets/print.h")))]
@@ -269,25 +284,20 @@ class REPLoop(cmd.Cmd):
                 # TODO: Weirdly, Python subprocess appears to only work with the
                 # redirection with the FD "3" (or probably the next free FD).
                 # For now, use FD 3 and fix it later.
-                clang_out = self.run([CLANG, "-x", "c", tmp_src_path, "-o", tmp_exe_path], check=False)
-                exe_out = self.run("{} 3>&1 >/dev/null 2>&1".format(tmp_exe_path), shell=True, capture_output=True)
+                clang_out = self.run([CLANG, "-x", "c", tmp_src_path, "-o", tmp_exe_path], check=False, capture_output=True)
                 
-                if (exe_out.returncode == 0):
-                    value_str = exe_out.stdout.decode()
+                if (clang_out.returncode == 0):
+                    exe_out = self.run("{} 3>&1 >/dev/null 2>&1".format(tmp_exe_path), shell=True, capture_output=True)
+                    if (exe_out.returncode == 0):
+                        value_str = exe_out.stdout.decode()
 
                 print("{} = ({}) {}".format(symbol_name, type_str, value_str))
 
-                # TODO: deep-copy 'self.tu' and change 'src_path' to another.
-                # TODO: inject '#define' for primitive types.
                 # TODO: if type is enum, parse ast harder, print it, and return.
                 # TODO: inject code to print value to fd X (e.g., 12345)
-                #           - primitive by default
-                #           - cast to (void*) if the option 'addr' is set.
-                #           - print elem-by-elem if the option 'len=<len>' is set.
-                #           - if type is struct, print field-by-field.
-                # TODO: execute code and get value.
-                #       - value = '?' if it crashed.
-                # TODO: assemble value and print to REPL.
+                #        - cast to (void*) if the option 'addr' is set.
+                #        - print elem-by-elem if the option 'len=<len>' is set.
+                #        - if type is struct, print field-by-field.
         else:
             logging.warning("unrecognized system command.")
 
