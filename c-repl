@@ -143,7 +143,7 @@ class REPLoop(cmd.Cmd):
         clang_version_str = subprocess.check_output(["clang -dM -E -x c /dev/null | grep __VERSION__"], shell=True).decode().strip()
         clang_version = clang_version_str.split(' ', 2)[2].replace('"', '')
     except:
-        clang_version = "Clang ?"
+        clang_version = "Clang rersion I♬don't♪know"
 
     intro = "C-REPL {} (main, {}) [{}] on linux\n".format(VERSION, c_repl_moddate, clang_version) + \
             "Type \"%print\" for the working code or \"%exit\" to exit."
@@ -180,6 +180,15 @@ class REPLoop(cmd.Cmd):
         except subprocess.CalledProcessError:
             pass
         self.wait_subproc = False
+        return ret
+
+    def input(self, *args, **kwargs):
+        prev_sighandler = signal.signal(signal.SIGINT, self.dfn_sigint)
+        try:
+            ret = input(*args, **kwargs)
+        except KeyboardInterrupt:
+            ret = ""
+        signal.signal(signal.SIGINT, prev_sighandler)
         return ret
 
     def is_system_cmd(self, line):
