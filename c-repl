@@ -1,13 +1,15 @@
 #!/usr/bin/python
 
 import argparse
+import cmd
+import copy
 import logging
 import re
 import signal
 import subprocess
 import sys
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 INDENT = "  "
 CLANG = "clang"
 FIND_HEADER = "./find-header"
@@ -131,8 +133,25 @@ class TranslationUnit():
             f.writelines([l + '\n' for l in self.get()])
         return True
 
-class REPLoop():
+class REPLoop(cmd.Cmd):
+    try:
+        c_repl_moddate = subprocess.check_output(["LANG=en date -r {} +\"%d %b %Y %H:%M:%S\"".format(__file__)], shell=True).decode().strip()
+    except:
+        c_repl_moddate = "?? ??? ???? ??:??:??"
+
+    try:
+        clang_version_str = subprocess.check_output(["clang -dM -E -x c /dev/null | grep __VERSION__"], shell=True).decode().strip()
+        clang_version = clang_version_str.split(' ', 2)[2].replace('"', '')
+    except:
+        clang_version = "Clang ?"
+
+    intro = "C-REPL {} (main, {}) [{}] on linux\n".format(VERSION, c_repl_moddate, clang_version) + \
+            "Type \"%print\" for the working code or \"%exit\" to exit."
+    prompt = ">>> "
+
     def __init__(self, src_path="/tmp/c-repl.c", exe_path="/tmp/c-repl"):
+        super().__init__()
+
         self.src_path = src_path
         self.exe_path = exe_path
         self.tu = TranslationUnit(out_path=src_path)
@@ -140,6 +159,7 @@ class REPLoop():
 
         self.wait_subproc = False
         self.dfn_sigint = signal.signal(signal.SIGINT, self.interrupt)
+        self.prev_exe_out = ""
 
     def exit(self):
         print("Goodbye ᕕ(⌐■_■)ᕗ ♪♬")
@@ -159,21 +179,11 @@ class REPLoop():
         self.wait_subproc = False
         return ret
 
-    def input(self, *args, **kwargs):
-        prev_sighandler = signal.signal(signal.SIGINT, self.dfn_sigint)
-        try:
-            ret = input(*args, **kwargs)
-        except KeyboardInterrupt:
-            ret = ""
-        signal.signal(signal.SIGINT, prev_sighandler)
-        return ret
-
-    def system(self, line):
-        line = line.strip()
+    def precmd(self, line):
         tokens = line.split()
 
         if (len(tokens) == 0 or line[0:1] != '%'):
-            return False
+            return line
         
         if (tokens[0] == "%exit"):
             self.exit()
@@ -195,10 +205,22 @@ class REPLoop():
                     if (re_type):
                         print('(' + re_type.group(1) + ')')
                         break
+
+                # TODO: deep-copy 'self.tu' and change 'src_path' to another.
+                # TODO: inject '#define' for primitive types.
+                # TODO: if type is enum, parse ast harder, print it, and return.
+                # TODO: inject code to print value to fd X (e.g., 12345)
+                #           - primitive by default
+                #           - cast to (void*) if the option 'addr' is set.
+                #           - print elem-by-elem if the option 'len=<len>' is set.
+                #           - if type is struct, print field-by-field.
+                # TODO: execute code and get value.
+                #       - value = '?' if it crashed.
+                # TODO: assemble value and print to REPL.
         else:
             logging.warning("unrecognized system command.")
 
-        return True
+        return None
 
     def is_preproc(self, line):
         return (re.search("#.*", line.strip()) != None)
@@ -219,141 +241,127 @@ class REPLoop():
         else:
             return None
     
-    def loop(self):
-        prev_exe_out = ""
-        while True:
-            prompt_head = self.stack[-1].repr
-            if (prompt_head): prompt_head += " "
-            print("{}>>> ".format(prompt_head), end='')
-            try:
-                line = input()
-            except EOFError:
-                self.interrupt(None, None)
+    def default(self, line):
+        if (line == "EOF"):
+            self.interrupt(None, None)
 
-            if (self.system(line)):
-                continue
-
-            # Identify the type of input.
-            if (self.is_preproc(line)):
-                cur_obj = Preproc(line)
-                self.tu.incls += [cur_obj]
-            else:
-                block_head = self.get_block_head(line)
-                n_block_close = self.get_block_close(line)
-                if (block_head != None):
-                    cur_obj = Block(block_head)
-                    if (cur_obj.kind == "function"):
-                        func_dup = False
-                        for f in self.tu.funcs:
-                            if (f.name == cur_obj.name):
-                                func_dup = True
-                                break
-                        if (func_dup):
-                            logging.error("function '{}' already defined.".format(cur_obj.name))
-                            continue
-                        else:
-                            self.tu.funcs += [cur_obj]
+        # Identify the type of input.
+        if (self.is_preproc(line)):
+            cur_obj = Preproc(line)
+            self.tu.incls += [cur_obj]
+        else:
+            block_head = self.get_block_head(line)
+            n_block_close = self.get_block_close(line)
+            if (block_head != None):
+                cur_obj = Block(block_head)
+                if (cur_obj.kind == "function"):
+                    func_dup = False
+                    for f in self.tu.funcs:
+                        if (f.name == cur_obj.name):
+                            func_dup = True
+                            break
+                    if (func_dup):
+                        logging.error("function '{}' already defined.".format(cur_obj.name))
+                        return
                     else:
-                        self.stack[-1].add(cur_obj)
-                    self.stack += [cur_obj]
-                elif (n_block_close != None):
-                    cur_obj = None
-                    if (n_block_close >= len(self.stack)):
-                        self.exit()
-                    self.stack = self.stack[:-n_block_close]
+                        self.tu.funcs += [cur_obj]
                 else:
-                    cur_obj = Statement(line.strip())
                     self.stack[-1].add(cur_obj)
-
-            # First compile attempt.
-            assert(self.tu.print())
-            clang_out = self.run([CLANG, "-x", "c", self.src_path, "-o", self.exe_path], check=False, capture_output=True)
-
-            # Obvious library function not included?
-            re_impl_lib_func = re.search("(implicitly declaring library function|call to undeclared library function) '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
-            auto_included = False
-            if (re_impl_lib_func):
-                impl_func_name = re_impl_lib_func.group(2)
-                logging.warning("function '{}' not included.".format(impl_func_name))
-                re_incl_suggest = re.search("include the header <([a-zA-Z_0-9/\\.]+)>", clang_out.stderr.decode())
-                if (re_incl_suggest):
-                    auto_included = True
-                    suggested_header_path = re_incl_suggest.group(1)
-                    logging.warning("automatically including suggested header '{}'...".format(suggested_header_path))
-                    self.tu.incls += [StdIncludePreproc(suggested_header_path, 0)]
-                else:
-                    assert(False)
-
-            # Less obvious function not included?
-            re_impl_func = re.search("(implicit declaration of function|call to undeclared function) '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
-            if (re_impl_func or (re_impl_lib_func and not auto_included)):
-                impl_func_name = re_impl_func.group(2) if (re_impl_func) else re_impl_lib_func.group(2)
-                logging.warning("function '{}' not included.".format(impl_func_name))
-                find_header_out = self.run([FIND_HEADER, "find", impl_func_name, "-f"], check=False, capture_output=True)
-                find_header_out_stdout = find_header_out.stdout.decode().strip()
-                if (find_header_out_stdout):
-                    cand_headers = [StdIncludePreproc(e.split('\t')[0], int(e.split('\t')[1])) for e in find_header_out_stdout.split('\n')]
-                    for i, cand_header in enumerate(cand_headers):
-                        logging.warning("[{}] {} (at '{}')".format(i, str(cand_header), cand_header.path))
-                    logging.warning("which to include? ")
-                    header_num = self.input()
-                    try:
-                        self.tu.incls += [cand_headers[int(header_num)]]
-                    except:
-                        logging.error("header inclusion failed.")
-                else:
-                    logging.warning("cannot find header.")
-
-            # Second compile attempt.
-            assert(self.tu.print())
-            clang_out = self.run([CLANG, "-x", "c", self.src_path, "-Werror=implicit-function-declaration", "-o", self.exe_path], check=False, capture_output=True)
-
-            # Execute.
-            if (clang_out.returncode == 0):
-                exe_out = self.run([self.exe_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-                new_exe_out = exe_out.stdout.decode().strip()
-                incl_exe_out = new_exe_out.removeprefix(prev_exe_out).strip()
-                prev_exe_out = new_exe_out
-                if (incl_exe_out):
-                    print(incl_exe_out)
-                else:
-                    # TODO: print the return value of the last statement.
-                    pass
-                if (exe_out.returncode != 0):
-                    cur_obj.err = ["error: (unknown runtime error)"]
-                    assert(self.tu.print())
-                    if (self.stack[-1] == cur_obj):
-                        self.stack = self.stack[:-1]
-                    logging.warning("unknown runtime error occurred.")
+                self.stack += [cur_obj]
+            elif (n_block_close != None):
+                cur_obj = None
+                if (n_block_close >= len(self.stack)):
+                    self.exit()
+                self.stack = self.stack[:-n_block_close]
             else:
-                print(clang_out.stderr.decode())
-                err_str = clang_out.stderr.decode().strip()
-                re_error_msg = re.search("(error: .*)\n", err_str)
-                if (not args.error_diag and re_error_msg):
-                    err_str = re_error_msg.group(1)
-                else:
-                    err_str = re.sub("^.* error:", "error:", err_str)
-                    err_str = re.sub("\n.*error.*generated.*", "", err_str)
-                cur_obj.err = [l.strip() for l in err_str.split('\n')]
+                cur_obj = Statement(line.strip())
+                self.stack[-1].add(cur_obj)
+
+        # First compile attempt.
+        assert(self.tu.print())
+        clang_out = self.run([CLANG, "-x", "c", self.src_path, "-o", self.exe_path], check=False, capture_output=True)
+
+        # Obvious library function not included?
+        # TODO: match this to the compiler flag.
+        re_impl_lib_func = re.search("(implicitly declaring library function|call to undeclared library function) '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
+        auto_included = False
+        if (re_impl_lib_func):
+            impl_func_name = re_impl_lib_func.group(2)
+            logging.warning("function '{}' not included.".format(impl_func_name))
+            re_incl_suggest = re.search("include the header <([a-zA-Z_0-9/\\.]+)>", clang_out.stderr.decode())
+            if (re_incl_suggest):
+                auto_included = True
+                suggested_header_path = re_incl_suggest.group(1)
+                logging.warning("automatically including suggested header '{}'...".format(suggested_header_path))
+                self.tu.incls += [StdIncludePreproc(suggested_header_path, 0)]
+            else:
+                assert(False)
+
+        # Less obvious function not included?
+        # TODO: match this to the compiler flag.
+        re_impl_func = re.search("(implicit declaration of function|call to undeclared function) '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
+        if (re_impl_func or (re_impl_lib_func and not auto_included)):
+            impl_func_name = re_impl_func.group(2) if (re_impl_func) else re_impl_lib_func.group(2)
+            logging.warning("function '{}' not included.".format(impl_func_name))
+            find_header_out = self.run([FIND_HEADER, "find", impl_func_name, "-f"], check=False, capture_output=True)
+            find_header_out_stdout = find_header_out.stdout.decode().strip()
+            if (find_header_out_stdout):
+                cand_headers = [StdIncludePreproc(e.split('\t')[0], int(e.split('\t')[1])) for e in find_header_out_stdout.split('\n')]
+                for i, cand_header in enumerate(cand_headers):
+                    logging.warning("[{}] {} (at '{}')".format(i, str(cand_header), cand_header.path))
+                logging.warning("which to include? ")
+                header_num = self.input()
+                try:
+                    self.tu.incls += [cand_headers[int(header_num)]]
+                except:
+                    logging.error("header inclusion failed.")
+            else:
+                logging.warning("cannot find header.")
+
+        # Second compile attempt.
+        assert(self.tu.print())
+        clang_out = self.run([CLANG, "-x", "c", self.src_path, "-Werror=implicit-function-declaration", "-o", self.exe_path], check=False, capture_output=True)
+
+        # Execute.
+        if (clang_out.returncode == 0):
+            exe_out = self.run([self.exe_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            new_exe_out = exe_out.stdout.decode().strip()
+            incl_exe_out = new_exe_out.removeprefix(self.prev_exe_out).strip()
+            self.prev_exe_out = new_exe_out
+            if (incl_exe_out):
+                print(incl_exe_out)
+            else:
+                # TODO: print the return value of the last statement.
+                pass
+            if (exe_out.returncode != 0):
+                cur_obj.err = ["error: (unknown runtime error)"]
                 assert(self.tu.print())
                 if (self.stack[-1] == cur_obj):
                     self.stack = self.stack[:-1]
+                logging.warning("unknown runtime error occurred.")
+        else:
+            print(clang_out.stderr.decode())
+            err_str = clang_out.stderr.decode().strip()
+            re_error_msg = re.search("(error: .*)\n", err_str)
+            if (not args.error_diag and re_error_msg):
+                err_str = re_error_msg.group(1)
+            else:
+                err_str = re.sub("^.* error:", "error:", err_str)
+                err_str = re.sub("\n.*error.*generated.*", "", err_str)
+            cur_obj.err = [l.strip() for l in err_str.split('\n')]
+            assert(self.tu.print())
+            if (self.stack[-1] == cur_obj):
+                self.stack = self.stack[:-1]
 
-try:
-    c_repl_moddate = subprocess.check_output(["LANG=en date -r {} +\"%d %b %Y %H:%M:%S\"".format(__file__)], shell=True).decode().strip()
-except:
-    c_repl_moddate = "?? ??? ???? ??:??:??"
+    def postcmd(self, stop, line):
+        prompt_head = self.stack[-1].repr
+        if (prompt_head): prompt_head += " "
+        self.prompt = "{}>>> ".format(prompt_head)
+        return stop
 
-try:
-    clang_version_str = subprocess.check_output(["clang -dM -E -x c /dev/null | grep __VERSION__"], shell=True).decode().strip()
-    clang_version = clang_version_str.split(' ', 2)[2].replace('"', '')
-except:
-    clang_version = "Clang ?"
 
-print("C-REPL {} (main, {}) [{}] on linux".format(VERSION, c_repl_moddate, clang_version))
-print("Type \"%print\" for the working code or \"%exit\" to exit.")
 repl = REPLoop(src_path=args.out_path)
-repl.loop()
+repl.cmdloop()
 
 # TODO: keyboard up to navigate previous statements
 # TODO: accept base code
