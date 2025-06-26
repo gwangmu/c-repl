@@ -21,7 +21,6 @@ parser = argparse.ArgumentParser(
 parser.add_argument("-e", "--error-diag", help="attach full error diagnostic", action="store_true")
 parser.add_argument("-o", "--out-path", help="set output path for code", type=str, default="/tmp/c-repl.c")
 parser.add_argument('-i', "--include", help="files to include", type=str, action='append')
-parser.add_argument('-r', "--print-ret", help="print the return value", action="store_true")
 args = parser.parse_args()
 
 class StdIncludePreproc():
@@ -155,7 +154,7 @@ class REPLoop(cmd.Cmd):
             "Type \"%print\" for the working code or \"%exit\" to exit."
     prompt = ">>> "
 
-    def __init__(self, src_path="/tmp/c-repl.c", exe_path="/tmp/c-repl", error_diag=False, print_ret=False):
+    def __init__(self, src_path="/tmp/c-repl.c", exe_path="/tmp/c-repl", error_diag=False):
         super().__init__()
 
         self.src_path = src_path
@@ -167,7 +166,6 @@ class REPLoop(cmd.Cmd):
         self.dfn_sigint = signal.signal(signal.SIGINT, self.interrupt)
         self.prev_exe_out = ""
         self.error_diag = error_diag
-        self.print_ret = print_ret
 
         open(self.src_path, 'w').close()
         open(self.exe_path, 'w').close()
@@ -396,20 +394,21 @@ class REPLoop(cmd.Cmd):
         # Execute.
         if (clang_out.returncode == 0):
             exe_out = self.run([self.exe_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            new_exe_out = exe_out.stdout.decode().strip()
-            incl_exe_out = new_exe_out.removeprefix(self.prev_exe_out).strip()
-            self.prev_exe_out = new_exe_out
-            if (incl_exe_out):
-                print(incl_exe_out)
-            else:
-                # TODO: print the return value of the last statement.
-                pass
+
             if (exe_out.returncode != 0):
                 cur_obj.err = ["error: (unknown runtime error)"]
                 assert(self.tu.print())
                 if (self.stack[-1] == cur_obj):
                     self.stack = self.stack[:-1]
                 logging.warning("unknown runtime error occurred.")
+
+            new_exe_out = exe_out.stdout.decode().strip()
+            excl_exe_out = new_exe_out.removeprefix(self.prev_exe_out).strip()
+            if (exe_out.returncode == 0):
+                self.prev_exe_out = new_exe_out
+            if (excl_exe_out == new_exe_out):
+                logging.warning("previous output changed. printing all...")
+            print(excl_exe_out)
         else:
             print(clang_out.stderr.decode())
             err_str = clang_out.stderr.decode().strip()
@@ -431,7 +430,7 @@ class REPLoop(cmd.Cmd):
         return stop
 
 
-repl = REPLoop(src_path=args.out_path, error_diag=args.error_diag, print_ret=args.print_ret)
+repl = REPLoop(src_path=args.out_path, error_diag=args.error_diag)
 
 if (args.include):
     for incl_filename in args.include:
