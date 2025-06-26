@@ -200,7 +200,7 @@ class REPLoop(cmd.Cmd):
             return line
 
     def is_preproc(self, line):
-        return (re.search("#.*", line.strip()) != None)
+        return (re.search("^#.*", line.strip()) != None)
 
     def get_block_head(self, line):
         line = line.strip()
