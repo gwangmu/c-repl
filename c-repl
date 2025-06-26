@@ -151,7 +151,7 @@ class REPLoop(cmd.Cmd):
         clang_version = "Clang rersion I♬don't♪know"
 
     intro = "C-REPL {} (main, {}) [{}] on linux\n".format(VERSION, c_repl_moddate, clang_version) + \
-            "Type \"%print\" for the working code or \"%exit\" to exit."
+            "Type \"help\" for more information."
     prompt = ">>> "
 
     def __init__(self, src_path="/tmp/c-repl.c", exe_path="/tmp/c-repl", error_diag=False):
@@ -169,6 +169,14 @@ class REPLoop(cmd.Cmd):
 
         open(self.src_path, 'w').close()
         open(self.exe_path, 'w').close()
+
+    def do_help(self, arg):
+        print("Enter C statements line-by-line. See README.md for details.")
+        print("")
+        print("Meta-commands:")
+        print("  %print [<expr>]    Print the return value of an expression <expr>.")
+        print("                     If <expr> is not given, print the working code.")
+        print("  %exit              Exit the prompt.")
 
     def exit(self):
         print("Goodbye ᕕ(⌐■_■)ᕗ ♪♬")
@@ -258,7 +266,7 @@ class REPLoop(cmd.Cmd):
                             type_str = re_type.group(1)
                             break
                 else:
-                    type_str = '-'
+                    type_str = "" 
 
                 # TranslationUnit has no concept of a stack (or the context),
                 # so add the print statement to the current TranslationUnit,
@@ -299,7 +307,7 @@ class REPLoop(cmd.Cmd):
                     if (exe_out.returncode == 0):
                         value_str = exe_out.stdout.decode()
 
-                print("{} = ({}) {}".format(target_name, type_str, value_str))
+                print("{} = {}{}".format(target_name, "({}) ".format(type_str) if (type_str) else "", value_str))
 
                 # TODO: if type is enum, parse ast harder, print it, and return.
                 # TODO: inject code to print value to fd X (e.g., 12345)
