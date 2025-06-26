@@ -353,42 +353,35 @@ class REPLoop(cmd.Cmd):
         assert(self.tu.print())
         clang_out = self.run([CLANG, "-x", "c", self.src_path, "-o", self.exe_path], check=False, capture_output=True)
 
-        # Obvious library function not included?
-        # TODO: match this to the compiler flag.
-        re_impl_lib_func = re.search("(implicitly declaring library function|call to undeclared library function) '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
-        auto_included = False
-        if (re_impl_lib_func):
-            impl_func_name = re_impl_lib_func.group(2)
+        if ("-Wimplicit-function-declaration" in clang_out.stderr.decode()):
+            re_impl_func = re.search("function '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
+            assert(re_impl_func)
+            impl_func_name = re_impl_func.group(1)
             logging.warning("function '{}' not included.".format(impl_func_name))
+
             re_incl_suggest = re.search("include the header <([a-zA-Z_0-9/\\.]+)>", clang_out.stderr.decode())
             if (re_incl_suggest):
-                auto_included = True
+                # Obvious library function not included?
                 suggested_header_path = re_incl_suggest.group(1)
                 logging.warning("automatically including suggested header '{}'...".format(suggested_header_path))
                 self.tu.incls += [StdIncludePreproc(suggested_header_path, 0)]
             else:
-                assert(False)
-
-        # Less obvious function not included?
-        # TODO: match this to the compiler flag.
-        re_impl_func = re.search("(implicit declaration of function|call to undeclared function) '([a-zA-Z_0-9]+)'", clang_out.stderr.decode())
-        if (re_impl_func or (re_impl_lib_func and not auto_included)):
-            impl_func_name = re_impl_func.group(2) if (re_impl_func) else re_impl_lib_func.group(2)
-            logging.warning("function '{}' not included.".format(impl_func_name))
-            find_header_out = self.run([FIND_HEADER, "find", impl_func_name, "-f"], check=False, capture_output=True)
-            find_header_out_stdout = find_header_out.stdout.decode().strip()
-            if (find_header_out_stdout):
-                cand_headers = [StdIncludePreproc(e.split('\t')[0], int(e.split('\t')[1])) for e in find_header_out_stdout.split('\n')]
-                for i, cand_header in enumerate(cand_headers):
-                    logging.warning("[{}] {} (at '{}')".format(i, str(cand_header), cand_header.path))
-                logging.warning("which to include? ")
-                header_num = self.input()
+                # Less obvious function not included?
                 try:
+                    find_header_out = self.run([FIND_HEADER, "find", impl_func_name, "-f", "-x"], check=False, capture_output=True)
+                    if (find_header_out.returncode == 200):
+                        logging.error("no cached header information.")
+                        logging.error("run '$ {} cache' to cache header information.".format(FIND_HEADER))
+                        raise Exception()
+                    find_header_out_stdout = find_header_out.stdout.decode().strip()
+                    cand_headers = [StdIncludePreproc(e.split('\t')[0], int(e.split('\t')[1])) for e in find_header_out_stdout.split('\n')]
+                    for i, cand_header in enumerate(cand_headers):
+                        logging.warning("[{}] {} (at '{}')".format(i, str(cand_header), cand_header.path))
+                    logging.warning("which to include? ")
+                    header_num = self.input()
                     self.tu.incls += [cand_headers[int(header_num)]]
                 except:
                     logging.error("header inclusion failed.")
-            else:
-                logging.warning("cannot find header.")
 
         # Second compile attempt.
         assert(self.tu.print())

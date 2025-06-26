@@ -175,13 +175,17 @@ cmd::cache() {
 cmd::find() {
   local target_name=""
 
-  local opts=("-a|--all-depth" "-d|--print-depth" "-i|--include" "-f|--formatted")
+  local opts=("-a|--all-depth" "-d|--print-depth" "-i|--include" "-f|--formatted" "-x|--fail-if-no-cache")
   local poss=(target_name)
   local etcs_out=()
   util::parse_arguments opts poss etcs_out $@
 
   if [[ ! -d "$CACHE_ROOT" ]]; then
-    cmd::cache
+    if [[ -v opt_failifnocache ]]; then
+      return 200
+    else
+      cmd::cache
+    fi
   fi
 
   local base_dirs=()
