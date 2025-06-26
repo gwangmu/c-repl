@@ -211,7 +211,7 @@ class REPLoop(cmd.Cmd):
         if (re_init_list):
             return None
 
-        re_block_head = re.search("([^{]*){", line)
+        re_block_head = re.search("([^{]*){$", line)
         if (re_block_head):
             return re_block_head.group(1).strip()
         else:
