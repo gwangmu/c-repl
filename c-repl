@@ -251,11 +251,14 @@ class REPLoop(cmd.Cmd):
                 ast_out = subprocess.run([CLANG, "-x", "c", "-fsyntax-only", "-Xclang", "-ast-dump", self.src_path], capture_output=True)
                 ast_lines = ast_out.stdout.decode().split('\n')
 
-                for ast_line in ast_lines:
-                    re_type = re.search("Decl .* {} '([^']+)'".format(target_name), ast_line)
-                    if (re_type):
-                        type_str = re_type.group(1)
-                        break
+                if (re.match("^[A-Za-z_][0-9A-Za-z_]*$", target_name)):
+                    for ast_line in ast_lines:
+                        re_type = re.search("Decl .* {} '([^']+)'".format(target_name), ast_line)
+                        if (re_type):
+                            type_str = re_type.group(1)
+                            break
+                else:
+                    type_str = '-'
 
                 # TranslationUnit has no concept of a stack (or the context),
                 # so add the print statement to the current TranslationUnit,
