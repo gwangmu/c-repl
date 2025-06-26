@@ -20,6 +20,7 @@ parser = argparse.ArgumentParser(
 		epilog="To be fair, you still need to install 'clang' (any non-ancient version) and 'python' (which you obviously have if you can read this).")
 parser.add_argument("-e", "--error-diag", help="attach full error diagnostic", action="store_true")
 parser.add_argument("-o", "--out-path", help="set output path for code", type=str, default="/tmp/c-repl.c")
+parser.add_argument('-i', "--include", help="files to include", type=str, action='append')
 args = parser.parse_args()
 
 class StdIncludePreproc():
@@ -153,7 +154,7 @@ class REPLoop(cmd.Cmd):
             "Type \"%print\" for the working code or \"%exit\" to exit."
     prompt = ">>> "
 
-    def __init__(self, src_path="/tmp/c-repl.c", exe_path="/tmp/c-repl"):
+    def __init__(self, src_path="/tmp/c-repl.c", exe_path="/tmp/c-repl", error_diag=False):
         super().__init__()
 
         self.src_path = src_path
@@ -164,6 +165,7 @@ class REPLoop(cmd.Cmd):
         self.wait_subproc = False
         self.dfn_sigint = signal.signal(signal.SIGINT, self.interrupt)
         self.prev_exe_out = ""
+        self.error_diag = error_diag
 
         open(self.src_path, 'w').close()
         open(self.exe_path, 'w').close()
@@ -407,7 +409,7 @@ class REPLoop(cmd.Cmd):
             print(clang_out.stderr.decode())
             err_str = clang_out.stderr.decode().strip()
             re_error_msg = re.search("(error: .*)\n", err_str)
-            if (not args.error_diag and re_error_msg):
+            if (not self.error_diag and re_error_msg):
                 err_str = re_error_msg.group(1)
             else:
                 err_str = re.sub("^.* error:", "error:", err_str)
@@ -424,7 +426,15 @@ class REPLoop(cmd.Cmd):
         return stop
 
 
-repl = REPLoop(src_path=args.out_path)
+repl = REPLoop(src_path=args.out_path, error_diag=args.error_diag)
+
+for incl_filename in args.include:
+    try:
+        incl_path = os.path.realpath(incl_filename)
+        repl.tu.incls += [Preproc("#include \"{}\"".format(incl_path))]
+    except:
+        logging.warning("file '{}' not included.".format(incl_filename))
+
 repl.cmdloop()
 
 # TODO: keyboard up to navigate previous statements
