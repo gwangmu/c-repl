@@ -21,6 +21,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument("-e", "--error-diag", help="attach full error diagnostic", action="store_true")
 parser.add_argument("-o", "--out-path", help="set output path for code", type=str, default="/tmp/c-repl.c")
 parser.add_argument('-i', "--include", help="files to include", type=str, action='append')
+parser.add_argument('-r', "--print-ret", help="print the return value", action="store_true")
 args = parser.parse_args()
 
 class StdIncludePreproc():
@@ -154,7 +155,7 @@ class REPLoop(cmd.Cmd):
             "Type \"%print\" for the working code or \"%exit\" to exit."
     prompt = ">>> "
 
-    def __init__(self, src_path="/tmp/c-repl.c", exe_path="/tmp/c-repl", error_diag=False):
+    def __init__(self, src_path="/tmp/c-repl.c", exe_path="/tmp/c-repl", error_diag=False, print_ret=False):
         super().__init__()
 
         self.src_path = src_path
@@ -166,6 +167,7 @@ class REPLoop(cmd.Cmd):
         self.dfn_sigint = signal.signal(signal.SIGINT, self.interrupt)
         self.prev_exe_out = ""
         self.error_diag = error_diag
+        self.print_ret = print_ret
 
         open(self.src_path, 'w').close()
         open(self.exe_path, 'w').close()
@@ -229,19 +231,22 @@ class REPLoop(cmd.Cmd):
         if (not self.is_system_cmd(line)):
             return line
 
-        tokens = line.split()
+        tokens = line.split(' ', 1)
         
         if (tokens[0] == "%exit"):
             self.exit()
-        elif (tokens[0] == "%print"):
+        elif (tokens[0][0:6] == "%print"):
             if (len(tokens) == 1):
                 with open(self.src_path, 'r') as f:
                     src_lines = f.readlines()
                 for src_line in src_lines:
                     print(src_line[:-1])
             else:
-                symbol_name = tokens[1]
-                options = tokens[2].split(',') if (len(tokens) >= 3) else ""
+                target_name = tokens[1]
+                options = [""]
+                re_options = re.search("%print\\(([^\\)]*)\\)", tokens[0])
+                if (re_options):
+                    options = re_options.group(1).split(',')
                 type_str = "?"
                 value_str = "?"
 
@@ -249,7 +254,7 @@ class REPLoop(cmd.Cmd):
                 ast_lines = ast_out.stdout.decode().split('\n')
 
                 for ast_line in ast_lines:
-                    re_type = re.search("Decl .* {} '([^']+)'".format(symbol_name), ast_line)
+                    re_type = re.search("Decl .* {} '([^']+)'".format(target_name), ast_line)
                     if (re_type):
                         type_str = re_type.group(1)
                         break
@@ -258,7 +263,7 @@ class REPLoop(cmd.Cmd):
                 # so add the print statement to the current TranslationUnit,
                 # copy it, and restore the TranslationUnit. Dirty hack I guess.
                 if ("ptr" in options):
-                    self.stack[-1].add(Statement("AUTO_PRINT((void *){});".format(symbol_name)))
+                    self.stack[-1].add(Statement("AUTO_PRINT((void *){});".format(target_name)))
                 elif (any(o.startswith("len=") for o in options)):
                     len_option = [o for o in options if o.startswith("len=")][-1]
                     n_len = len_option.split("=")[1]
@@ -270,9 +275,9 @@ class REPLoop(cmd.Cmd):
                                 RAW_PRINT(", ");
                             else
                                 RAW_PRINT(" ]");
-                        }}""".format(n_len, symbol_name, n_len)))
+                        }}""".format(n_len, target_name, n_len)))
                 else:
-                    self.stack[-1].add(Statement("AUTO_PRINT({});".format(symbol_name)))
+                    self.stack[-1].add(Statement("AUTO_PRINT({});".format(target_name)))
                 tu_copy = copy.deepcopy(self.tu)
                 self.stack[-1].pop()
 
@@ -293,7 +298,7 @@ class REPLoop(cmd.Cmd):
                     if (exe_out.returncode == 0):
                         value_str = exe_out.stdout.decode()
 
-                print("{} = ({}) {}".format(symbol_name, type_str, value_str))
+                print("{} = ({}) {}".format(target_name, type_str, value_str))
 
                 # TODO: if type is enum, parse ast harder, print it, and return.
                 # TODO: inject code to print value to fd X (e.g., 12345)
@@ -426,14 +431,15 @@ class REPLoop(cmd.Cmd):
         return stop
 
 
-repl = REPLoop(src_path=args.out_path, error_diag=args.error_diag)
+repl = REPLoop(src_path=args.out_path, error_diag=args.error_diag, print_ret=args.print_ret)
 
-for incl_filename in args.include:
-    try:
-        incl_path = os.path.realpath(incl_filename)
-        repl.tu.incls += [Preproc("#include \"{}\"".format(incl_path))]
-    except:
-        logging.warning("file '{}' not included.".format(incl_filename))
+if (args.include):
+    for incl_filename in args.include:
+        try:
+            incl_path = os.path.realpath(incl_filename)
+            repl.tu.incls += [Preproc("#include \"{}\"".format(incl_path))]
+        except:
+            logging.warning("file '{}' not included.".format(incl_filename))
 
 repl.cmdloop()
 
