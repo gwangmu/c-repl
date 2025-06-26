@@ -80,7 +80,7 @@ class Block():
             self.kind = "block"
             self.repr = "(block)"
         else:
-            re_block_kw = re.search("^(for|while|if|case) *\\(", self.head)
+            re_block_kw = re.search("^(for|while|else if|if|case) *\\(", self.head)
             if (re_block_kw):
                 self.kind = re_block_kw.group(1)
             else:
