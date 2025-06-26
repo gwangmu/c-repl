@@ -406,9 +406,10 @@ class REPLoop(cmd.Cmd):
             excl_exe_out = new_exe_out.removeprefix(self.prev_exe_out).strip()
             if (exe_out.returncode == 0):
                 self.prev_exe_out = new_exe_out
-            if (excl_exe_out == new_exe_out):
-                logging.warning("previous output changed. printing all...")
-            print(excl_exe_out)
+            if (excl_exe_out):
+                if (excl_exe_out == new_exe_out):
+                    logging.warning("previous output changed. printing all...")
+                print(excl_exe_out)
         else:
             print(clang_out.stderr.decode())
             err_str = clang_out.stderr.decode().strip()
