@@ -278,9 +278,9 @@ class REPLoop(cmd.Cmd):
                     n_len = len_option.split("=")[1]
                     self.stack[-1].add(Statement(""" 
                         RAW_PRINT("[ ");
-                        for (int i = 0; i < {}; i++) {{
-                            AUTO_PRINT({}[i]);
-                            if (i < {} - 1)
+                        for (int i = 0; i < ({}); i++) {{
+                            AUTO_PRINT(({})[i]);
+                            if (i < ({}) - 1)
                                 RAW_PRINT(", ");
                             else
                                 RAW_PRINT(" ]");
