@@ -1,6 +1,6 @@
 # c-repl
 
-Minimal interactive C prompt. The main focus: how much mileage can we get only using a handful of Python and Bash scripts? When it comes to the interactive C prompt, you can go quite far. Your computer will suffer a lot from unnecessary and repetitive computations, but at least _you_ can do your job.
+Minimal interactive C prompt. The main focus: how much mileage can we get only with a handful of Python and Bash scripts? When it comes to the interactive C prompt, you can go quite far. Your computer will suffer a lot from unnecessary and repetitive computations, but at least _you_ can do your job.
 
 ## Requirements
 
