@@ -29,7 +29,7 @@ $ ./assets/find-header cache
 ### Basics
 
  - Every statement goes to `int main()` by default.
-    - If a new statement generates an error, the statement will be commented out, and the error message will be commented above.
+    - If a new statement generates an error, the statement and the error message will be added as a comment.
     - All preprocessor directives will be prepended at the beginning.
  - A function definition can be started by typing a function prototype.
     - Similarly, a block can be opened by typing the block header (with `{` at the end).
