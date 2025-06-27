@@ -9,6 +9,8 @@ Installing them from the OS package repository should be enough.
  - Clang (non-ancient)
  - Python (3.0.0+)
 
+Optionally, if your default shell is not Bash, you may want to install it too.
+
 ## How to Use
 
 Run `c-repl` and enter C statements. `-h` for help.
