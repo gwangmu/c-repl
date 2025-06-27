@@ -24,22 +24,41 @@ $ ./assets/find-header cache
 ```
 
 
-## Summary 
+## How Does It Work
+
+### Basics
 
  - Every statement goes to `int main()` by default.
+    - If a new statement generates an error, the statement will be commented out, and the error message will be commented above.
+    - All preprocessor directives will be prepended at the beginning.
  - A function definition can be started by typing a function prototype.
+    - Similarly, a block can be opened by typing the block header (with `{` at the end).
     - Functions will be _global_: no local function definition.
     - When defining a function, every statement will be added to it (not in `main`).
-    - Previous duplicate functions will be commented out.
+    - Type `}` to end a function (or a block).
+    - Duplicate function definition will be rejected.
  - New program output will be printed after every new statement.
     - If a new program output is not prepended with the previous one, the entire new output will be printed.
  - Missing headers will be handled on a best-effort basis.
     - Compiler-suggested headers will be automatically included.
     - If not, users have to choose what to include among the suggestions by `find-header`. 
     - Users can manually type `#include` to include headers.
- - All preprocessor directives will be prepended at the beginning.
- - If a new statement generates an error (either at compile time or at runtime), the statement will be commented out and the error message will be added above as additional comments.
+ - The pre-existing C code could be included with the `-i` option.
 
+### Value Printing
+
+The return value of expressions (e.g., variables) can be printed. Type `%print <expr>` (`<expr>` being your expression), and it'll print the value (if `<expr>` is reachable from the execution point of view) and its type (if it's identifiable). For example,
+
+```
+>>> const char *s = "Hello";
+>>> %print s
+s = (const char*) "Hello"
+```
+
+You can specify **print hints** in the parentheses next to `%print` to control the print result. Available hints:
+
+ - `ptr`: print the pointer address.
+ - `len=<len>`: print an array with a length `<len>`. `<len>` can be a number or a variable name.
 
 ## FAQ
 
