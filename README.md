@@ -32,7 +32,7 @@ $ ./assets/find-header cache
     - If a new statement generates an error, the statement and the error message will be added as a comment.
     - All preprocessor directives will be prepended at the beginning.
  - A _global_ function definition can be started by typing a function prototype.
-    - Then, every new statement will be added to it (not in `main`) until it's ended.
+    - Then, every new statement will be added to it (not to `main`) until it's ended.
     - Similarly, a block can be opened by typing the block header (with `{` at the end).
     - Type `}` to end a function (or a block).
     - Duplicate function definition will be rejected.
