@@ -1,6 +1,6 @@
 # c-repl
 
-Minimal C REPL prompt, written in Python and Bash.
+Minimal C REPL prompt, written in Python and Bash. The main focus is _extreme minimalism_; how much mileage can we get only using a handful of Python and Bash scripts? It turns out that, when it comes to the interactive C prompt, you can sort of do it. Your computer will suffer a lot from unnecessary and repetitive computations, but at least _you_ can do your job.
 
 ## Requirements
 
@@ -8,17 +8,18 @@ Minimal C REPL prompt, written in Python and Bash.
 
 ## How to Use
 
- 1. (one-time) Initialize header lookup cache. **This may take some time.**
+Run `c-repl` and enter C statements. `-h` for help.
 
 ```
-$ ./find-header cache
+$ ./c-repl
 ```
 
- 2. Run `c-repl` and enter C statements.
+Optionally, initialize header lookup cache for automatic non-C-library header inclusion. **This may take some time.**
 
 ```
-$ ./c-repl    # -o <code_path>, if you'd like to get the code.
+$ ./assets/find-header cache
 ```
+
 
 ## Summary 
 
@@ -35,3 +36,9 @@ $ ./c-repl    # -o <code_path>, if you'd like to get the code.
     - Users can manually type `#include` to include headers.
  - All proprocessor directives will be prepended at the beginning.
  - If a new statement generates an error (either at compile time or at runtime), the statement will be commented out and the error message will be added above as additional comments.
+
+
+## FAQ
+
+ - Does it work?
+    - Yes, it works.
