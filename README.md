@@ -4,7 +4,10 @@ Minimal interactive C prompt. The main focus: how much mileage can we get only u
 
 ## Requirements
 
- - Clang (any version, maybe)
+ - Clang (non-ancient)
+ - Python (3.0.0+)
+
+Installing them from the OS package repository should be enough.
 
 ## How to Use
 
