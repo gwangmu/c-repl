@@ -65,7 +65,7 @@ For example, the following snippet prints the above string `s` as a `unsigned ch
 
 ```
 >>> %print(len=6) (unsigned char *)s
-(unsigned char *)s = [ 'H', 'e', 'l', 'l', 'o', '' ]
+(unsigned char *)s = [ 72, 101, 108, 108, 111, 0 ]
 ```
 
 ## FAQ
