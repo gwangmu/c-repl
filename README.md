@@ -51,7 +51,7 @@ The return value of expressions (e.g., variables) can be printed. Type `%print <
 ```
 >>> const char *s = "Hello";
 >>> %print s
-s = (const char*) "Hello"
+s = (const char *) "Hello"
 ```
 
 You can specify **print hints** in the parentheses next to `%print` to control the print result. Available hints:
