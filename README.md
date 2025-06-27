@@ -46,7 +46,7 @@ $ ./assets/find-header cache
 
 ### Value Printing
 
-The return value of expressions (e.g., variables) can be printed. Type `%print <expr>` (`<expr>` being your expression), and it'll print the value (if `<expr>` is reachable from the execution point of view) and its type (if it's identifiable). For example,
+The return value of expressions (e.g., variables) can be printed. Type `%print <expr>` (`<expr>` being your expression), and it'll print the value (if `<expr>` is executable) and its type (if it's identifiable). For example,
 
 ```
 >>> const char *s = "Hello";
