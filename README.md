@@ -1,6 +1,6 @@
 # c-repl
 
-Minimal C REPL prompt, written in Python and Bash. The main focus is _extreme minimalism_; how much mileage can we get only using a handful of Python and Bash scripts? It turns out that, when it comes to the interactive C prompt, you can sort of do it. Your computer will suffer a lot from unnecessary and repetitive computations, but at least _you_ can do your job.
+Minimal interactive C prompt. The main focus; how much mileage can we get only using a handful of Python and Bash scripts? It turns out that, when it comes to the interactive C prompt, you can sort of do it. Your computer will suffer a lot from unnecessary and repetitive computations, but at least _you_ can do your job.
 
 ## Requirements
 
