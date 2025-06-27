@@ -59,6 +59,13 @@ You can specify **print hints** in the parentheses next to `%print` to control t
  - `ptr`: print the pointer address.
  - `len=<len>`: print an array with a length `<len>`. `<len>` can be a number or a variable name.
 
+For example, the following snippet prints the above string `s` as an array of length `10`.
+
+```
+>>> %print(len=10) s
+s = (const char *) [ 'H', 'e', 'l', 'l', 'o', '', '[', ' ', '', ''' ]
+```
+
 ## FAQ
 
  - Does it work?
