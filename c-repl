@@ -631,4 +631,4 @@ repl.cmdloop()
 # TODO: support incremental build
 # TODO: print last return value (if nothing is to print)
 # TODO: replay input after the first time
-# TODO: support 'global' (define 'global' as empty, but variable def --> put it in the global scope)
+# TODO: print dereferenced non-primitive type (e.g., struct)
