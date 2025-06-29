@@ -116,6 +116,8 @@ class Block():
             child_lines = child.get()
             for child_line in child_lines:
                 out += ["{}{}".format(INDENT, child_line)]
+        if (self.kind == "enum" and not self.children):
+            out += ["{}{}_NO_ELEMENT".format(INDENT, self.name)]
         if (not self.end):
             out += ["}"]
             if (self.kind in ["struct", "union", "enum"]):
