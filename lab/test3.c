@@ -35,6 +35,8 @@ enum __test_enum__ {
 };
 
 typedef struct __test_ml_struct__ __test_typedef__;
+typedef __test_typedef__ __test_typedef2__;
+typedef __test_typedef2__ __test_typedef3__;
 
 struct __test_struct_2__ {
     int x;
