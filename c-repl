@@ -76,6 +76,7 @@ class Block():
         self.commented = False
         self.kind = "?"
         self.name = ""
+        self.end = ""
 
         if (not self.head):
             self.kind = "block"
@@ -89,10 +90,15 @@ class Block():
                 if (re_block_else):
                     self.kind = "else"
                 else:
-                    self.kind = "function"
-                    re_func_name = re.search("([a-zA-Z_0-9]+) *\\(", self.head)
-                    if (re_func_name):
-                        self.name = re_func_name.group(1)
+                    re_def_kw = re.search("^(typedef )?(struct|union|enum) ([a-zA-Z_][a-zA-Z0-9_]*)", self.head)
+                    if (re_def_kw):
+                        self.kind = re_def_kw.group(2)
+                        self.name = re_def_kw.group(3)
+                    else:
+                        self.kind = "function"
+                        re_func_name = re.search("([a-zA-Z_0-9]+) *\\(", self.head)
+                        if (re_func_name):
+                            self.name = re_func_name.group(1)
         
         if (self.name == "main"):
             self.repr = ""
@@ -110,7 +116,12 @@ class Block():
             child_lines = child.get()
             for child_line in child_lines:
                 out += ["{}{}".format(INDENT, child_line)]
-        out += ["}"]
+        if (not self.end):
+            out += ["}"]
+            if (self.kind in ["struct", "union", "enum"]):
+                out[-1] += ";"
+        else:
+            out += [self.end]
         if (self.commented) or (self.err):
             out = ["// " + l for l in out]
         return out
@@ -119,6 +130,7 @@ class TranslationUnit():
     def __init__(self, out_path=None):
         self.out_path = out_path
         self.incls = []
+        self.defs = []
         self.funcs = []
         self.main = Block("int main()")
 
@@ -126,10 +138,16 @@ class TranslationUnit():
         out = []
         for incl in self.incls:
             out += incl.get()
-        if (self.incls): out += [""]
+        for deff in self.defs:
+            def_strs = deff.get()
+            if (out):
+                if (len(def_strs) > 1 or "}" in out[-1]): 
+                    out += [""]
+            out += def_strs
+        if (self.funcs): out += [""]
         for func in self.funcs:
             out += func.get()
-            out += [""]
+        out += [""]
         out += self.main.get()
         return out
 
@@ -212,6 +230,9 @@ class REPLoop(cmd.Cmd):
     def is_preproc(self, line):
         return (re.search("^#.*", line.strip()) != None)
 
+    def is_inline_typedef(self, line):
+        return (re.search("^typedef.*;$", line.strip()) != None)
+
     def get_block_head(self, line):
         line = line.strip()
 
@@ -219,7 +240,7 @@ class REPLoop(cmd.Cmd):
         if (re_init_list):
             return None
 
-        re_block_head = re.search("([^{]*){$", line)
+        re_block_head = re.search("^([^{]*){$", line)
         if (re_block_head):
             return re_block_head.group(1).strip()
         else:
@@ -227,7 +248,7 @@ class REPLoop(cmd.Cmd):
 
     def get_block_close(self, line):
         line = line.strip()
-        re_block_close = re.search("^(}+)$", line)
+        re_block_close = re.search("^(}+)", line)
         if (re_block_close):
             return re_block_close.group(1).count('}')
         else:
@@ -329,6 +350,9 @@ class REPLoop(cmd.Cmd):
         if (self.is_preproc(line)):
             cur_obj = Preproc(line)
             self.tu.incls += [cur_obj]
+        elif (self.is_inline_typedef(line)):
+            cur_obj = Statement(line)
+            self.tu.defs += [cur_obj]
         else:
             block_head = self.get_block_head(line)
             n_block_close = self.get_block_close(line)
@@ -345,6 +369,8 @@ class REPLoop(cmd.Cmd):
                         return
                     else:
                         self.tu.funcs += [cur_obj]
+                elif (cur_obj.kind in ["struct", "union", "enum"]):
+                    self.tu.defs += [cur_obj]
                 else:
                     self.stack[-1].add(cur_obj)
                 self.stack += [cur_obj]
@@ -352,6 +378,8 @@ class REPLoop(cmd.Cmd):
                 cur_obj = None
                 if (n_block_close >= len(self.stack)):
                     self.exit()
+                elif (n_block_close == 1 and line != "}"):
+                    self.stack[-1].end = line
                 self.stack = self.stack[:-n_block_close]
             else:
                 cur_obj = Statement(line.strip())
@@ -447,8 +475,7 @@ if (args.include):
 
 repl.cmdloop()
 
-# TODO: keyboard up to navigate previous statements
-# TODO: accept base code
 # TODO: support incremental build
 # TODO: print last return value (if nothing is to print)
 # TODO: replay input after the first time
+# TODO: support 'global' (define 'global' as empty, but variable def --> put it in the global scope)

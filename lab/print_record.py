@@ -6,7 +6,7 @@ import sys
 
 INDENT = "  "
 
-class Record():
+class RecordType():
     def __init__(self, kind="?", name="?"):
         self.kind = kind 
         self.name = name
@@ -22,7 +22,7 @@ class Record():
     def fields(self):
         return [c.fields() for c in self.children]
 
-class NonRecord():
+class NonRecordType():
     def __init__(self, name="?"):
         self.name = name
 
@@ -32,7 +32,7 @@ class NonRecord():
     def fields(self):
         return self.name
 
-class Field():
+class RecordField():
     def __init__(self, type=None, name="?"):
         self.type = type
         self.name = name
@@ -43,7 +43,7 @@ class Field():
         return ret
 
     def fields(self):
-        if (isinstance(self.type, Record)):
+        if (isinstance(self.type, RecordType)):
             return { self.name: self.type.fields() }
         else:
             return self.name
@@ -60,7 +60,7 @@ def parse_record(lines, start_idx=0, target_name=None, nest_prefix="| ", rec_ctx
                 rec_kind = re_rec_decl.group(1)
                 rec_name = re_rec_decl.group(2)
                 if (target_name == None or rec_name == target_name): 
-                    cur_record = Record(rec_kind, rec_name)
+                    cur_record = RecordType(rec_kind, rec_name)
                     if (not rec_name):
                         re_lineno = re.search("<line:([0-9:]+),", cur_line)
                         if (re_lineno):
@@ -87,8 +87,8 @@ def parse_record(lines, start_idx=0, target_name=None, nest_prefix="| ", rec_ctx
                     rec_ctx[field_type] = new_rec_type
                     field_type_obj = new_rec_type
                 else:
-                    field_type_obj = NonRecord(field_type)
-                cur_record.children += [Field(field_type_obj, field_name)]
+                    field_type_obj = NonRecordType(field_type)
+                cur_record.children += [RecordField(field_type_obj, field_name)]
             elif ("RecordDecl" in cur_line):
                 child_rec, next_idx = parse_record(lines, start_idx=idx, nest_prefix="| " + nest_prefix, rec_ctx=rec_ctx)
                 assert(child_rec)
@@ -97,6 +97,16 @@ def parse_record(lines, start_idx=0, target_name=None, nest_prefix="| ", rec_ctx
 
     return cur_record, idx-1
 
+def find_typedef_record(lines, target_name):
+    typedef_sig = "{} '".format(target_name)
+    for line in lines:
+        if ("TypedefDecl" in line):
+            if (typedef_sig in line):
+                re_real_name = re.search("'(struct|union) ([A-Za-z0-9_]+)", line)
+                if (re_real_name):
+                    return re_real_name.group(2)
+    return target_name
+
 def main():
     filename = sys.argv[1]
     target_name = sys.argv[2]
@@ -104,17 +114,9 @@ def main():
     with open(filename, 'r') as f:
         ast_lines = f.readlines()
 
-    # Fix typedef struct to the real one.
-    typedef_sig = "{} '".format(target_name)
-    for ast_line in ast_lines:
-        if ("TypedefDecl" in ast_line):
-            if (typedef_sig in ast_line):
-                re_real_name = re.search("'(struct|union) ([A-Za-z0-9_]+)", ast_line)
-                if (re_real_name):
-                    target_name = re_real_name.group(2)
-                    break
-
+    target_name = find_typedef_record(ast_lines, target_name)
     rec = parse_record(ast_lines, target_name=target_name)[0]
+
     if (rec):
         for rec_line in rec.get():
             print(rec_line)
