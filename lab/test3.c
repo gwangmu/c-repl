@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 struct __test_struct__ {
     int x;
     float y;

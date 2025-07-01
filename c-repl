@@ -351,14 +351,22 @@ class REPLoop(cmd.Cmd):
         return cur_enum
 
     def find_typedef_type(self, lines, target_name):
+        suffix = ""
+
+        re_name_suffix = re.search("^([^\\*]*)(\\**)$", target_name)
+        if (re_name_suffix):
+            target_name = re_name_suffix.group(1).strip()
+            suffix = " " + re_name_suffix.group(2)
+
         typedef_sig = "{} '".format(target_name)
         for line in lines:
             if ("TypedefDecl" in line):
                 if (typedef_sig in line):
                     re_real_name = re.search("'(struct|union|enum) ([A-Za-z0-9_]+)", line)
                     if (re_real_name):
-                        return "{} {}".format(re_real_name.group(1), re_real_name.group(2))
-        return target_name
+                        return "{} {}{}".format(re_real_name.group(1), re_real_name.group(2), suffix)
+
+        return target_name + suffix
 
     def is_system_cmd(self, line):
         if (line[0:1] == '%'):
@@ -448,13 +456,19 @@ class REPLoop(cmd.Cmd):
                                 RAW_PRINT(" ]");
                         }}""".format(n_len, target_name, n_len)))
                 elif (type_str.startswith("struct ") or type_str.startswith("union ")):
-                    rec_obj = self.parse_record(ast_lines, target_name=type_str)[0]
+                    if (type_str[-1] == "*"):
+                        deref_op = "->"
+                        type_str_inner = type_str[:-1].strip()
+                    else:
+                        deref_op = "."
+                        type_str_inner = type_str
+                    rec_obj = self.parse_record(ast_lines, target_name=type_str_inner)[0]
                     if (rec_obj):
                         rec_fields = rec_obj.fields()
                         stmt = "RAW_PRINT(\"{ \");\n"
                         for i, rec_field in enumerate(rec_fields):
                             stmt += "RAW_PRINT(\"{}: \");\n".format(rec_field)
-                            stmt += "AUTO_PRINT(({}).{});\n".format(target_name, rec_field)
+                            stmt += "AUTO_PRINT(({}){}{});\n".format(target_name, deref_op, rec_field)
                             if (i < len(rec_fields) - 1):
                                 stmt += "RAW_PRINT(\", \");\n"
                             else:
@@ -549,7 +563,7 @@ class REPLoop(cmd.Cmd):
             impl_func_name = re_impl_func.group(1)
             logging.warning("function '{}' not included.".format(impl_func_name))
 
-            re_incl_suggest = re.search("include the header <([a-zA-Z_0-9/\\.]+)>", clang_out.stderr.decode())
+            re_incl_suggest = re.search("inclu.* header <([a-zA-Z_0-9/\\.]+)>", clang_out.stderr.decode())
             if (re_incl_suggest):
                 # Obvious library function not included?
                 suggested_header_path = re_incl_suggest.group(1)

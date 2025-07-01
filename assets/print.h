@@ -26,7 +26,7 @@
     wchar_t const*    : "\"%ls\"",\
     void*             : "%p",     \
     void const*       : "%p",     \
-    default           : ""        \
+    default           : "?"       \
   )
 
 #define AUTO_PRINT(X) dprintf(3, PRINTF_FORMAT((X)), (X))
