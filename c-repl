@@ -128,32 +128,40 @@ class Block():
         return out
 
 class EnumType():
-    def __init__(self, name="?"):
+    def __init__(self, name="?", opaque=False):
         self.name = name
         self.children = []
+        self.opaque = opaque
 
-    def get(self):
-        ret = ["enum {} {{".format(self.name)]
-        for child in self.children:
-            ret += ["{}{},".format(INDENT, child)]
-        ret += ["}"]
-        return ret
+    def get(self, opt=[]):
+        if (self.opaque):
+            return ["enum {}".format(self.name)]
+        else:
+            ret = ["enum {} {{".format(self.name)]
+            for child in self.children:
+                ret += ["{}{},".format(INDENT, child)]
+            ret += ["}"]
+            return ret
 
     def fields(self):
         return self.children
 
 class RecordType():
-    def __init__(self, kind="?", name="?"):
+    def __init__(self, kind="?", name="?", opaque=False):
         self.kind = kind 
         self.name = name
         self.children = []
+        self.opaque = opaque
 
-    def get(self):
-        ret = ["{} {}{{".format(self.kind, self.name + " " if self.name else "")]
-        for child in self.children:
-            ret += [INDENT + s for s in child.get()]
-        ret += ["}"]
-        return ret
+    def get(self, opt=[]):
+        if (self.opaque):
+            return ["{}{}".format(self.kind, " " + self.name if self.name else "")]
+        else:
+            ret = ["{} {}{{".format(self.kind, self.name + " " if (self.name and ("no-print-unnamed" not in opt or not self.name.startswith("@unnamed"))) else "")]
+            for child in self.children:
+                ret += [INDENT + s for s in child.get(opt)]
+            ret += ["}"]
+            return ret
 
     def fields(self):
         return [c.fields() for c in self.children]
@@ -162,7 +170,7 @@ class GenericType():
     def __init__(self, name="?"):
         self.name = name
 
-    def get(self):
+    def get(self, opt=[]):
         return [self.name]
 
     def fields(self):
@@ -173,8 +181,8 @@ class RecordField():
         self.type = type
         self.name = name
 
-    def get(self):
-        ret = self.type.get() if self.type else ["?"]
+    def get(self, opt=[]):
+        ret = self.type.get(opt) if self.type else ["?"]
         ret[-1] += " {};".format(self.name)
         return ret
 
@@ -316,6 +324,8 @@ class REPLoop(cmd.Cmd):
                         field_type_obj = rec_ctx[field_type]
                     elif ("struct " in field_type or "union " in field_type):
                         new_rec_type, _ = self.parse_record(lines, start_idx=0, target_name=field_type, nest_prefix="| ", rec_ctx=rec_ctx)
+                        if (not new_rec_type):
+                            new_rec_type = RecordType(*field_type.split(' ', 1), opaque=True)
                         rec_ctx[field_type] = new_rec_type
                         field_type_obj = new_rec_type
                     else:
@@ -361,13 +371,9 @@ class REPLoop(cmd.Cmd):
         for line in lines:
             if ("TypedefDecl" in line):
                 if (typedef_sig in line):
-                    re_real_name = re.search("'(struct|union|enum) ([A-Za-z0-9_]+)", line)
+                    re_real_name = re.search("'(struct |union |enum )?([A-Za-z0-9_]+)", line)
                     if (re_real_name):
                         return "{}{}".format(re_real_name.group(2), suffix)
-                    else:
-                        re_real_name = re.search("'([A-Za-z0-9_]+)", line)
-                        if (re_real_name):
-                            return "{}{}".format(re_real_name.group(1), suffix)
 
         return target_name + suffix
 
@@ -465,7 +471,7 @@ class REPLoop(cmd.Cmd):
                     if (target_kind == "record"):
                         rec_type = self.parse_record(ast_lines, target_name=type_str)[0]
                         if (rec_type):
-                            for decl_line in rec_type.get():
+                            for decl_line in rec_type.get(opt=["no-print-unnamed"]):
                                 print(decl_line)
                     elif (target_kind == "enum"):
                         enum_type = self.parse_enum(ast_lines, target_name=type_str)
