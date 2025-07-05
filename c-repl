@@ -16,8 +16,7 @@ CLANG = "clang"
 FIND_HEADER = "./assets/find-header"
 
 parser = argparse.ArgumentParser(
-		description="For those who'd like to use C like an interpreted language but just don't want to install ANYTHING, caveman style.",
-		epilog="To be fair, you still need to install 'clang' (any non-ancient version) and 'python' (which you obviously have if you can read this).")
+		description="C-REPL is for those who'd like to use C like an interpreted language but just don't want to install ANYTHING, caveman style. But to be fair, you still need to install (non-ancient) 'clang' and 'python' (which you obviously have if you can read this). And of course, if you have 'clang', you may already have 'clang-repl' on your system. 'clang-repl' is the official Clang support for C/C++ REPL, and I won't blame you if you use it over this. (By the way, C-REPL has no plan to support C++.)")
 parser.add_argument("-e", "--error-diag", help="attach full error diagnostic", action="store_true")
 parser.add_argument("-o", "--out-path", help="set output path for code", type=str, default="/tmp/c-repl.c")
 parser.add_argument('-i', "--include", help="files to include", type=str, action='append')
@@ -442,7 +441,7 @@ class REPLoop(cmd.Cmd):
                 # so add the print statement to the current TranslationUnit,
                 # copy it, and restore the TranslationUnit. Dirty hack I guess.
                 if ("ptr" in options):
-                    self.stack[-1].add(Statement("AUTO_PRINT((void *){});".format(target_name)))
+                    self.stack[-1].add(Statement("AUTO_PRINT((void *)({}));".format(target_name)))
                 elif (any(o.startswith("len=") for o in options)):
                     len_option = [o for o in options if o.startswith("len=")][-1]
                     n_len = len_option.split("=")[1]
