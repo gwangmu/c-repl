@@ -174,7 +174,7 @@ class RecordField():
         self.name = name
 
     def get(self):
-        ret = self.type.get()
+        ret = self.type.get() if self.type else ["?"]
         ret[-1] += " {};".format(self.name)
         return ret
 
@@ -352,7 +352,7 @@ class REPLoop(cmd.Cmd):
     def find_typedef_type(self, lines, target_name):
         suffix = ""
 
-        re_name_suffix = re.search("^([^\\*]*)(\\**)$", target_name)
+        re_name_suffix = re.search("^([^\\*]*)(\\*+)$", target_name)
         if (re_name_suffix):
             target_name = re_name_suffix.group(1).strip()
             suffix = " " + re_name_suffix.group(2)
@@ -363,7 +363,11 @@ class REPLoop(cmd.Cmd):
                 if (typedef_sig in line):
                     re_real_name = re.search("'(struct|union|enum) ([A-Za-z0-9_]+)", line)
                     if (re_real_name):
-                        return "{} {}{}".format(re_real_name.group(1), re_real_name.group(2), suffix)
+                        return "{}{}".format(re_real_name.group(2), suffix)
+                    else:
+                        re_real_name = re.search("'([A-Za-z0-9_]+)", line)
+                        if (re_real_name):
+                            return "{}{}".format(re_real_name.group(1), suffix)
 
         return target_name + suffix
 
@@ -414,94 +418,120 @@ class REPLoop(cmd.Cmd):
                     print(src_line[:-1])
             else:
                 target_name = tokens[1]
+                org_target_name = tokens[1]
                 options = [""]
                 re_options = re.search("%print\\(([^\\)]*)\\)", tokens[0])
                 if (re_options):
                     options = re_options.group(1).split(',')
+
                 type_str = "?"
                 value_str = "?"
+                target_kind = "?"
 
                 ast_out = subprocess.run([CLANG, "-x", "c", "-fsyntax-only", "-Xclang", "-ast-dump", self.src_path], capture_output=True)
                 ast_lines = ast_out.stdout.decode().split('\n')
 
+                # Find the kind of 'target_name'
                 if (re.match("[A-Za-z_][0-9A-Za-z_]*", target_name)):
+                    target_name = self.find_typedef_type(ast_lines, target_name)
                     for ast_line in ast_lines:
-                        re_type = re.search("Decl .* {} '([^']+)'".format(target_name), ast_line)
+                        re_type = re.search("(Var|Function)Decl .* {} '([^']+)'".format(target_name), ast_line)
                         if (re_type):
-                            type_str = re_type.group(1)
+                            type_str = re_type.group(2)
+                            if (re_type.group(1) == "Var"):
+                                target_kind = "var"
+                            elif (re_type.group(1) == "Function"):
+                                target_kind = "func"
                             break
-                else:
-                    type_str = "" 
-
-                # (If applicable) restore typedef type.
-                if (type_str):
-                    type_str = self.find_typedef_type(ast_lines, type_str)
-
-                # TranslationUnit has no concept of a stack (or the context),
-                # so add the print statement to the current TranslationUnit,
-                # copy it, and restore the TranslationUnit. Dirty hack I guess.
-                if ("ptr" in options):
-                    self.stack[-1].add(Statement("AUTO_PRINT((void *)({}));".format(target_name)))
-                elif (any(o.startswith("len=") for o in options)):
-                    len_option = [o for o in options if o.startswith("len=")][-1]
-                    n_len = len_option.split("=")[1]
-                    self.stack[-1].add(Statement(""" 
-                        RAW_PRINT("[ ");
-                        for (int i = 0; i < ({}); i++) {{
-                            AUTO_PRINT(({})[i]);
-                            if (i < ({}) - 1)
-                                RAW_PRINT(", ");
-                            else
-                                RAW_PRINT(" ]");
-                        }}""".format(n_len, target_name, n_len)))
-                elif (type_str.startswith("struct ") or type_str.startswith("union ")):
-                    if (type_str[-1] == "*"):
-                        deref_op = "->"
-                        type_str_inner = type_str[:-1].strip()
-                    else:
-                        deref_op = "."
-                        type_str_inner = type_str
-                    rec_obj = self.parse_record(ast_lines, target_name=type_str_inner)[0]
-                    if (rec_obj):
-                        rec_fields = rec_obj.fields()
-                        stmt = "RAW_PRINT(\"{ \");\n"
-                        for i, rec_field in enumerate(rec_fields):
-                            stmt += "RAW_PRINT(\"{}: \");\n".format(rec_field)
-                            stmt += "AUTO_PRINT(({}){}{});\n".format(target_name, deref_op, rec_field)
-                            if (i < len(rec_fields) - 1):
-                                stmt += "RAW_PRINT(\", \");\n"
+                        else:
+                            re_rec_type = re.search("RecordDecl .* (struct|union) {} ?definition".format(target_name), ast_line)
+                            if (re_rec_type):
+                                type_str = re_rec_type.group(1) + " " + target_name
+                                target_kind = "record"
+                                break
+                            elif (re.match("[| -]*EnumDecl .* {}".format(target_name), ast_line)):
+                                type_str = "enum " + target_name
+                                target_kind = "enum"
+                                break
                             else:
-                                stmt += "RAW_PRINT(\" }\");\n"
-                        self.stack[-1].add(Statement(stmt))
+                                type_str = target_name
+                                target_kind = "type"
                 else:
-                    self.stack[-1].add(Statement("AUTO_PRINT({});".format(target_name)))
-                tu_copy = copy.deepcopy(self.tu)
-                self.stack[-1].pop()
+                    type_str = ""
+                    target_kind = "expr" 
 
-                tmp_src_path = "/tmp/c-repl.tmp.c"
-                tmp_exe_path = "/tmp/c-repl.tmp"
-                tu_copy.out_path = tmp_src_path
-                
-                tu_copy.incls += [Preproc("#include \"{}\"".format(os.path.realpath("./assets/print.h")))]
-                assert(tu_copy.print())
+                if (target_kind in ["func", "record", "enum", "type"]):
+                    print("{} = {}".format(org_target_name, type_str))
+                    if (target_kind == "record"):
+                        rec_type = self.parse_record(ast_lines, target_name=type_str)[0]
+                        if (rec_type):
+                            for decl_line in rec_type.get():
+                                print(decl_line)
+                    elif (target_kind == "enum"):
+                        enum_type = self.parse_enum(ast_lines, target_name=type_str)
+                        if (enum_type):
+                            for decl_line in enum_type.get():
+                                print(decl_line)
+                elif (target_kind in ["var", "expr"]):
+                    # TranslationUnit has no concept of a stack (or the context),
+                    # so add the print statement to the current TranslationUnit,
+                    # copy it, and restore the TranslationUnit. Dirty hack I guess.
+                    if ("ptr" in options):
+                        self.stack[-1].add(Statement("AUTO_PRINT((void *)({}));".format(target_name)))
+                    elif (any(o.startswith("len=") for o in options)):
+                        len_option = [o for o in options if o.startswith("len=")][-1]
+                        n_len = len_option.split("=")[1]
+                        self.stack[-1].add(Statement(""" 
+                            RAW_PRINT("[ ");
+                            for (int i = 0; i < ({}); i++) {{
+                                AUTO_PRINT(({})[i]);
+                                if (i < ({}) - 1)
+                                    RAW_PRINT(", ");
+                                else
+                                    RAW_PRINT(" ]");
+                            }}""".format(n_len, target_name, n_len)))
+                    elif (type_str.startswith("struct ") or type_str.startswith("union ")):
+                        if (type_str[-1] == "*"):
+                            deref_op = "->"
+                            type_str_inner = type_str[:-1].strip()
+                        else:
+                            deref_op = "."
+                            type_str_inner = type_str
+                        rec_obj = self.parse_record(ast_lines, target_name=type_str_inner)[0]
+                        if (rec_obj):
+                            rec_fields = rec_obj.fields()
+                            stmt = "RAW_PRINT(\"{ \");\n"
+                            for i, rec_field in enumerate(rec_fields):
+                                stmt += "RAW_PRINT(\"{}: \");\n".format(rec_field)
+                                stmt += "AUTO_PRINT(({}){}{});\n".format(target_name, deref_op, rec_field)
+                                if (i < len(rec_fields) - 1):
+                                    stmt += "RAW_PRINT(\", \");\n"
+                                else:
+                                    stmt += "RAW_PRINT(\" }\");\n"
+                            self.stack[-1].add(Statement(stmt))
+                    else:
+                        self.stack[-1].add(Statement("AUTO_PRINT({});".format(target_name)))
+                    tu_copy = copy.deepcopy(self.tu)
+                    self.stack[-1].pop()
 
-                # TODO: Weirdly, Python subprocess appears to only work with the
-                # redirection with the FD "3" (or probably the next free FD).
-                # For now, use FD 3 and fix it later.
-                clang_out = self.run([CLANG, "-x", "c", tmp_src_path, "-o", tmp_exe_path], check=False, capture_output=True)
-                
-                if (clang_out.returncode == 0):
-                    exe_out = self.run("{} 3>&1 >/dev/null 2>&1".format(tmp_exe_path), shell=True, capture_output=True)
-                    if (exe_out.returncode == 0):
-                        value_str = exe_out.stdout.decode()
+                    tmp_src_path = "/tmp/c-repl.tmp.c"
+                    tmp_exe_path = "/tmp/c-repl.tmp"
+                    tu_copy.out_path = tmp_src_path
+                    
+                    tu_copy.incls += [Preproc("#include \"{}\"".format(os.path.realpath("./assets/print.h")))]
+                    assert(tu_copy.print())
 
-                print("{} = {}{}".format(target_name, "({}) ".format(type_str) if (type_str) else "", value_str))
+                    # TODO: Weirdly, Python subprocess appears to only work with the
+                    # redirection with the FD "3" (or probably the next free FD).
+                    # For now, use FD 3 and fix it later.
+                    clang_out = self.run([CLANG, "-x", "c", tmp_src_path, "-o", tmp_exe_path], check=False, capture_output=True)
+                    
+                    if (clang_out.returncode == 0):
+                        exe_out = self.run("{} 3>&1 >/dev/null 2>&1".format(tmp_exe_path), shell=True, capture_output=True)
+                        if (exe_out.returncode == 0):
+                            value_str = exe_out.stdout.decode()
 
-                # TODO: if type is enum, parse ast harder, print it, and return.
-                # TODO: inject code to print value to fd X (e.g., 12345)
-                #        - cast to (void*) if the option 'addr' is set.
-                #        - print elem-by-elem if the option 'len=<len>' is set.
-                #        - if type is struct, print field-by-field.
+                    print("{} = {}{}".format(org_target_name, "({}) ".format(type_str) if (type_str) else "", value_str))
         else:
             logging.warning("unrecognized system command.")
 
@@ -639,6 +669,7 @@ if (args.include):
             repl.tu.incls += [Preproc("#include \"{}\"".format(incl_path))]
         except:
             logging.warning("file '{}' not included.".format(incl_filename))
+    assert(repl.tu.print())
 
 repl.cmdloop()
 

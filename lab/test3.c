@@ -39,6 +39,7 @@ enum __test_enum__ {
 typedef struct __test_ml_struct__ __test_typedef__;
 typedef __test_typedef__ __test_typedef2__;
 typedef __test_typedef2__ __test_typedef3__;
+typedef float my_float;
 
 struct __test_struct_2__ {
     int x;
@@ -47,7 +48,7 @@ struct __test_struct_2__ {
     struct __test_struct__ sss;
 };
 
-int main() {
+int foo() {
     struct __test_struct__ s1;
     union __test_union__ u1;
     struct __test_ml_struct__ s2;
