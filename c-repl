@@ -10,7 +10,7 @@ import signal
 import subprocess
 import sys
 
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 INDENT = "  "
 CLANG = "clang"
 FIND_HEADER = "./assets/find-header"
@@ -438,7 +438,7 @@ class REPLoop(cmd.Cmd):
                 ast_lines = ast_out.stdout.decode().split('\n')
 
                 # Find the kind of 'target_name'
-                if (re.match("[A-Za-z_][0-9A-Za-z_]*", target_name)):
+                if (re.match("^[A-Za-z_][0-9A-Za-z_]*$", target_name)):
                     target_name = self.find_typedef_type(ast_lines, target_name)
                     for ast_line in ast_lines:
                         re_type = re.search("(Var|Function)Decl .* {} '([^']+)'".format(target_name), ast_line)
@@ -516,7 +516,7 @@ class REPLoop(cmd.Cmd):
                                     stmt += "RAW_PRINT(\" }\");\n"
                             self.stack[-1].add(Statement(stmt))
                     else:
-                        self.stack[-1].add(Statement("AUTO_PRINT({});".format(target_name)))
+                        self.stack[-1].add(Statement("AUTO_PRINT(({}));".format(target_name)))
                     tu_copy = copy.deepcopy(self.tu)
                     self.stack[-1].pop()
 
