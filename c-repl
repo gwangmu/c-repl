@@ -462,6 +462,9 @@ class REPLoop(cmd.Cmd):
                             else:
                                 type_str = target_name
                                 target_kind = "type"
+                                break
+                    type_str = ""
+                    target_kind = "expr"
                 else:
                     type_str = ""
                     target_kind = "expr" 
@@ -524,7 +527,7 @@ class REPLoop(cmd.Cmd):
                     tmp_exe_path = "/tmp/c-repl.tmp"
                     tu_copy.out_path = tmp_src_path
                     
-                    tu_copy.incls += [Preproc("#include \"{}\"".format(os.path.realpath("./assets/print.h")))]
+                    tu_copy.incls += [Preproc("#include \"{}\"".format("{}/assets/print.h".format(os.path.dirname(__file__))))]
                     assert(tu_copy.print())
 
                     # TODO: Weirdly, Python subprocess appears to only work with the
