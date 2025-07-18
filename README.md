@@ -68,6 +68,63 @@ For example, the following snippet prints the above string `s` as a `unsigned ch
 (unsigned char *)s = [ 72, 101, 108, 108, 111, 0 ]
 ```
 
+### Including Pre-written C Snippet
+
+A pre-written C snippet (e.g., functions or struct/enum definitions) can be included at startup with the `-i` option.
+
+```
+$ cat foo.c
+#include <stdio.h>
+void foo() {
+    printf("Hello\n");
+}
+
+$ c-repl -i foo.c
+C-REPL 0.1.5 (main, 17 Jul 2025 09:24:08) [Ubuntu Clang 18.1.3 (1ubuntu1)] on linux
+Type "help" for more information.
+>>> foo();
+Hello
+```
+
+## When to Use
+
+### Manual Unit Testing
+
+You could use `c-repl` to unit-test a function. This is the usage that I'm mainly using it for. For example, suppose you should write a function that swaps `#` to `/` in a URI string, but only when it is used as a demarcator (e.g., between a domain name and a path-like identifier). Assuming you wrote a function `fix_sharp_to_slash_delim` for this, you could create a test wrapper function `test` and include both of them before starting up `c-repl`. Then you could use `%print` to check the return value of `test`.
+
+```
+$ cat fix-uri.c 
+#include <string.h>
+
+static void fix_sharp_to_slash_delim(char *s) {
+    char *ptr_sharp = strchr(s, '#');
+    char *ptr_slash = strchr(s, '/');
+
+    if (ptr_sharp && (!ptr_slash || ptr_sharp < ptr_slash)) 
+        *ptr_sharp = '/';
+
+    return;
+}
+
+static char *test(const char *s) {
+    char *ss = strdup(s);
+    fix_sharp_to_slash_delim(ss);
+    return ss;
+}
+
+$ c-repl -i fix-uri.c 
+C-REPL 0.1.5 (main, 17 Jul 2025 09:24:08) [Ubuntu Clang 18.1.3 (1ubuntu1)] on linux
+Type "help" for more information.
+>>> %print test("aa.bb.cc#aa/bb")
+test("aa.bb.cc#aa/bb") = "aa.bb.cc/aa/bb"
+>>> %print test("aa.bb.cc/aa/bb")
+test("aa.bb.cc/aa/bb") = "aa.bb.cc/aa/bb"
+>>> %print test("aa.bb.cc/aa#aa/bb")
+test("aa.bb.cc/aa#aa/bb") = "aa.bb.cc/aa#aa/bb"
+>>> %print test("aa.bb.cc")
+test("aa.bb.cc") = "aa.bb.cc"
+```
+
 ## FAQ
 
  - Does it work?
